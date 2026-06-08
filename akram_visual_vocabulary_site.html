@@ -1,0 +1,418 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@400;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body,.wrap{font-family:'Nunito',sans-serif;background:#f4f7ff;}
+.hero{background:linear-gradient(135deg,#071560 0%,#1a3fa8 60%,#0d7bd4 100%);padding:2rem 1.5rem 1.8rem;text-align:center;position:relative;overflow:hidden;}
+.hero-badge{display:inline-block;background:#ffd700;color:#071560;font-size:11px;font-weight:800;padding:3px 14px;border-radius:20px;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;}
+.hero h1{font-family:'Baloo Thambi 2',cursive;color:#fff;font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;line-height:1.2;margin-bottom:5px;}
+.hero h1 span{color:#ffd700;}
+.hero-sub{color:rgba(255,255,255,.8);font-size:13px;margin-bottom:16px;}
+.hero-stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
+.stat-pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;}
+.stat-pill i{margin-right:4px;color:#ffd700;}
+.feat-bar{background:#071560;padding:.8rem 1.5rem;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;}
+.feat-bar::-webkit-scrollbar{display:none;}
+.feat{flex-shrink:0;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.9);padding:5px 11px;border-radius:7px;font-size:11px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+.feat i{color:#ffd700;font-size:13px;}
+.controls{background:#fff;padding:.8rem 1.2rem;display:flex;gap:8px;align-items:center;border-bottom:1px solid #dde3f0;flex-wrap:wrap;}
+.search-wrap{display:flex;align-items:center;flex:1;min-width:200px;border:1.5px solid #c5cfe8;border-radius:8px;padding:0 10px;background:#f8f9ff;}
+.search-wrap i{color:#8896c8;font-size:16px;}
+.search-wrap input{border:none;background:transparent;padding:7px 8px;font-size:13px;font-family:'Nunito',sans-serif;outline:none;width:100%;}
+.series-tabs{display:flex;gap:6px;}
+.s-tab{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:800;border:1.5px solid #c5cfe8;background:#f0f4ff;color:#1a3fa8;cursor:pointer;transition:all .15s;font-family:'Nunito',sans-serif;white-space:nowrap;}
+.s-tab.active{background:#1a3fa8;border-color:#1a3fa8;color:#fff;}
+.filter-wrap{background:#f7f9ff;padding:.6rem 1.2rem;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #eaeffa;}
+.filter-btn{padding:3px 12px;border-radius:14px;font-size:11px;font-weight:700;border:1.5px solid #c5cfe8;background:#fff;color:#1a3fa8;cursor:pointer;transition:all .15s;font-family:'Nunito',sans-serif;}
+.filter-btn.active,.filter-btn:hover{background:#1a3fa8;border-color:#1a3fa8;color:#fff;}
+.section-hdr{padding:1rem 1.4rem .4rem;font-size:14px;font-weight:800;color:#071560;display:flex;align-items:center;gap:6px;}
+.section-hdr i{color:#d4220e;font-size:17px;}
+.count-badge{background:#e8edff;color:#1a3fa8;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:4px;}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;padding:.6rem 1.2rem 2rem;}
+.video-card{background:#fff;border:1.5px solid #e0e8f8;border-radius:11px;overflow:hidden;transition:all .2s;cursor:pointer;}
+.video-card:hover{border-color:#1a3fa8;transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,63,168,.12);}
+.video-card.playing{border-color:#d4220e;box-shadow:0 0 0 3px rgba(212,34,14,.15);}
+.thumb-wrap{position:relative;width:100%;padding-top:56.25%;background:#071560;overflow:hidden;}
+.thumb-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+.thumb-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#071560 0%,#1a3fa8 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;}
+.play-btn{width:44px;height:44px;background:#d4220e;border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:transform .15s;}
+.play-btn:hover{transform:scale(1.1);}
+.play-btn i{color:#fff;font-size:18px;}
+.thumb-label{color:rgba(255,255,255,.85);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.vid-num{position:absolute;top:7px;left:7px;background:rgba(0,0,0,.65);color:#ffd700;font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px;}
+.series-tag{position:absolute;top:7px;right:7px;font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;}
+.tag-s1{background:#ffd700;color:#071560;}
+.tag-s2{background:#d4220e;color:#fff;}
+.card-body{padding:9px 11px 11px;}
+.card-title{font-size:12.5px;font-weight:800;color:#071560;margin-bottom:5px;line-height:1.3;}
+.card-meta{display:flex;align-items:center;justify-content:space-between;}
+.card-cat{font-size:10px;color:#3a5298;font-weight:700;background:#eef2ff;padding:2px 8px;border-radius:5px;}
+.card-series{font-size:10px;color:#888;display:flex;align-items:center;gap:3px;}
+.no-results{grid-column:1/-1;text-align:center;padding:3rem 1rem;color:#888;}
+.no-results i{font-size:40px;color:#ccd;display:block;margin-bottom:10px;}
+.footer{background:#071560;color:rgba(255,255,255,.7);text-align:center;padding:1.3rem;font-size:11.5px;line-height:1.9;}
+.footer strong{color:#ffd700;}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;">Akram Visual Vocabulary — 6000 American English words in 200 Tamil-medium videos by Dr. Mozhippriyan</h2>
+<div class="wrap">
+<div class="hero">
+  <div class="hero-badge">Tamil Medium · Ages 3–60</div>
+  <h1>தமிழ் வழியாக <span>6000</span> American English<br>வார்த்தைகளை கற்க</h1>
+  <p class="hero-sub">by <strong style="color:#fff;">Dr. Mozhippriyan</strong> · Akram Visual Vocabulary</p>
+  <div class="hero-stats">
+    <span class="stat-pill"><i class="ti ti-device-tv" aria-hidden="true"></i>200 Videos</span>
+    <span class="stat-pill"><i class="ti ti-book" aria-hidden="true"></i>6000 Words</span>
+    <span class="stat-pill"><i class="ti ti-volume" aria-hidden="true"></i>IPA Pronunciation</span>
+    <span class="stat-pill"><i class="ti ti-wifi-off" aria-hidden="true"></i>Offline Friendly</span>
+  </div>
+</div>
+<div class="feat-bar">
+  <span class="feat"><i class="ti ti-check" aria-hidden="true"></i>Tamil + English</span>
+  <span class="feat"><i class="ti ti-photo" aria-hidden="true"></i>Visual Learning</span>
+  <span class="feat"><i class="ti ti-microphone" aria-hidden="true"></i>Native Speaker Audio</span>
+  <span class="feat"><i class="ti ti-device-laptop" aria-hidden="true"></i>Laptop &amp; Mobile</span>
+  <span class="feat"><i class="ti ti-star" aria-hidden="true"></i>IPA Symbols</span>
+  <span class="feat"><i class="ti ti-users" aria-hidden="true"></i>All Ages</span>
+</div>
+<div class="controls">
+  <div class="search-wrap">
+    <i class="ti ti-search" aria-hidden="true"></i>
+    <input type="text" id="searchInput" placeholder="Search by topic or video number…" oninput="filterVideos()">
+  </div>
+  <div class="series-tabs">
+    <button class="s-tab active" onclick="setSeries('all',this)">All 200</button>
+    <button class="s-tab" onclick="setSeries('s1',this)">Series 1 (150)</button>
+    <button class="s-tab" onclick="setSeries('s2',this)">Series 2 (50)</button>
+  </div>
+</div>
+<div class="filter-wrap" id="filterWrap"></div>
+<div class="section-hdr">
+  <i class="ti ti-brand-youtube" aria-hidden="true"></i>
+  Video Lessons
+  <span class="count-badge" id="countBadge">200 videos</span>
+</div>
+<div class="video-grid" id="videoGrid"></div>
+<div class="footer">
+  <strong>Akram Visual Vocabulary</strong> · Dr. Mozhippriyan<br>
+  தமிழ் வழியாக 6000 American English வார்த்தைகளை கற்க · 200 வீடியோக்கள் · Ages 3–60<br>
+  ஒவ்வொரு ஆங்கில வார்த்தைக்கும் தமிழ் வார்த்தைகளுடன் · சரியான IPA ஒலிபெயர்ப்புடன்
+</div>
+</div>
+<script>
+const YT = 'yEwWzuRGnMw';
+
+const s1 = [
+  {n:1,title:'Cardinal Numerals',cat:'Numbers'},
+  {n:2,title:'Ordinal Numerals',cat:'Numbers'},
+  {n:3,title:'Colors',cat:'Colors'},
+  {n:4,title:'Calendar',cat:'Time & Measurement'},
+  {n:5,title:'Time',cat:'Time & Measurement'},
+  {n:6,title:'Sizes and Shapes',cat:'Time & Measurement'},
+  {n:7,title:'Units of Measurement',cat:'Time & Measurement'},
+  {n:8,title:'Fruits',cat:'Food & Drinks'},
+  {n:9,title:'Vegetables',cat:'Food & Drinks'},
+  {n:10,title:'Meat',cat:'Food & Drinks'},
+  {n:11,title:'Fish and Seafood',cat:'Food & Drinks'},
+  {n:12,title:'Dairy Products',cat:'Food & Drinks'},
+  {n:13,title:'Breads',cat:'Food & Drinks'},
+  {n:14,title:'Grains, Nuts and Seeds',cat:'Food & Drinks'},
+  {n:15,title:'Condiments',cat:'Food & Drinks'},
+  {n:16,title:'Sweets',cat:'Food & Drinks'},
+  {n:17,title:'Meals',cat:'Food & Drinks'},
+  {n:18,title:'Dishes',cat:'Food & Drinks'},
+  {n:19,title:'Describing Food',cat:'Food & Drinks'},
+  {n:20,title:'Non-Alcoholic Drinks',cat:'Food & Drinks'},
+  {n:21,title:'Domestic Animals',cat:'Animals'},
+  {n:22,title:'Domestic Birds',cat:'Animals'},
+  {n:23,title:'Wild Animals',cat:'Animals'},
+  {n:24,title:'Wild Birds',cat:'Animals'},
+  {n:25,title:'Fish',cat:'Animals'},
+  {n:26,title:'Amphibians and Reptiles',cat:'Animals'},
+  {n:27,title:'Aquatic Animals',cat:'Animals'},
+  {n:28,title:'Insects and Arachnids',cat:'Animals'},
+  {n:29,title:'Baby Animals',cat:'Animals'},
+  {n:30,title:'Parts of Animals',cat:'Animals'},
+  {n:31,title:'Animal Groups',cat:'Animals'},
+  {n:32,title:'Animal Sounds',cat:'Animals'},
+  {n:33,title:'Family',cat:'People & Society'},
+  {n:34,title:'Love and Friendship',cat:'People & Society'},
+  {n:35,title:'People',cat:'People & Society'},
+  {n:36,title:'Identity',cat:'People & Society'},
+  {n:37,title:'Age and Life Events',cat:'People & Society'},
+  {n:38,title:'Head and Face',cat:'Human Body'},
+  {n:39,title:'Body Parts',cat:'Human Body'},
+  {n:40,title:'Internal Organs',cat:'Human Body'},
+  {n:41,title:'Skeleton and Muscles',cat:'Human Body'},
+  {n:42,title:'Health Problems',cat:'Health & Medicine'},
+  {n:43,title:'Symptoms',cat:'Health & Medicine'},
+  {n:44,title:'Injuries',cat:'Health & Medicine'},
+  {n:45,title:'Treatment',cat:'Health & Medicine'},
+  {n:46,title:'Specialists',cat:'Health & Medicine'},
+  {n:47,title:'Pharmacy',cat:'Health & Medicine'},
+  {n:48,title:'Dentists',cat:'Health & Medicine'},
+  {n:49,title:'Optometrists',cat:'Health & Medicine'},
+  {n:50,title:'School',cat:'Education & Science'},
+  {n:51,title:'University',cat:'Education & Science'},
+  {n:52,title:'Mathematics',cat:'Education & Science'},
+  {n:53,title:'Physics',cat:'Education & Science'},
+  {n:54,title:'Astronomy',cat:'Education & Science'},
+  {n:55,title:'Chemistry',cat:'Education & Science'},
+  {n:56,title:'Biology',cat:'Education & Science'},
+  {n:57,title:'Geography',cat:'Education & Science'},
+  {n:58,title:'Linguistics',cat:'Education & Science'},
+  {n:59,title:'Scientists',cat:'Education & Science'},
+  {n:60,title:'Jobs Part 1',cat:'Work & Business'},
+  {n:61,title:'Jobs Part 2',cat:'Work & Business'},
+  {n:62,title:'Workplace',cat:'Work & Business'},
+  {n:63,title:'Business',cat:'Work & Business'},
+  {n:64,title:'Banks',cat:'Work & Business'},
+  {n:65,title:'Winter Sports',cat:'Sports'},
+  {n:66,title:'Summer Sports',cat:'Sports'},
+  {n:67,title:'Gym',cat:'Sports'},
+  {n:68,title:'Sports Equipment',cat:'Sports'},
+  {n:69,title:'About Sports',cat:'Sports'},
+  {n:70,title:'Sportsmen',cat:'Sports'},
+  {n:71,title:'Clothes',cat:'Fashion & Style'},
+  {n:72,title:'Footwear',cat:'Fashion & Style'},
+  {n:73,title:'Accessories',cat:'Fashion & Style'},
+  {n:74,title:'Beauty Shop',cat:'Fashion & Style'},
+  {n:75,title:'Tailor',cat:'Fashion & Style'},
+  {n:76,title:'Types of Houses',cat:'Home & Living'},
+  {n:77,title:'Rooms',cat:'Home & Living'},
+  {n:78,title:'Furniture',cat:'Home & Living'},
+  {n:79,title:'Home Decor',cat:'Home & Living'},
+  {n:80,title:'Parts of The House',cat:'Home & Living'},
+  {n:81,title:'Describing A House',cat:'Home & Living'},
+  {n:82,title:'Real Estate Office',cat:'Home & Living'},
+  {n:83,title:'Types of Stores',cat:'Shopping'},
+  {n:84,title:'Appliance Store',cat:'Shopping'},
+  {n:85,title:'Kitchenware',cat:'Shopping'},
+  {n:86,title:'Household Products',cat:'Shopping'},
+  {n:87,title:'Stationery',cat:'Shopping'},
+  {n:88,title:'Bookstore',cat:'Shopping'},
+  {n:89,title:'Kids Store',cat:'Shopping'},
+  {n:90,title:'Cosmetics',cat:'Shopping'},
+  {n:91,title:'Bath Products',cat:'Shopping'},
+  {n:92,title:'Hardware Store',cat:'Shopping'},
+  {n:93,title:'In-Store Shopping',cat:'Shopping'},
+  {n:94,title:'Online Shopping',cat:'Shopping'},
+  {n:95,title:'TV and Radio',cat:'Technology & Media'},
+  {n:96,title:'Computers',cat:'Technology & Media'},
+  {n:97,title:'Internet',cat:'Technology & Media'},
+  {n:98,title:'Phones',cat:'Technology & Media'},
+  {n:99,title:'Journalism',cat:'Technology & Media'},
+  {n:100,title:'Mail',cat:'Technology & Media'},
+  {n:101,title:'Trees',cat:'Nature & Plants'},
+  {n:102,title:'Fruit Trees',cat:'Nature & Plants'},
+  {n:103,title:'Shrubs',cat:'Nature & Plants'},
+  {n:104,title:'Flowers',cat:'Nature & Plants'},
+  {n:105,title:'Other Plants',cat:'Nature & Plants'},
+  {n:106,title:'About Plants',cat:'Nature & Plants'},
+  {n:107,title:'Agriculture',cat:'Nature & Plants'},
+  {n:108,title:'Hotel',cat:'Travel & Leisure'},
+  {n:109,title:'Restaurant and Bar',cat:'Travel & Leisure'},
+  {n:110,title:'Tourist Attractions',cat:'Travel & Leisure'},
+  {n:111,title:'Buildings',cat:'Travel & Leisure'},
+  {n:112,title:'Streets',cat:'Travel & Leisure'},
+  {n:113,title:'Regions',cat:'Travel & Leisure'},
+  {n:114,title:'Literature',cat:'Arts & Culture'},
+  {n:115,title:'Books',cat:'Arts & Culture'},
+  {n:116,title:'Music',cat:'Arts & Culture'},
+  {n:117,title:'Musical Instruments',cat:'Arts & Culture'},
+  {n:118,title:'Plastic Arts',cat:'Arts & Culture'},
+  {n:119,title:'Photography',cat:'Arts & Culture'},
+  {n:120,title:'Myths and Legends',cat:'Arts & Culture'},
+  {n:121,title:'Supernatural',cat:'Arts & Culture'},
+  {n:122,title:'Cinema',cat:'Arts & Culture'},
+  {n:123,title:'Theater',cat:'Arts & Culture'},
+  {n:124,title:'Hobbies',cat:'Hobbies & Games'},
+  {n:125,title:'Traveling',cat:'Hobbies & Games'},
+  {n:126,title:'At The Beach',cat:'Hobbies & Games'},
+  {n:127,title:'Camping',cat:'Hobbies & Games'},
+  {n:128,title:'Fishing',cat:'Hobbies & Games'},
+  {n:129,title:'Games',cat:'Hobbies & Games'},
+  {n:130,title:'Playground',cat:'Hobbies & Games'},
+  {n:131,title:'Road Transportation',cat:'Transport'},
+  {n:132,title:'Rail Transportation',cat:'Transport'},
+  {n:133,title:'Air Transportation',cat:'Transport'},
+  {n:134,title:'Water Transportation',cat:'Transport'},
+  {n:135,title:'Roads',cat:'Transport'},
+  {n:136,title:'Car Parts',cat:'Transport'},
+  {n:137,title:'Police',cat:'Law & Society'},
+  {n:138,title:'Crimes',cat:'Law & Society'},
+  {n:139,title:'Culprits',cat:'Law & Society'},
+  {n:140,title:'Law and Justice',cat:'Law & Society'},
+  {n:141,title:'Army and War',cat:'Law & Society'},
+  {n:142,title:'Weapons',cat:'Law & Society'},
+  {n:143,title:'Poverty and Charity',cat:'Law & Society'},
+  {n:144,title:'Weather',cat:'Environment'},
+  {n:145,title:'Natural Phenomena',cat:'Environment'},
+  {n:146,title:'Landscape',cat:'Environment'},
+  {n:147,title:'Water Bodies',cat:'Environment'},
+  {n:148,title:'Pollution',cat:'Environment'},
+  {n:149,title:'Rocks and Gemstones',cat:'Environment'},
+  {n:150,title:'Minerals and Metals',cat:'Environment'},
+];
+
+const s2 = [
+  {n:1,title:'Pronouns',cat:'Pronouns'},
+  {n:2,title:'Objective Pronouns',cat:'Pronouns'},
+  {n:3,title:'Possessive Pronouns',cat:'Pronouns'},
+  {n:4,title:'Reflexive Pronouns',cat:'Pronouns'},
+  {n:5,title:'Relative Pronouns',cat:'Pronouns'},
+  {n:6,title:'Prepositions',cat:'Grammar Essentials'},
+  {n:7,title:'Conjunctions',cat:'Grammar Essentials'},
+  {n:8,title:'Expressing Quantity',cat:'Grammar Essentials'},
+  {n:9,title:'Punctuations',cat:'Grammar Essentials'},
+  {n:10,title:'Nouns: Communication',cat:'Nouns'},
+  {n:11,title:'Nouns: Consciousness',cat:'Nouns'},
+  {n:12,title:'Nouns: Concrete Nouns',cat:'Nouns'},
+  {n:13,title:'Nouns: Abstract Nouns Part 1',cat:'Nouns'},
+  {n:14,title:'Nouns: Abstract Nouns Part 2',cat:'Nouns'},
+  {n:15,title:'Adjectives: Describing Objects',cat:'Adjectives'},
+  {n:16,title:'Adjectives: About People',cat:'Adjectives'},
+  {n:17,title:'Adjectives: Describing Art',cat:'Adjectives'},
+  {n:18,title:'Adjectives: Descriptions Part 1',cat:'Adjectives'},
+  {n:19,title:'Adjectives: Descriptions Part 2',cat:'Adjectives'},
+  {n:20,title:'Adjectives: Descriptions Part 3',cat:'Adjectives'},
+  {n:21,title:'Adjectives: Pairs Part 1',cat:'Adjectives'},
+  {n:22,title:'Adjectives: Pairs Part 2',cat:'Adjectives'},
+  {n:23,title:'Adverbs: Time and Frequency',cat:'Adverbs'},
+  {n:24,title:'Adverbs: Place',cat:'Adverbs'},
+  {n:25,title:'Adverbs: Manner Part 1',cat:'Adverbs'},
+  {n:26,title:'Adverbs: Manner Part 2',cat:'Adverbs'},
+  {n:27,title:'Adverbs: Manner Part 3',cat:'Adverbs'},
+  {n:28,title:'Adverbs: Degree',cat:'Adverbs'},
+  {n:29,title:'Adverbs: Interrogative and Linking Words',cat:'Adverbs'},
+  {n:30,title:'Verbs: Actions Part 1',cat:'Verbs'},
+  {n:31,title:'Verbs: Actions Part 2',cat:'Verbs'},
+  {n:32,title:'Verbs: Actions Part 3',cat:'Verbs'},
+  {n:33,title:'Verbs: Cooking',cat:'Verbs'},
+  {n:34,title:'Verbs: Management',cat:'Verbs'},
+  {n:35,title:'Verbs: Communications',cat:'Verbs'},
+  {n:36,title:'Verbs: Education and Research',cat:'Verbs'},
+  {n:37,title:'Verbs: Interpersonal Skills',cat:'Verbs'},
+  {n:38,title:'Verbs: Efficiency',cat:'Verbs'},
+  {n:39,title:'Verbs: Skills',cat:'Verbs'},
+  {n:40,title:'Verbs: Stative Verbs',cat:'Verbs'},
+  {n:41,title:'Verbs: Expressing Feelings',cat:'Verbs'},
+  {n:42,title:'Describing Noun Characteristics Part 1',cat:'Describing Nouns'},
+  {n:43,title:'Describing Noun Characteristics Part 2',cat:'Describing Nouns'},
+  {n:44,title:'Describing Noun Characteristics Part 3',cat:'Describing Nouns'},
+  {n:45,title:'Describing Noun: Physical Characteristics',cat:'Describing Nouns'},
+  {n:46,title:'Describing Noun: Physical States',cat:'Describing Nouns'},
+  {n:47,title:'Describing Noun: Emotional States',cat:'Describing Nouns'},
+  {n:48,title:'Describing Noun: Feelings',cat:'Describing Nouns'},
+  {n:49,title:'Describing Noun: People Opinions',cat:'Describing Nouns'},
+  {n:50,title:'Describing Noun: Values and Vices',cat:'Describing Nouns'},
+];
+
+const s1Cats = [...new Set(s1.map(v=>v.cat))];
+const s2Cats = [...new Set(s2.map(v=>v.cat))];
+
+let activeSeries = 'all';
+let activeCat = 'All';
+let currentPlaying = null;
+
+function buildFilters() {
+  const wrap = document.getElementById('filterWrap');
+  const cats = activeSeries==='s2' ? s2Cats : activeSeries==='s1' ? s1Cats : ['All'];
+  if(activeSeries==='all'){
+    wrap.innerHTML='<button class="filter-btn active" onclick="setCat(\'All\',this)">All Topics</button>';
+    return;
+  }
+  const list = activeSeries==='s1'?s1Cats:s2Cats;
+  wrap.innerHTML='<button class="filter-btn active" onclick="setCat(\'All\',this)">All</button>'+
+    list.map(c=>`<button class="filter-btn" onclick="setCat('${c.replace(/'/g,"\\'")}',this)">${c}</button>`).join('');
+  activeCat='All';
+}
+
+function setCat(c,btn){
+  activeCat=c;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filterVideos();
+}
+
+function setSeries(s,btn){
+  activeSeries=s;
+  activeCat='All';
+  document.querySelectorAll('.s-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildFilters();
+  filterVideos();
+}
+
+function filterVideos(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  let pool=[];
+  if(activeSeries==='all'||activeSeries==='s1') s1.forEach(v=>pool.push({...v,series:'s1',label:'Series 1'}));
+  if(activeSeries==='all'||activeSeries==='s2') s2.forEach(v=>pool.push({...v,series:'s2',label:'Series 2'}));
+  const filtered=pool.filter(v=>{
+    const mc=activeCat==='All'||v.cat===activeCat;
+    const mq=!q||v.title.toLowerCase().includes(q)||v.cat.toLowerCase().includes(q)||String(v.n).includes(q);
+    return mc&&mq;
+  });
+  renderGrid(filtered);
+  document.getElementById('countBadge').textContent=filtered.length+' video'+(filtered.length!==1?'s':'');
+}
+
+function playVideo(el,ytId){
+  if(currentPlaying&&currentPlaying!==el){
+    const p=currentPlaying;
+    const tw=p.querySelector('.thumb-wrap');
+    const numTxt=tw.querySelector('.vid-num')?.textContent||'';
+    const stxt=tw.querySelector('.series-tag')?.textContent||'';
+    const scls=tw.querySelector('.series-tag')?.className.replace('series-tag ','').trim()||'';
+    tw.innerHTML='<div class="thumb-overlay"><button class="play-btn"><i class="ti ti-player-play" aria-hidden="true"></i></button><span class="thumb-label">Click to Play</span></div>';
+    if(numTxt){const nb=document.createElement('div');nb.className='vid-num';nb.textContent=numTxt;tw.appendChild(nb);}
+    if(stxt){const sb=document.createElement('div');sb.className='series-tag '+scls;sb.textContent=stxt;tw.appendChild(sb);}
+    tw.querySelector('.play-btn').onclick=e=>{e.stopPropagation();playVideo(p,ytId);};
+    p.classList.remove('playing');
+  }
+  const tw=el.querySelector('.thumb-wrap');
+  const numTxt=tw.querySelector('.vid-num')?.textContent||'';
+  const stxt=tw.querySelector('.series-tag')?.textContent||'';
+  const scls=tw.querySelector('.series-tag')?.className.replace('series-tag ','').trim()||'';
+  tw.innerHTML='';
+  const ifr=document.createElement('iframe');
+  ifr.src='https://www.youtube.com/embed/'+ytId+'?autoplay=1&rel=0';
+  ifr.allow='autoplay; encrypted-media';
+  ifr.allowFullscreen=true;
+  tw.appendChild(ifr);
+  if(numTxt){const nb=document.createElement('div');nb.className='vid-num';nb.textContent=numTxt;tw.appendChild(nb);}
+  if(stxt){const sb=document.createElement('div');sb.className='series-tag '+scls;sb.textContent=stxt;tw.appendChild(sb);}
+  el.classList.add('playing');
+  currentPlaying=el;
+}
+
+function renderGrid(videos){
+  const grid=document.getElementById('videoGrid');
+  if(!videos.length){grid.innerHTML='<div class="no-results"><i class="ti ti-search-off" aria-hidden="true"></i>No videos found. Try a different search.</div>';return;}
+  grid.innerHTML=videos.map(v=>`
+    <div class="video-card" id="vc-${v.series}-${v.n}" onclick="playVideo(this,'${YT}')">
+      <div class="thumb-wrap">
+        <div class="thumb-overlay">
+          <button class="play-btn" onclick="event.stopPropagation();playVideo(document.getElementById('vc-${v.series}-${v.n}'),'${YT}')">
+            <i class="ti ti-player-play" aria-hidden="true"></i>
+          </button>
+          <span class="thumb-label">Click to Play</span>
+        </div>
+        <div class="vid-num">#${String(v.n).padStart(3,'0')}</div>
+        <div class="series-tag ${v.series==='s1'?'tag-s1':'tag-s2'}">${v.series==='s1'?'Vocab':'Grammar'}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">${v.title}</div>
+        <div class="card-meta">
+          <span class="card-cat">${v.cat}</span>
+          <span class="card-series"><i class="ti ti-${v.series==='s1'?'book':'pencil'}" style="font-size:11px" aria-hidden="true"></i>${v.label}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+buildFilters();
+filterVideos();
+</script>
