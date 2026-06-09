@@ -7,765 +7,209 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* (same styles as before - keep your existing CSS) */
+  /* ===== SAME STYLES AS BEFORE (keep your existing CSS) ===== */
+  /* I'm including the minimal required styles – you can reuse your full CSS */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --navy:   #0B1E3D;
-    --navy2:  #122649;
-    --gold:   #F5A623;
-    --sky:    #0EA5E9;
-    --muted:  #64748B;
-    --border: #E2E8F0;
-    --bg:     #F1F5FC;
-    --white:  #FFFFFF;
-    --error:  #EF4444;
-    --sidebar-w: 260px;
+    --navy: #0B1E3D; --navy2: #122649; --gold: #F5A623;
+    --sky: #0EA5E9; --muted: #64748B; --border: #E2E8F0;
+    --bg: #F1F5FC; --white: #FFFFFF; --sidebar-w: 260px;
   }
-
-  html, body {
-    height: 100%;
-    font-family: 'Inter', system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--navy);
-  }
-
-  .layout {
-    display: flex;
-    min-height: 100vh;
-  }
-
+  html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--bg); }
+  .layout { display: flex; min-height: 100vh; }
   .sidebar {
-    width: var(--sidebar-w);
-    min-width: var(--sidebar-w);
-    background: var(--navy);
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow-y: auto;
+    width: var(--sidebar-w); background: var(--navy);
+    display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0;
   }
-  .sidebar-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 1.5rem 1.25rem 1.25rem;
-    border-bottom: 1px solid rgba(255,255,255,.07);
-  }
-  .sidebar-brand .icon {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, var(--gold) 0%, #e8951a 100%);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-  }
-  .sidebar-brand .name {
-    font-size: 15px;
-    font-weight: 800;
-    color: var(--white);
-    line-height: 1.2;
-  }
+  .sidebar-brand { padding: 1.5rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,.07); display: flex; gap: 10px; align-items: center; }
+  .sidebar-brand .icon { width: 38px; height: 38px; background: linear-gradient(135deg, var(--gold), #e8951a); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .sidebar-brand .name { font-size: 15px; font-weight: 800; color: white; }
   .sidebar-brand .name span { color: var(--gold); }
-
-  .sidebar-user {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid rgba(255,255,255,.07);
-  }
-  .user-avatar {
-    width: 42px; height: 42px;
-    background: linear-gradient(135deg, var(--sky) 0%, #0284c7 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 8px;
-  }
-  .user-name {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 2px;
-  }
-  .user-lang {
-    font-size: 12px;
-    color: rgba(255,255,255,.5);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .lang-badge {
-    background: rgba(245,166,35,.18);
-    color: var(--gold);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-top: 5px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .sidebar-section {
-    padding: 0.75rem 1.25rem 0.5rem;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: rgba(255,255,255,.3);
-  }
-  .sidebar-nav {
-    flex: 1;
-    padding: 0 0.75rem;
-  }
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 9px 12px;
-    border-radius: 8px;
-    font-size: 13.5px;
-    font-weight: 600;
-    color: rgba(255,255,255,.65);
-    cursor: pointer;
-    transition: background .15s, color .15s;
-    margin-bottom: 2px;
-    text-decoration: none;
-  }
-  .nav-item:hover, .nav-item.active {
-    background: rgba(255,255,255,.08);
-    color: var(--white);
-  }
+  .sidebar-user { padding: 1rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,.07); }
+  .user-avatar { width: 42px; height: 42px; background: linear-gradient(135deg, var(--sky), #0284c7); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; margin-bottom: 8px; }
+  .user-name { font-size: 13.5px; font-weight: 700; color: white; }
+  .lang-badge { background: rgba(245,166,35,.18); color: var(--gold); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-flex; gap: 4px; }
+  .sidebar-nav { flex: 1; padding: 0 0.75rem; }
+  .nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,.65); cursor: pointer; }
   .nav-item.active { background: rgba(245,166,35,.15); color: var(--gold); }
-  .nav-item .nav-ico { font-size: 16px; }
-
-  .sidebar-footer {
-    padding: 1rem;
-    border-top: 1px solid rgba(255,255,255,.07);
-  }
-  .btn-logout {
-    width: 100%;
-    padding: 9px;
-    background: rgba(239,68,68,.12);
-    color: #fca5a5;
-    border: 1px solid rgba(239,68,68,.2);
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    transition: background .15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-  .btn-logout:hover { background: rgba(239,68,68,.22); }
-
-  .main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .topbar {
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    padding: 0.9rem 1.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-shrink: 0;
-  }
-  .topbar-title {
-    font-size: 16px;
-    font-weight: 800;
-    color: var(--navy);
-  }
-  .search-wrap {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 7px 12px;
-    flex: 1;
-    max-width: 320px;
-  }
-  .search-wrap input {
-    border: none;
-    background: transparent;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    color: var(--navy);
-    outline: none;
-    width: 100%;
-  }
-  .search-wrap input::placeholder { color: var(--muted); }
-
-  .content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 1.75rem;
-  }
-
-  .pending-card {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 3rem 2rem;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,.06);
-    max-width: 500px;
-    margin: 2rem auto;
-  }
-  .pending-icon { font-size: 52px; margin-bottom: 1rem; }
-  .pending-card h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; }
-  .pending-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
-  .pending-badge {
-    display: inline-block;
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    color: #92400e;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 4px 14px;
-    border-radius: 20px;
-    margin-bottom: 1rem;
-  }
-
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-    margin-bottom: 1.5rem;
-  }
-  .stat-card {
-    background: var(--white);
-    border-radius: 12px;
-    padding: 1.1rem 1.25rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,.05);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .stat-ico {
-    width: 44px; height: 44px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
+  .sidebar-footer { padding: 1rem; border-top: 1px solid rgba(255,255,255,.07); }
+  .btn-logout { width: 100%; padding: 9px; background: rgba(239,68,68,.12); color: #fca5a5; border: 1px solid rgba(239,68,68,.2); border-radius: 8px; font-weight: 600; cursor: pointer; }
+  .main { flex: 1; display: flex; flex-direction: column; }
+  .topbar { background: white; border-bottom: 1px solid var(--border); padding: 0.9rem 1.75rem; display: flex; justify-content: space-between; }
+  .search-wrap { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 7px 12px; max-width: 320px; }
+  .search-wrap input { border: none; background: transparent; outline: none; width: 100%; }
+  .content { flex: 1; overflow-y: auto; padding: 1.75rem; }
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+  .stat-card { background: white; border-radius: 12px; padding: 1.1rem 1.25rem; display: flex; align-items: center; gap: 12px; }
+  .stat-ico { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
   .stat-ico.blue { background: #eff6ff; }
-  .stat-ico.gold { background: #fffbeb; }
-  .stat-ico.green { background: #f0fdf4; }
-  .stat-label {
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .stat-value {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--navy);
-    line-height: 1.1;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
-  .section-title {
-    font-size: 16px;
-    font-weight: 800;
-    color: var(--navy);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .count-pill {
-    background: #eef2ff;
-    color: #3730a3;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 10px;
-    border-radius: 20px;
-  }
-
-  .video-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-  }
-
-  .video-card {
-    background: var(--white);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,.06);
-    border: 1.5px solid var(--border);
-    transition: transform .2s, box-shadow .2s, border-color .2s;
-  }
-  .video-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 28px rgba(11,30,61,.12);
-    border-color: #c7d7f8;
-  }
-  .video-card.playing {
-    border-color: var(--sky);
-    box-shadow: 0 0 0 3px rgba(14,165,233,.15);
-  }
-
-  .thumb-wrap {
-    position: relative;
-    padding-top: 56.25%;
-    background: var(--navy);
-    overflow: hidden;
-  }
-  .thumb-wrap iframe {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    border: 0;
-  }
-  .thumb-overlay {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, #0B1E3D 0%, #1a3fa8 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: opacity .2s;
-  }
-  .thumb-overlay:hover { opacity: 0.9; }
-  .play-btn {
-    width: 52px; height: 52px;
-    background: var(--gold);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-    transition: transform .15s, box-shadow .15s;
-    box-shadow: 0 6px 20px rgba(245,166,35,.45);
-  }
-  .play-btn:hover { transform: scale(1.1); }
-  .play-btn::after {
-    content: '▶';
-    color: var(--navy);
-    font-size: 18px;
-    margin-left: 3px;
-  }
-  .thumb-label {
-    color: rgba(255,255,255,.7);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-  .vid-num {
-    position: absolute;
-    top: 8px; left: 8px;
-    background: rgba(0,0,0,.7);
-    color: var(--gold);
-    font-size: 10px;
-    font-weight: 800;
-    padding: 2px 8px;
-    border-radius: 6px;
-    letter-spacing: 0.3px;
-  }
-
-  .card-body {
-    padding: 12px 14px 14px;
-  }
-  .card-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 6px;
-    line-height: 1.35;
-  }
-  .card-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .card-cat {
-    font-size: 11px;
-    font-weight: 700;
-    color: #3b82f6;
-    background: #eff6ff;
-    padding: 2px 9px;
-    border-radius: 6px;
-  }
-  .card-order {
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 500;
-  }
-
-  .empty-state {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 4rem 1rem;
-    color: var(--muted);
-  }
-  .empty-state .ico { font-size: 48px; margin-bottom: 12px; }
-  .empty-state h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
-  .empty-state p { font-size: 13.5px; }
-
-  .loading-state {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem;
-    gap: 12px;
-    color: var(--muted);
-    font-size: 14px;
-  }
-  .spinner {
-    width: 22px; height: 22px;
-    border: 3px solid var(--border);
-    border-top-color: var(--sky);
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
-  }
+  .stat-value { font-size: 1.4rem; font-weight: 800; color: var(--navy); }
+  .section-header { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .video-card { background: white; border-radius: 14px; overflow: hidden; border: 1.5px solid var(--border); transition: 0.2s; }
+  .video-card.playing { border-color: var(--sky); }
+  .thumb-wrap { position: relative; padding-top: 56.25%; background: var(--navy); }
+  .thumb-wrap iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; }
+  .thumb-overlay { position: absolute; inset:0; background: linear-gradient(135deg, #0B1E3D, #1a3fa8); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
+  .play-btn { width: 52px; height: 52px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
+  .play-btn::after { content: '▶'; color: var(--navy); font-size: 18px; margin-left: 3px; }
+  .vid-num { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,.7); color: var(--gold); font-size: 10px; padding: 2px 8px; border-radius: 6px; }
+  .card-body { padding: 12px 14px; }
+  .card-title { font-size: 14px; font-weight: 700; }
+  .empty-state { text-align: center; padding: 4rem; color: var(--muted); }
+  .debug-panel { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 12px; margin-top: 20px; font-family: monospace; font-size: 12px; white-space: pre-wrap; }
+  .loading-state { display: flex; justify-content: center; padding: 4rem; gap: 12px; }
+  .spinner { width: 22px; height: 22px; border: 3px solid var(--border); border-top-color: var(--sky); border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    color: var(--navy);
-    padding: 4px;
-  }
-  .sidebar-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.45);
-    z-index: 10;
-  }
-
-  /* Debug panel (temporary, will show if no videos) */
-  .debug-panel {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 20px;
-    font-size: 12px;
-    font-family: monospace;
-    text-align: left;
-    max-width: 100%;
-    overflow-x: auto;
-  }
-
-  @media (max-width: 768px) {
-    .sidebar {
-      position: fixed;
-      left: -280px;
-      top: 0; bottom: 0;
-      z-index: 20;
-      transition: left .25s ease;
-      height: 100%;
-    }
-    .sidebar.open { left: 0; }
-    .sidebar-overlay.show { display: block; }
-    .menu-btn { display: block; }
-    .content { padding: 1.25rem; }
-    .topbar { padding: 0.9rem 1.25rem; }
-    .video-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 768px) { .sidebar { position: fixed; left: -280px; z-index: 20; transition: left 0.25s; } .sidebar.open { left: 0; } .menu-btn { display: block; } }
+  .menu-btn { display: none; background: none; border: none; font-size: 22px; cursor: pointer; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 10; }
+  .sidebar-overlay.show { display: block; }
 </style>
 </head>
 <body>
 
 <div class="layout">
-
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-      <div class="icon">📘</div>
-      <div class="name">Vocabulary<br><span>Academy</span></div>
-    </div>
-    <div class="sidebar-user" id="sidebarUser">
-      <div class="user-avatar" id="userAvatar">…</div>
-      <div class="user-name" id="userName">Loading…</div>
-      <div class="user-lang" id="userLangWrap" style="display:none">
-        <span id="userLangBadge" class="lang-badge"></span>
-      </div>
-    </div>
-    <div class="sidebar-nav">
-      <div class="sidebar-section">Navigation</div>
-      <a class="nav-item active" href="#"><span class="nav-ico">🎓</span> My Course</a>
-    </div>
-    <div class="sidebar-footer">
-      <button class="btn-logout" id="logoutBtn">🚪 Sign Out</button>
-    </div>
+    <div class="sidebar-brand"><div class="icon">📘</div><div class="name">Vocabulary<br><span>Academy</span></div></div>
+    <div class="sidebar-user"><div class="user-avatar" id="userAvatar">…</div><div class="user-name" id="userName">Loading…</div><div id="userLangBadge" class="lang-badge" style="margin-top:5px;"></div></div>
+    <div class="sidebar-nav"><a class="nav-item active"><span>🎓</span> My Course</a></div>
+    <div class="sidebar-footer"><button class="btn-logout" id="logoutBtn">🚪 Sign Out</button></div>
   </aside>
-
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
   <div class="main">
     <div class="topbar">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <button class="menu-btn" id="menuBtn">☰</button>
-        <div class="topbar-title" id="topbarTitle">My Course</div>
-      </div>
-      <div class="search-wrap" id="searchWrap" style="display:none">
-        <span>🔍</span>
-        <input type="text" id="searchInput" placeholder="Search videos…">
-      </div>
+      <div style="display:flex; gap:10px;"><button class="menu-btn" id="menuBtn">☰</button><div class="topbar-title" id="topbarTitle">My Course</div></div>
+      <div class="search-wrap" id="searchWrap" style="display:none"><span>🔍</span><input type="text" id="searchInput" placeholder="Search videos…"></div>
     </div>
-    <div class="content" id="contentArea">
-      <div class="loading-state">
-        <div class="spinner"></div>
-        Loading your course…
-      </div>
-    </div>
+    <div class="content" id="contentArea"><div class="loading-state"><div class="spinner"></div> Loading…</div></div>
   </div>
 </div>
 
 <script type="module">
 import { app } from "./firebase-config.js";
-import {
-  getAuth, onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
-import {
-  getFirestore, doc, getDoc,
-  collection, getDocs, query, where
-} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const auth = getAuth(app);
-const db   = getFirestore(app);
-
-const LANG_META = {
-  'American English': { flag: '🇺🇸', label: 'American English' },
-  'English': { flag: '🇺🇸', label: 'English' },
-  'Hindi':            { flag: '🇮🇳', label: 'Hindi' },
-  'Arabic':           { flag: '🇸🇦', label: 'Arabic' },
-  'German':           { flag: '🇩🇪', label: 'German' },
-  'Mandarin':         { flag: '🇨🇳', label: 'Mandarin' },
-  'Japanese':         { flag: '🇯🇵', label: 'Japanese' },
-  'French':           { flag: '🇫🇷', label: 'French' },
-};
+const db = getFirestore(app);
 
 // Mobile sidebar
-const sidebar = document.getElementById('sidebar');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
-document.getElementById('menuBtn').addEventListener('click', () => {
-  sidebar.classList.add('open');
-  sidebarOverlay.classList.add('show');
-});
-sidebarOverlay.addEventListener('click', () => {
-  sidebar.classList.remove('open');
-  sidebarOverlay.classList.remove('show');
-});
-
-// Logout
-document.getElementById('logoutBtn').addEventListener('click', async () => {
-  await signOut(auth);
-  window.location = 'login.html';
-});
+document.getElementById('menuBtn').onclick = () => {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('show');
+};
+document.getElementById('sidebarOverlay').onclick = () => {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+};
+document.getElementById('logoutBtn').onclick = async () => { await signOut(auth); window.location = 'login.html'; };
 
 let currentPlayingId = null;
+let allVideos = [];
 
-// Simple function to fetch videos WITHOUT orderBy to avoid index issues
-async function fetchVideosForLanguage(language) {
-  console.log("🔍 Fetching videos for language:", language);
-  const videosRef = collection(db, 'videos');
-  
-  // Try exact match
-  const q = query(videosRef, where('language', '==', language));
-  const snapshot = await getDocs(q);
-  let videos = [];
-  snapshot.forEach(doc => {
-    videos.push({ id: doc.id, ...doc.data() });
-  });
-  console.log(`📊 Found ${videos.length} videos with exact match for "${language}"`);
-  
-  // If no results and language is 'English' or 'American English', try the other
-  if (videos.length === 0 && (language === 'English' || language === 'American English')) {
-    const altLang = language === 'English' ? 'American English' : 'English';
-    console.log(`🔄 Trying alternate language: "${altLang}"`);
-    const altQ = query(videosRef, where('language', '==', altLang));
-    const altSnapshot = await getDocs(altQ);
-    altSnapshot.forEach(doc => {
-      videos.push({ id: doc.id, ...doc.data() });
-    });
-    console.log(`📊 Found ${videos.length} videos with alternate match for "${altLang}"`);
-  }
-  
-  // If still no videos, try case-insensitive by fetching all and filtering (fallback)
-  if (videos.length === 0) {
-    console.log("⚠️ No videos found with where clause, fetching all videos and filtering client-side...");
-    const allSnapshot = await getDocs(videosRef);
-    allSnapshot.forEach(doc => {
-      const data = doc.data();
-      if (data.language && data.language.toLowerCase() === language.toLowerCase()) {
-        videos.push({ id: doc.id, ...data });
-      }
-    });
-    console.log(`📊 Found ${videos.length} videos after case-insensitive filter`);
-  }
-  
-  // Sort by order if exists
-  videos.sort((a, b) => {
-    if (a.order != null && b.order != null) return a.order - b.order;
-    return (a.title || '').localeCompare(b.title || '');
-  });
-  
-  return videos;
-}
+// Helper: safe HTML escape
+function esc(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+function escAttr(str) { return str.replace(/'/g, '&#39;').replace(/"/g, '&quot;'); }
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location = 'login.html'; return; }
 
-  const userSnap = await getDoc(doc(db, 'users', user.uid));
-  if (!userSnap.exists()) {
-    renderContent(`<div class="empty-state"><div class="ico">❌</div><h3>Profile not found</h3><p>Please contact support.</p></div>`);
-    return;
-  }
+  // Fetch user data
+  const userDoc = await getDocs(collection(db, 'users'));
+  let userData = null;
+  userDoc.forEach(d => { if (d.id === user.uid) userData = d.data(); });
+  if (!userData) { renderError('User profile not found'); return; }
 
-  const data = userSnap.data();
-  const name = data.name || data.Name || 'Student';
-  const lang = data.language || data.Language || '';
-  const status = data.status || data.Status;
-  const meta = LANG_META[lang] || { flag: '🌐', label: lang || 'Not assigned' };
+  const name = userData.name || 'Student';
+  const lang = userData.language || '';
+  const status = userData.status;
+  const meta = { flag: '🌐', label: lang || 'Not assigned' };
+  if (lang === 'American English') meta.flag = '🇺🇸';
+  else if (lang === 'English') meta.flag = '🇺🇸';
+  else if (lang === 'Hindi') meta.flag = '🇮🇳';
+  else if (lang === 'Arabic') meta.flag = '🇸🇦';
+  else if (lang === 'German') meta.flag = '🇩🇪';
+  else if (lang === 'Mandarin') meta.flag = '🇨🇳';
+  else if (lang === 'Japanese') meta.flag = '🇯🇵';
+  else if (lang === 'French') meta.flag = '🇫🇷';
+  meta.label = lang;
 
   document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
   document.getElementById('userName').textContent = name;
-  if (lang) {
-    const wrap = document.getElementById('userLangWrap');
-    wrap.style.display = 'flex';
-    document.getElementById('userLangBadge').textContent = meta.flag + ' ' + meta.label;
-  }
+  document.getElementById('userLangBadge').textContent = meta.flag + ' ' + meta.label;
   document.getElementById('topbarTitle').textContent = name + "'s Course";
 
   if (status !== 'approved') {
-    renderContent(`
-      <div class="pending-card">
-        <div class="pending-icon">⏳</div>
-        <div class="pending-badge">Pending Approval</div>
-        <h2>Your account is under review</h2>
-        <p>An administrator will approve your account shortly.</p>
-      </div>
-    `);
+    renderContent(`<div class="pending-card" style="text-align:center;padding:3rem;"><div class="pending-badge">Pending Approval</div><h2>Your account is under review</h2></div>`);
     return;
   }
-
   document.getElementById('searchWrap').style.display = 'flex';
+  if (!lang) { renderError('No language assigned. Contact support.'); return; }
 
-  if (!lang) {
+  // 🔥 CRITICAL: Fetch ALL videos from 'videos' collection (no where clause)
+  const videosSnapshot = await getDocs(collection(db, 'videos'));
+  const allDocs = [];
+  videosSnapshot.forEach(doc => allDocs.push({ id: doc.id, ...doc.data() }));
+  console.log(`📁 Total documents in 'videos' collection: ${allDocs.length}`);
+  console.log('📄 Raw documents:', allDocs);
+
+  // Filter by language (case‑insensitive)
+  let filtered = allDocs.filter(v => {
+    const docLang = (v.language || '').trim();
+    const userLang = lang.trim();
+    return docLang.toLowerCase() === userLang.toLowerCase();
+  });
+
+  // Special fallback: if userLang is 'American English' and no matches, try 'English'
+  if (filtered.length === 0 && lang === 'American English') {
+    console.log('🔄 No American English videos, trying English');
+    filtered = allDocs.filter(v => (v.language || '').trim().toLowerCase() === 'english');
+  } else if (filtered.length === 0 && lang === 'English') {
+    console.log('🔄 No English videos, trying American English');
+    filtered = allDocs.filter(v => (v.language || '').trim().toLowerCase() === 'american english');
+  }
+
+  // Sort by order if available
+  filtered.sort((a,b) => (a.order || 0) - (b.order || 0));
+  allVideos = filtered;
+
+  // If still zero, show debug panel with details
+  if (filtered.length === 0) {
+    const debugInfo = {
+      userLanguage: lang,
+      totalVideosInCollection: allDocs.length,
+      allLanguagesFound: [...new Set(allDocs.map(v => v.language))],
+      sampleDocuments: allDocs.slice(0,3).map(v => ({ id: v.id, language: v.language, title: v.title }))
+    };
     renderContent(`
-      <div class="empty-state">
-        <div class="ico">⚠️</div>
-        <h3>No language assigned</h3>
-        <p>Please contact support to have a language assigned to your profile.</p>
-      </div>
+      <div class="empty-state"><div class="ico">🔍</div><h3>No videos for "${lang}"</h3><p>Check the debug info below.</p></div>
+      <div class="debug-panel"><strong>🔧 Firestore Debug</strong><br><pre>${JSON.stringify(debugInfo, null, 2)}</pre><hr>Make sure at least one video document has <code>language: "${lang}"</code> (exact case, no extra spaces).</div>
     `);
     return;
   }
 
-  let videos = await fetchVideosForLanguage(lang);
-  window.currentVideos = videos;
-  
-  renderDashboard(meta, videos);
-  
-  // If still no videos, show debug info
-  if (videos.length === 0) {
-    console.error("❌ CRITICAL: No videos found after all fallbacks!");
-    // Show debug panel with instructions
-    const debugHtml = `
-      <div class="debug-panel">
-        <strong>🔧 Debug Info:</strong><br>
-        User language: <code>${lang}</code><br>
-        Videos collection exists? Check Firestore.<br>
-        Make sure at least one document in "videos" collection has field <code>language</code> = "${lang}" (case-sensitive).<br>
-        <hr>
-        <strong>Try this in Firestore console:</strong><br>
-        Add a test video document with:<br>
-        <code>language: "${lang}"</code><br>
-        <code>title: "Test Video"</code><br>
-        <code>bunnySrc: "https://player.mediadelivery.net/embed/679120/85a6a0b7-28ba-4d84-a0b6-21c43c3b17eb?autoplay=true"</code>
-      </div>
-    `;
-    const grid = document.getElementById('videoGrid');
-    if (grid) grid.innerHTML = debugHtml;
-  }
-
-  const searchInput = document.getElementById('searchInput');
-  if (searchInput) {
-    searchInput.addEventListener('input', () => {
-      const q = searchInput.value.toLowerCase();
-      const filtered = window.currentVideos.filter(v =>
-        !q ||
-        (v.title || '').toLowerCase().includes(q) ||
-        (v.category || v.cat || '').toLowerCase().includes(q)
-      );
-      renderVideoGrid(filtered);
-      const countEl = document.getElementById('vidCount');
-      if (countEl) countEl.textContent = filtered.length + ' video' + (filtered.length !== 1 ? 's' : '');
-    });
-  }
+  // Render dashboard
+  renderDashboard(meta, filtered);
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase();
+    const filteredSearch = allVideos.filter(v => (v.title || '').toLowerCase().includes(q));
+    renderVideoGrid(filteredSearch);
+    document.getElementById('vidCount').innerText = filteredSearch.length + ' video' + (filteredSearch.length !== 1 ? 's' : '');
+  });
 });
 
-function renderContent(html) {
-  document.getElementById('contentArea').innerHTML = html;
-}
+function renderContent(html) { document.getElementById('contentArea').innerHTML = html; }
+function renderError(msg) { renderContent(`<div class="empty-state"><div class="ico">⚠️</div><h3>${msg}</h3></div>`); }
 
 function renderDashboard(meta, videos) {
-  const area = document.getElementById('contentArea');
-  area.innerHTML = `
+  document.getElementById('contentArea').innerHTML = `
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-ico blue">🎥</div>
-        <div>
-          <div class="stat-label">Total Videos</div>
-          <div class="stat-value">${videos.length}</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-ico gold">${meta.flag}</div>
-        <div>
-          <div class="stat-label">Your Language</div>
-          <div class="stat-value" style="font-size:1rem; line-height:1.3;">${meta.label}</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-ico green">✅</div>
-        <div>
-          <div class="stat-label">Status</div>
-          <div class="stat-value" style="font-size:1rem; color:#10B981; line-height:1.3;">Active</div>
-        </div>
-      </div>
+      <div class="stat-card"><div class="stat-ico blue">🎥</div><div><div class="stat-label">Total Videos</div><div class="stat-value">${videos.length}</div></div></div>
+      <div class="stat-card"><div class="stat-ico gold">${meta.flag}</div><div><div class="stat-label">Your Language</div><div class="stat-value" style="font-size:1rem;">${meta.label}</div></div></div>
+      <div class="stat-card"><div class="stat-ico green">✅</div><div><div class="stat-label">Status</div><div class="stat-value" style="font-size:1rem;color:#10B981;">Active</div></div></div>
     </div>
-    <div class="section-header">
-      <div class="section-title">
-        ${meta.flag} ${meta.label} Lessons
-        <span class="count-pill" id="vidCount">${videos.length} video${videos.length !== 1 ? 's' : ''}</span>
-      </div>
-    </div>
+    <div class="section-header"><div class="section-title">${meta.flag} ${meta.label} Lessons <span class="count-pill" id="vidCount">${videos.length} videos</span></div></div>
     <div class="video-grid" id="videoGrid"></div>
   `;
   renderVideoGrid(videos);
@@ -774,112 +218,65 @@ function renderDashboard(meta, videos) {
 function renderVideoGrid(videos) {
   const grid = document.getElementById('videoGrid');
   if (!grid) return;
-
   if (!videos.length) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <div class="ico">📭</div>
-        <h3>No videos found</h3>
-        <p>No lessons are available yet, or nothing matches your search. Check back soon!</p>
-      </div>`;
+    grid.innerHTML = `<div class="empty-state"><div class="ico">📭</div><h3>No videos match your search</h3></div>`;
     return;
   }
-
-  grid.innerHTML = videos.map((v, i) => {
-    const title    = escHtml(v.title || 'Untitled Lesson');
-    const category = escHtml(v.category || v.cat || '');
-    const order    = v.order != null ? v.order : (i + 1);
+  grid.innerHTML = videos.map((v, idx) => {
+    const title = esc(v.title || 'Untitled');
+    const order = v.order != null ? v.order : idx+1;
     const bunnySrc = (v.bunnySrc || '').trim();
-    const cardId   = 'vc-' + v.id;
-
+    const vidId = v.id;
     return `
-      <div class="video-card" id="${cardId}" data-video-id="${v.id}" data-bunny-src="${escAttr(bunnySrc)}">
-        <div class="thumb-wrap" id="tw-${v.id}">
-          <div class="thumb-overlay" onclick="event.stopPropagation(); playVideo('${v.id}', '${escAttr(bunnySrc)}')">
-            <button class="play-btn" title="Play ${title}"></button>
-            <span class="thumb-label">Click to Play</span>
+      <div class="video-card" id="vc-${vidId}" data-bunny-src="${escAttr(bunnySrc)}">
+        <div class="thumb-wrap" id="tw-${vidId}">
+          <div class="thumb-overlay" onclick="window.playVideo('${vidId}')">
+            <button class="play-btn"></button><span class="thumb-label">Click to Play</span>
           </div>
-          <div class="vid-num">#${String(order).padStart(3, '0')}</div>
+          <div class="vid-num">#${String(order).padStart(3,'0')}</div>
         </div>
-        <div class="card-body">
-          <div class="card-title">${title}</div>
-          <div class="card-meta">
-            ${category ? `<span class="card-cat">${category}</span>` : '<span></span>'}
-            <span class="card-order">Lesson ${order}</span>
-          </div>
-        </div>
+        <div class="card-body"><div class="card-title">${title}</div></div>
       </div>`;
   }).join('');
 }
 
-window.playVideo = function(videoId, bunnySrc) {
-  if (!bunnySrc) {
-    alert('No video source available for this lesson.');
-    return;
-  }
+window.playVideo = function(videoId) {
+  const card = document.getElementById(`vc-${videoId}`);
+  if (!card) return;
+  const bunnySrc = card.getAttribute('data-bunny-src');
+  if (!bunnySrc) { alert('No video source'); return; }
 
-  const currentCard = document.getElementById('vc-' + videoId);
-  if (!currentCard) return;
-
+  // Reset previous playing video
   if (currentPlayingId && currentPlayingId !== videoId) {
-    const prevCard = document.getElementById('vc-' + currentPlayingId);
+    const prevCard = document.getElementById(`vc-${currentPlayingId}`);
     if (prevCard) {
       const prevSrc = prevCard.getAttribute('data-bunny-src');
-      const prevTw = document.getElementById('tw-' + currentPlayingId);
+      const prevTw = document.getElementById(`tw-${currentPlayingId}`);
       if (prevTw) {
-        const numEl = prevTw.querySelector('.vid-num');
-        const numTxt = numEl ? numEl.innerHTML : '';
+        const num = prevTw.querySelector('.vid-num')?.innerHTML || '';
         prevTw.innerHTML = `
-          <div class="thumb-overlay" onclick="event.stopPropagation(); playVideo('${currentPlayingId}', '${escAttr(prevSrc)}')">
-            <button class="play-btn"></button>
-            <span class="thumb-label">Click to Play</span>
+          <div class="thumb-overlay" onclick="window.playVideo('${currentPlayingId}')">
+            <button class="play-btn"></button><span class="thumb-label">Click to Play</span>
           </div>
-          ${numTxt ? `<div class="vid-num">${numTxt}</div>` : ''}
+          <div class="vid-num">${num}</div>
         `;
       }
       prevCard.classList.remove('playing');
     }
   }
 
-  const tw = document.getElementById('tw-' + videoId);
-  if (!tw) return;
-
-  const numEl = tw.querySelector('.vid-num');
-  const numTxt = numEl ? numEl.innerHTML : '';
-
+  const tw = document.getElementById(`tw-${videoId}`);
+  const numHtml = tw.querySelector('.vid-num')?.outerHTML || '';
   let src = bunnySrc;
-  if (src && !src.startsWith('http')) {
-    src = 'https://player.mediadelivery.net/embed/679120/' + src;
-  }
-  if (src && !src.includes('autoplay')) {
-    src += (src.includes('?') ? '&' : '?') + 'autoplay=true';
-  }
-
+  if (!src.includes('autoplay')) src += (src.includes('?') ? '&' : '?') + 'autoplay=true';
   tw.innerHTML = `
-    <iframe
-      src="${src}"
-      loading="lazy"
-      style="border:0;position:absolute;top:0;height:100%;width:100%;"
-      allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen"
-      allowfullscreen="true">
-    </iframe>
-    ${numTxt ? `<div class="vid-num">${numTxt}</div>` : ''}
+    <iframe src="${src}" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"></iframe>
+    ${numHtml}
   `;
-
-  currentCard.classList.add('playing');
+  card.classList.add('playing');
   currentPlayingId = videoId;
-  currentCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 };
-
-function escHtml(str) {
-  if (!str) return '';
-  return str.replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]);
-}
-
-function escAttr(str) {
-  if (!str) return '';
-  return str.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-}
 </script>
 </body>
 </html>
