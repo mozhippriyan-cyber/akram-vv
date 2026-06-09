@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* ===== SAME STYLES AS BEFORE (keep your existing CSS) ===== */
-  /* I'm including the minimal required styles – you can reuse your full CSS */
+  /* ===== SAME STYLES AS BEFORE (copy from your working CSS) ===== */
+  /* I'm including the essential styles – replace with your full CSS if needed */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --navy: #0B1E3D; --navy2: #122649; --gold: #F5A623;
@@ -57,7 +57,6 @@
   .card-body { padding: 12px 14px; }
   .card-title { font-size: 14px; font-weight: 700; }
   .empty-state { text-align: center; padding: 4rem; color: var(--muted); }
-  .debug-panel { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 12px; margin-top: 20px; font-family: monospace; font-size: 12px; white-space: pre-wrap; }
   .loading-state { display: flex; justify-content: center; padding: 4rem; gap: 12px; }
   .spinner { width: 22px; height: 22px; border: 3px solid var(--border); border-top-color: var(--sky); border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -89,10 +88,16 @@
 <script type="module">
 import { app } from "./firebase-config.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// Helper: remove surrounding double quotes from a string
+function unquote(str) {
+  if (typeof str !== 'string') return str;
+  return str.replace(/^"(.*)"$/, '$1');
+}
 
 // Mobile sidebar
 document.getElementById('menuBtn').onclick = () => {
@@ -108,7 +113,6 @@ document.getElementById('logoutBtn').onclick = async () => { await signOut(auth)
 let currentPlayingId = null;
 let allVideos = [];
 
-// Helper: safe HTML escape
 function esc(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
 function escAttr(str) { return str.replace(/'/g, '&#39;').replace(/"/g, '&quot;'); }
 
@@ -116,14 +120,15 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location = 'login.html'; return; }
 
   // Fetch user data
-  const userDoc = await getDocs(collection(db, 'users'));
-  let userData = null;
-  userDoc.forEach(d => { if (d.id === user.uid) userData = d.data(); });
-  if (!userData) { renderError('User profile not found'); return; }
+  const userDocRef = doc(db, 'users', user.uid);
+  const userSnap = await getDoc(userDocRef);
+  if (!userSnap.exists()) { renderError('User profile not found'); return; }
+  const userData = userSnap.data();
+  // Unquote user fields as well (just in case)
+  const name = unquote(userData.name || userData.Name || 'Student');
+  let lang = unquote(userData.language || userData.Language || '');
+  const status = unquote(userData.status || userData.Status);
 
-  const name = userData.name || 'Student';
-  const lang = userData.language || '';
-  const status = userData.status;
   const meta = { flag: '🌐', label: lang || 'Not assigned' };
   if (lang === 'American English') meta.flag = '🇺🇸';
   else if (lang === 'English') meta.flag = '🇺🇸';
@@ -147,49 +152,49 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById('searchWrap').style.display = 'flex';
   if (!lang) { renderError('No language assigned. Contact support.'); return; }
 
-  // 🔥 CRITICAL: Fetch ALL videos from 'videos' collection (no where clause)
+  // Fetch ALL videos from 'videos' collection and unquote string fields
   const videosSnapshot = await getDocs(collection(db, 'videos'));
-  const allDocs = [];
-  videosSnapshot.forEach(doc => allDocs.push({ id: doc.id, ...doc.data() }));
-  console.log(`📁 Total documents in 'videos' collection: ${allDocs.length}`);
-  console.log('📄 Raw documents:', allDocs);
-
-  // Filter by language (case‑insensitive)
-  let filtered = allDocs.filter(v => {
-    const docLang = (v.language || '').trim();
-    const userLang = lang.trim();
-    return docLang.toLowerCase() === userLang.toLowerCase();
+  let allDocs = [];
+  videosSnapshot.forEach(doc => {
+    const data = doc.data();
+    // Unquote title, language, bunnySrc, category, etc.
+    const cleaned = {
+      id: doc.id,
+      title: unquote(data.title),
+      language: unquote(data.language),
+      bunnySrc: unquote(data.bunnySrc),
+      category: unquote(data.category || data.cat || ''),
+      order: data.order
+    };
+    allDocs.push(cleaned);
   });
+  console.log('Cleaned videos:', allDocs);
 
-  // Special fallback: if userLang is 'American English' and no matches, try 'English'
+  // Filter by language (exact match after unquoting)
+  let filtered = allDocs.filter(v => v.language === lang);
+  
+  // Fallback: if lang is 'American English' and no matches, try 'English'
   if (filtered.length === 0 && lang === 'American English') {
-    console.log('🔄 No American English videos, trying English');
-    filtered = allDocs.filter(v => (v.language || '').trim().toLowerCase() === 'english');
+    filtered = allDocs.filter(v => v.language === 'English');
   } else if (filtered.length === 0 && lang === 'English') {
-    console.log('🔄 No English videos, trying American English');
-    filtered = allDocs.filter(v => (v.language || '').trim().toLowerCase() === 'american english');
+    filtered = allDocs.filter(v => v.language === 'American English');
   }
 
-  // Sort by order if available
   filtered.sort((a,b) => (a.order || 0) - (b.order || 0));
   allVideos = filtered;
 
-  // If still zero, show debug panel with details
   if (filtered.length === 0) {
-    const debugInfo = {
-      userLanguage: lang,
-      totalVideosInCollection: allDocs.length,
-      allLanguagesFound: [...new Set(allDocs.map(v => v.language))],
-      sampleDocuments: allDocs.slice(0,3).map(v => ({ id: v.id, language: v.language, title: v.title }))
-    };
     renderContent(`
-      <div class="empty-state"><div class="ico">🔍</div><h3>No videos for "${lang}"</h3><p>Check the debug info below.</p></div>
-      <div class="debug-panel"><strong>🔧 Firestore Debug</strong><br><pre>${JSON.stringify(debugInfo, null, 2)}</pre><hr>Make sure at least one video document has <code>language: "${lang}"</code> (exact case, no extra spaces).</div>
+      <div class="empty-state">
+        <div class="ico">🔍</div>
+        <h3>No videos for "${lang}"</h3>
+        <p>Make sure your video document has language = "${lang}" (without extra quotes).</p>
+        <p>Currently found languages: ${[...new Set(allDocs.map(v => v.language))].join(', ') || 'none'}</p>
+      </div>
     `);
     return;
   }
 
-  // Render dashboard
   renderDashboard(meta, filtered);
   document.getElementById('searchInput').addEventListener('input', (e) => {
     const q = e.target.value.toLowerCase();
@@ -225,7 +230,9 @@ function renderVideoGrid(videos) {
   grid.innerHTML = videos.map((v, idx) => {
     const title = esc(v.title || 'Untitled');
     const order = v.order != null ? v.order : idx+1;
-    const bunnySrc = (v.bunnySrc || '').trim();
+    let bunnySrc = (v.bunnySrc || '').trim();
+    // Ensure the src is a valid URL (strip any leftover quotes)
+    bunnySrc = bunnySrc.replace(/^"|"$/g, '');
     const vidId = v.id;
     return `
       <div class="video-card" id="vc-${vidId}" data-bunny-src="${escAttr(bunnySrc)}">
@@ -243,8 +250,12 @@ function renderVideoGrid(videos) {
 window.playVideo = function(videoId) {
   const card = document.getElementById(`vc-${videoId}`);
   if (!card) return;
-  const bunnySrc = card.getAttribute('data-bunny-src');
+  let bunnySrc = card.getAttribute('data-bunny-src');
   if (!bunnySrc) { alert('No video source'); return; }
+  // Ensure autoplay parameter
+  if (!bunnySrc.includes('autoplay')) {
+    bunnySrc += (bunnySrc.includes('?') ? '&' : '?') + 'autoplay=true';
+  }
 
   // Reset previous playing video
   if (currentPlayingId && currentPlayingId !== videoId) {
@@ -253,12 +264,12 @@ window.playVideo = function(videoId) {
       const prevSrc = prevCard.getAttribute('data-bunny-src');
       const prevTw = document.getElementById(`tw-${currentPlayingId}`);
       if (prevTw) {
-        const num = prevTw.querySelector('.vid-num')?.innerHTML || '';
+        const num = prevTw.querySelector('.vid-num')?.outerHTML || '';
         prevTw.innerHTML = `
           <div class="thumb-overlay" onclick="window.playVideo('${currentPlayingId}')">
             <button class="play-btn"></button><span class="thumb-label">Click to Play</span>
           </div>
-          <div class="vid-num">${num}</div>
+          ${num}
         `;
       }
       prevCard.classList.remove('playing');
@@ -267,10 +278,8 @@ window.playVideo = function(videoId) {
 
   const tw = document.getElementById(`tw-${videoId}`);
   const numHtml = tw.querySelector('.vid-num')?.outerHTML || '';
-  let src = bunnySrc;
-  if (!src.includes('autoplay')) src += (src.includes('?') ? '&' : '?') + 'autoplay=true';
   tw.innerHTML = `
-    <iframe src="${src}" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"></iframe>
+    <iframe src="${bunnySrc}" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"></iframe>
     ${numHtml}
   `;
   card.classList.add('playing');
