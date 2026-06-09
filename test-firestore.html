@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Firestore Diagnostic</title>
+    <style>pre { background: #f4f4f4; padding: 10px; overflow: auto; }</style>
+</head>
+<body>
+    <h1>Firestore Diagnostic – videos collection</h1>
+    <div id="output">Loading...</div>
+
+    <script type="module">
+        import { app } from "./firebase-config.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const db = getFirestore(app);
+        const output = document.getElementById('output');
+
+        async function test() {
+            try {
+                const videosRef = collection(db, 'videos');
+                const snapshot = await getDocs(videosRef);
+                const docs = [];
+                snapshot.forEach(doc => {
+                    docs.push({ id: doc.id, ...doc.data() });
+                });
+                if (docs.length === 0) {
+                    output.innerHTML = '<p style="color:red;">❌ No documents found in "videos" collection.</p><p>Check that the collection name is exactly "videos" (case-sensitive) and that the security rules allow read access.</p>';
+                } else {
+                    output.innerHTML = `<p>✅ Found ${docs.length} document(s):</p><pre>${JSON.stringify(docs, null, 2)}</pre>`;
+                }
+            } catch (err) {
+                output.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+            }
+        }
+        test();
+    </script>
+</body>
+</html>
