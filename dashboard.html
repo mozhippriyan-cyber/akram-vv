@@ -4,24 +4,18 @@
     <meta charset="UTF-8">
     <title>Vocabulary Academy Dashboard</title>
     <style>
-        /* Optional: small note to remind you about the YouTube limitation */
-        .admin-note {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
-            margin: 20px 0;
-            font-size: 0.9em;
+        /* Optional: simple responsive spacing */
+        .video-container {
+            margin-bottom: 2rem;
+        }
+        .video-title {
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
 <body>
 
 <h1>Vocabulary Academy</h1>
-
-<div class="admin-note">
-    <strong>⚠️ Important:</strong> Even with <code>modestbranding=1</code>, the small "YouTube" text on the video player remains clickable.<br>
-    Students can still visit YouTube directly. To truly remove the link, you must host videos on a platform that allows logo removal (e.g., Vimeo Pro, self-hosted).
-</div>
 
 <p id="welcome">Loading...</p>
 <p id="statusMessage"></p>
@@ -81,24 +75,44 @@
         document.getElementById("content").style.display = "block";
         document.getElementById("language").textContent = data.language;
 
+        // Fetch videos for the student's language
         const q = query(collection(db, "videos"), where("language", "==", data.language));
         const snapshot = await getDocs(q);
 
         let html = "";
         snapshot.forEach((doc) => {
             const v = doc.data();
+
+            // Expect each video document to have:
+            // - title (string)
+            // - bunnySrc (string) = the embed URL from Bunny.net
+            //   Example: "https://player.mediadelivery.net/embed/679120/85a6a0b7-28ba-4d84-a0b6-21c43c3b17eb?autoplay=true&loop=false&muted=true&preload=true&responsive=true"
+            if (!v.bunnySrc) {
+                console.warn("Missing bunnySrc for video:", v.title);
+                return;
+            }
+
+            // Build a responsive Bunny.net player (16:9)
             html += `
-                <h3>${v.title}</h3>
-                <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube-nocookie.com/embed/${v.youtubeId}?rel=0&modestbranding=1"
-                    frameborder="0"
-                    allowfullscreen>
-                </iframe>
-                <hr>
+                <div class="video-container">
+                    <h3 class="video-title">${escapeHtml(v.title)}</h3>
+                    <div style="position:relative;padding-top:56.25%;">
+                        <iframe
+                            src="${v.bunnySrc}"
+                            loading="lazy"
+                            style="border:0;position:absolute;top:0;height:100%;width:100%;"
+                            allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;"
+                            allowfullscreen="true">
+                        </iframe>
+                    </div>
+                    <hr>
+                </div>
             `;
         });
+
+        if (html === "") {
+            html = "<p>No videos found for your language yet.</p>";
+        }
         document.getElementById("videos").innerHTML = html;
     });
 
@@ -106,6 +120,16 @@
         await signOut(auth);
         window.location = "login.html";
     });
+
+    // Simple helper to prevent XSS
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === "&") return "&amp;";
+            if (m === "<") return "&lt;";
+            if (m === ">") return "&gt;";
+            return m;
+        });
+    }
 </script>
 
 </body>
