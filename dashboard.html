@@ -147,6 +147,19 @@ onAuthStateChanged(auth, async (user) => {
     renderContent(`<div class="pending-card" style="text-align:center;padding:3rem;"><div class="pending-badge">Pending Approval</div><h2>Your account is under review</h2></div>`);
     return;
   }
+
+  // ── Language routing — redirect to language-specific dashboard ──
+  const langRoutes = {
+    'Hindi': 'dashboard_hindi.html',
+    // Add more as they are created:
+    // 'Arabic': 'dashboard_arabic.html',
+    // 'German': 'dashboard_german.html',
+  };
+  if (langRoutes[lang]) {
+    window.location = langRoutes[lang];
+    return;
+  }
+
   document.getElementById('searchWrap').style.display = 'flex';
   if (!lang) { renderError('No language assigned. Contact support.'); return; }
 
