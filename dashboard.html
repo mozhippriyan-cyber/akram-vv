@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vocabulary Academy Dashboard</title>
+</head>
+<body>
+
+<h1>Vocabulary Academy</h1>
+
+<p id="welcome">Loading...</p>
+
+<p id="statusMessage"></p>
+
+<button id="logoutBtn">Logout</button>
+
+<hr>
+
+<div id="content" style="display:none;">
+  <h2>Your Language Course</h2>
+
+  <p><strong>Language:</strong>
+    <span id="language"></span>
+  </p>
+
+  <div id="videos"></div>
+</div>
+
+<script type="module">
+
+import { app } from "./firebase-config.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  where
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+
+  if (!user) {
+    window.location = "login.html";
+    return;
+  }
+
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
+
+  if (!userSnap.exists()) {
+    alert("User profile not found.");
+    return;
+  }
+
+  const data = userSnap.data();
+
+  document.getElementById("welcome").textContent =
+    "Welcome, " + data.name;
+
+  if (data.status !== "approved") {
+
+    document.getElementById("statusMessage").innerHTML =
+      "<b>Your account is awaiting approval.</b>";
+
+    return;
+  }
+
+  document.getElementById("content").style.display = "block";
+
+  document.getElementById("language").textContent =
+    data.language;
+
+  const q = query(
+    collection(db, "videos"),
+    where("language", "==", data.language)
+  );
+
+  const snapshot = await getDocs(q);
+
+  let html = "";
+
+  snapshot.forEach((doc) => {
+
+    const v = doc.data();
+
+    html += `
+      <h3>${v.title}</h3>
+      <iframe
+        width="560"
+        height="315"
+        src="https://www.youtube.com/embed/${v.youtubeId}"
+        frameborder="0"
+        allowfullscreen>
+      </iframe>
+      <hr>
+    `;
+
+  });
+
+  document.getElementById("videos").innerHTML = html;
+
+});
+
+document
+.getElementById("logoutBtn")
+.addEventListener("click", async () => {
+
+  await signOut(auth);
+
+  window.location = "login.html";
+
+});
+
+</script>
+
+</body>
+</html>

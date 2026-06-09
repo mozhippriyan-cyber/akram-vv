@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Register - Vocabulary Academy</title>
+</head>
+<body>
+
+<h2>Create Account</h2>
+
+<input id="name" placeholder="Full Name"><br><br>
+
+<input id="whatsapp" placeholder="WhatsApp Number"><br><br>
+
+<input id="email" type="email" placeholder="Email"><br><br>
+
+<input id="password" type="password" placeholder="Password"><br><br>
+
+<select id="language">
+  <option value="">Select Language</option>
+  <option>English</option>
+  <option>Hindi</option>
+  <option>Arabic</option>
+  <option>German</option>
+  <option>Chinese</option>
+  <option>French</option>
+  <option>Japanese</option>
+</select>
+
+<br><br>
+
+<button id="registerBtn">Register</button>
+
+<p>
+Already have an account?
+<a href="login.html">Login</a>
+</p>
+
+<script type="module">
+
+import { app } from "./firebase-config.js";
+
+import {
+  getAuth,
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+document.getElementById("registerBtn")
+.addEventListener("click", async () => {
+
+  const name = document.getElementById("name").value;
+  const whatsapp = document.getElementById("whatsapp").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const language = document.getElementById("language").value;
+
+  try {
+
+    const userCredential =
+      await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    const uid = userCredential.user.uid;
+
+    await setDoc(doc(db, "users", uid), {
+      name,
+      whatsapp,
+      email,
+      language,
+      status: "pending",
+      createdAt: new Date()
+    });
+
+    alert(
+      "Registration successful. Your account is awaiting approval."
+    );
+
+    window.location = "login.html";
+
+  } catch(error) {
+
+    alert(error.message);
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
