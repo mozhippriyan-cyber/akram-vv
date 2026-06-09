@@ -440,8 +440,8 @@
   .empty-state h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
   .empty-state p { font-size: 13.5px; }
 
-  /* ── Loading & error ── */
-  .loading-state, .error-state {
+  /* ── Loading ── */
+  .loading-state {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -450,7 +450,6 @@
     color: var(--muted);
     font-size: 14px;
   }
-  .error-state { color: var(--error); }
   .spinner {
     width: 22px; height: 22px;
     border: 3px solid var(--border);
@@ -563,7 +562,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 import {
   getFirestore, doc, getDoc,
-  collection, getDocs, query, where
+  collection, getDocs, query, where, orderBy
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const auth = getAuth(app);
@@ -597,93 +596,126 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
   window.location = 'login.html';
 });
 
+// Store current playing video ID and its iframe state
+let currentPlayingId = null;
+
+// ── Helper: Fetch videos with language fallback (fix for "American English" vs "English" mismatch) ──
+async function fetchVideosForLanguage(language) {
+  const videosRef = collection(db, 'videos');
+  
+  // First try exact match
+  let q;
+  try {
+    q = query(videosRef, where('language', '==', language), orderBy('order'));
+  } catch {
+    q = query(videosRef, where('language', '==', language));
+  }
+  
+  let snapshot = await getDocs(q);
+  let videos = [];
+  snapshot.forEach(d => videos.push({ id: d.id, ...d.data() }));
+  
+  // FALLBACK: If user language is "American English" but no videos found, try "English"
+  if (videos.length === 0 && language === 'American English') {
+    console.log('No videos found for American English, trying fallback: English');
+    let fallbackQ;
+    try {
+      fallbackQ = query(videosRef, where('language', '==', 'English'), orderBy('order'));
+    } catch {
+      fallbackQ = query(videosRef, where('language', '==', 'English'));
+    }
+    const fallbackSnapshot = await getDocs(fallbackQ);
+    fallbackSnapshot.forEach(d => videos.push({ id: d.id, ...d.data() }));
+    
+    if (videos.length > 0) {
+      console.log(`Found ${videos.length} videos with language "English" as fallback`);
+    }
+  }
+  
+  // Sort by order field if present, else title
+  videos.sort((a, b) => {
+    if (a.order != null && b.order != null) return a.order - b.order;
+    return (a.title || '').localeCompare(b.title || '');
+  });
+  
+  return videos;
+}
+
 // ── Auth ──
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location = 'login.html'; return; }
 
-  try {
-    const userSnap = await getDoc(doc(db, 'users', user.uid));
-    if (!userSnap.exists()) {
-      renderContent(`<div class="empty-state"><div class="ico">❌</div><h3>Profile not found</h3><p>Please contact support.</p></div>`);
-      return;
-    }
+  const userSnap = await getDoc(doc(db, 'users', user.uid));
+  if (!userSnap.exists()) {
+    renderContent(`<div class="empty-state"><div class="ico">❌</div><h3>Profile not found</h3><p>Please contact support.</p></div>`);
+    return;
+  }
 
-    const data = userSnap.data();
-    const name = data.name || data.Name || 'Student';
-    const lang = data.language || data.Language || '';
-    const status = data.status || data.Status;
-    const meta = LANG_META[lang] || { flag: '🌐', label: lang };
+  const data = userSnap.data();
+  const name = data.name || data.Name || 'Student';
+  const lang = data.language || data.Language || '';
+  const status = data.status || data.Status;
+  const meta = LANG_META[lang] || { flag: '🌐', label: lang || 'Not assigned' };
 
-    // Sidebar user info
-    document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
-    document.getElementById('userName').textContent = name;
-    if (lang) {
-      const wrap = document.getElementById('userLangWrap');
-      wrap.style.display = 'flex';
-      document.getElementById('userLangBadge').textContent = meta.flag + ' ' + meta.label;
-    }
-    document.getElementById('topbarTitle').textContent = name + "'s Course";
+  // Sidebar user info
+  document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('userName').textContent = name;
+  if (lang) {
+    const wrap = document.getElementById('userLangWrap');
+    wrap.style.display = 'flex';
+    document.getElementById('userLangBadge').textContent = meta.flag + ' ' + meta.label;
+  }
+  document.getElementById('topbarTitle').textContent = name + "'s Course";
 
-    // ── Pending ──
-    if (status !== 'approved') {
-      renderContent(`
-        <div class="pending-card">
-          <div class="pending-icon">⏳</div>
-          <div class="pending-badge">Pending Approval</div>
-          <h2>Your account is under review</h2>
-          <p>An administrator will approve your account shortly. You'll be able to access your <strong>${meta.flag} ${meta.label}</strong> course once approved.</p>
-        </div>
-      `);
-      return;
-    }
-
-    // ── Show search ──
-    document.getElementById('searchWrap').style.display = 'flex';
-
-    if (!lang) {
-      renderContent(`
-        <div class="empty-state">
-          <div class="ico">⚠️</div>
-          <h3>No language assigned</h3>
-          <p>Please contact support to have a language assigned to your profile.</p>
-        </div>
-      `);
-      return;
-    }
-
-    // ── Fetch videos for this language (no orderBy to avoid index errors) ──
-    const videosRef = collection(db, 'videos');
-    const q = query(videosRef, where('language', '==', lang));
-    const snapshot = await getDocs(q);
-    let videos = [];
-    snapshot.forEach(d => videos.push({ id: d.id, ...d.data() }));
-
-    // Sort client‑side by 'order' field if present, otherwise by title
-    videos.sort((a, b) => {
-      if (a.order != null && b.order != null) return a.order - b.order;
-      return (a.title || '').localeCompare(b.title || '');
-    });
-
-    renderDashboard(meta, videos);
-
-    // Search handler
-    document.getElementById('searchInput').addEventListener('input', () => {
-      const q2 = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = videos.filter(v =>
-        !q2 ||
-        (v.title || '').toLowerCase().includes(q2) ||
-        (v.category || v.cat || '').toLowerCase().includes(q2)
-      );
-      renderVideoGrid(filtered);
-      document.getElementById('vidCount').textContent = filtered.length + ' video' + (filtered.length !== 1 ? 's' : '');
-    });
-  } catch (err) {
-    console.error("Dashboard error:", err);
+  // ── Pending ──
+  if (status !== 'approved') {
     renderContent(`
-      <div class="error-state">
-        <span>⚠️</span> Failed to load your course. Please refresh the page or contact support.
+      <div class="pending-card">
+        <div class="pending-icon">⏳</div>
+        <div class="pending-badge">Pending Approval</div>
+        <h2>Your account is under review</h2>
+        <p>An administrator will approve your account shortly. You'll be able to access your <strong>${meta.flag} ${meta.label}</strong> course once approved.</p>
       </div>
     `);
+    return;
+  }
+
+  // ── Show search ──
+  document.getElementById('searchWrap').style.display = 'flex';
+
+  if (!lang) {
+    renderContent(`
+      <div class="empty-state">
+        <div class="ico">⚠️</div>
+        <h3>No language assigned</h3>
+        <p>Please contact support to have a language assigned to your profile.</p>
+      </div>
+    `);
+    return;
+  }
+
+  // ── Fetch videos with fallback support ──
+  let videos = await fetchVideosForLanguage(lang);
+  
+  // Store videos globally for search
+  window.currentVideos = videos;
+  
+  renderDashboard(meta, videos);
+
+  // Search functionality
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase();
+      const filtered = window.currentVideos.filter(v =>
+        !q ||
+        (v.title || '').toLowerCase().includes(q) ||
+        (v.category || v.cat || '').toLowerCase().includes(q)
+      );
+      renderVideoGrid(filtered);
+      const countEl = document.getElementById('vidCount');
+      if (countEl) countEl.textContent = filtered.length + ' video' + (filtered.length !== 1 ? 's' : '');
+    });
   }
 });
 
@@ -691,8 +723,6 @@ onAuthStateChanged(auth, async (user) => {
 function renderContent(html) {
   document.getElementById('contentArea').innerHTML = html;
 }
-
-let currentPlayingId = null;
 
 function renderDashboard(meta, videos) {
   const area = document.getElementById('contentArea');
@@ -756,9 +786,9 @@ function renderVideoGrid(videos) {
     const cardId   = 'vc-' + v.id;
 
     return `
-      <div class="video-card" id="${cardId}">
+      <div class="video-card" id="${cardId}" data-video-id="${v.id}" data-bunny-src="${escAttr(bunnySrc)}">
         <div class="thumb-wrap" id="tw-${v.id}">
-          <div class="thumb-overlay" onclick="playVideo('${v.id}', '${escAttr(bunnySrc)}')">
+          <div class="thumb-overlay" onclick="event.stopPropagation(); playVideo('${v.id}', '${escAttr(bunnySrc)}')">
             <button class="play-btn" title="Play ${title}"></button>
             <span class="thumb-label">Click to Play</span>
           </div>
@@ -775,64 +805,86 @@ function renderVideoGrid(videos) {
   }).join('');
 }
 
+// ── Fixed playVideo function with proper reset and src handling ──
 window.playVideo = function(videoId, bunnySrc) {
   if (!bunnySrc) {
     alert('No video source available for this lesson.');
     return;
   }
 
-  // Reset previous video's overlay
+  // Get the video card element
+  const currentCard = document.getElementById('vc-' + videoId);
+  if (!currentCard) return;
+
+  // If there's a previously playing video and it's not the current one, reset it
   if (currentPlayingId && currentPlayingId !== videoId) {
     const prevCard = document.getElementById('vc-' + currentPlayingId);
-    const prevTw   = document.getElementById('tw-' + currentPlayingId);
-    if (prevCard && prevTw) {
+    if (prevCard) {
+      // Get the original bunny src from data attribute
+      const prevSrc = prevCard.getAttribute('data-bunny-src');
+      const prevTw = document.getElementById('tw-' + currentPlayingId);
+      if (prevTw) {
+        // Get the video number text to preserve
+        const numEl = prevTw.querySelector('.vid-num');
+        const numTxt = numEl ? numEl.innerHTML : '';
+        
+        // Restore overlay with the correct src
+        prevTw.innerHTML = `
+          <div class="thumb-overlay" onclick="event.stopPropagation(); playVideo('${currentPlayingId}', '${escAttr(prevSrc)}')">
+            <button class="play-btn"></button>
+            <span class="thumb-label">Click to Play</span>
+          </div>
+          ${numTxt ? `<div class="vid-num">${numTxt}</div>` : ''}
+        `;
+      }
       prevCard.classList.remove('playing');
-      const numEl = prevTw.querySelector('.vid-num');
-      const numTxt = numEl ? numEl.textContent : '';
-      prevTw.innerHTML = `
-        <div class="thumb-overlay" onclick="playVideo('${currentPlayingId}', '${escAttr(bunnySrc)}')">
-          <button class="play-btn"></button>
-          <span class="thumb-label">Click to Play</span>
-        </div>
-        ${numTxt ? `<div class="vid-num">${numTxt}</div>` : ''}
-      `;
     }
   }
 
-  const card = document.getElementById('vc-' + videoId);
-  const tw   = document.getElementById('tw-' + videoId);
-  if (!card || !tw) return;
+  // Now play the current video
+  const tw = document.getElementById('tw-' + videoId);
+  if (!tw) return;
 
-  const numEl  = tw.querySelector('.vid-num');
-  const numTxt = numEl ? numEl.textContent : '';
+  // Get the video number text to preserve
+  const numEl = tw.querySelector('.vid-num');
+  const numTxt = numEl ? numEl.innerHTML : '';
 
-  // Use Bunny src as provided (already a full embed URL)
+  // Ensure bunnySrc is a proper embed URL
   let src = bunnySrc;
-  // If for some reason it's not a full URL, try to reconstruct (fallback)
-  if (!src.startsWith('http')) {
-    src = 'https://player.mediadelivery.net/embed/' + src;
+  if (src && !src.startsWith('http')) {
+    // If it's just an ID, construct the full URL
+    src = 'https://player.mediadelivery.net/embed/679120/' + src;
+  }
+  
+  // Add autoplay parameter if not present
+  if (src && !src.includes('autoplay')) {
+    src += (src.includes('?') ? '&' : '?') + 'autoplay=true';
   }
 
+  // Replace the thumbnail with iframe
   tw.innerHTML = `
     <iframe
       src="${src}"
       loading="lazy"
       style="border:0;position:absolute;top:0;height:100%;width:100%;"
-      allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;"
+      allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen"
       allowfullscreen="true">
     </iframe>
     ${numTxt ? `<div class="vid-num">${numTxt}</div>` : ''}
   `;
 
-  card.classList.add('playing');
+  currentCard.classList.add('playing');
   currentPlayingId = videoId;
-  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  
+  // Scroll the video into view smoothly
+  currentCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 };
 
 function escHtml(str) {
   if (!str) return '';
   return str.replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]);
 }
+
 function escAttr(str) {
   if (!str) return '';
   return str.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
