@@ -440,8 +440,8 @@
   .empty-state h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
   .empty-state p { font-size: 13.5px; }
 
-  /* ── Loading ── */
-  .loading-state {
+  /* ── Loading & error ── */
+  .loading-state, .error-state {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -450,6 +450,7 @@
     color: var(--muted);
     font-size: 14px;
   }
+  .error-state { color: var(--error); }
   .spinner {
     width: 22px; height: 22px;
     border: 3px solid var(--border);
@@ -562,7 +563,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 import {
   getFirestore, doc, getDoc,
-  collection, getDocs, query, where, orderBy
+  collection, getDocs, query, where
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const auth = getAuth(app);
@@ -600,131 +601,90 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location = 'login.html'; return; }
 
-  const userSnap = await getDoc(doc(db, 'users', user.uid));
-  if (!userSnap.exists()) {
-    renderContent(`<div class="empty-state"><div class="ico">❌</div><h3>Profile not found</h3><p>Please contact support.</p></div>`);
-    return;
-  }
-
-  const data = userSnap.data();
-  const name = data.name || data.Name || 'Student';
-  const lang = data.language || data.Language || '';
-  const status = data.status || data.Status;
-  const meta = LANG_META[lang] || { flag: '🌐', label: lang };
-
-  // Sidebar user info
-  document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
-  document.getElementById('userName').textContent = name;
-  if (lang) {
-    const wrap = document.getElementById('userLangWrap');
-    wrap.style.display = 'flex';
-    document.getElementById('userLangBadge').textContent = meta.flag + ' ' + meta.label;
-  }
-  document.getElementById('topbarTitle').textContent = name + "'s Course";
-
-  // ── Pending ──
-  if (status !== 'approved') {
-    renderContent(`
-      <div class="pending-card">
-        <div class="pending-icon">⏳</div>
-        <div class="pending-badge">Pending Approval</div>
-        <h2>Your account is under review</h2>
-        <p>An administrator will approve your account shortly. You'll be able to access your <strong>${meta.flag} ${meta.label}</strong> course once approved.</p>
-      </div>
-    `);
-    return;
-  }
-
-  // ── Show search ──
-  document.getElementById('searchWrap').style.display = 'flex';
-
-  if (!lang) {
-    renderContent(`
-      <div class="empty-state">
-        <div class="ico">⚠️</div>
-        <h3>No language assigned</h3>
-        <p>Please contact support to have a language assigned to your profile.</p>
-      </div>
-    `);
-    return;
-  }
-
-  // ── Fetch videos for this language ONLY ──
-  const videosRef = collection(db, 'videos');
-  let videos = [];
-  let fetchError = null;
-
   try {
-    // Try with orderBy first (requires a Firestore composite index)
-    let q;
-    try {
-      q = query(videosRef, where('language', '==', lang), orderBy('order'));
-      const snap = await getDocs(q);
-      snap.forEach(d => videos.push({ id: d.id, ...d.data() }));
-    } catch (indexErr) {
-      // orderBy failed (no index) — fall back to simple where query
-      console.warn('orderBy failed, falling back:', indexErr.message);
-      q = query(videosRef, where('language', '==', lang));
-      const snap = await getDocs(q);
-      snap.forEach(d => videos.push({ id: d.id, ...d.data() }));
+    const userSnap = await getDoc(doc(db, 'users', user.uid));
+    if (!userSnap.exists()) {
+      renderContent(`<div class="empty-state"><div class="ico">❌</div><h3>Profile not found</h3><p>Please contact support.</p></div>`);
+      return;
     }
-  } catch (err) {
-    fetchError = err;
-  }
 
-  // Show debug info panel (always visible so you can diagnose)
-  const debugHtml = `
-    <details style="margin-bottom:1rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px 16px; font-size:12px; font-family:monospace;">
-      <summary style="cursor:pointer; font-weight:700; font-family:'Inter',sans-serif; font-size:13px; color:#0B1E3D;">
-        🔍 Debug Info (click to expand)
-      </summary>
-      <div style="margin-top:10px; line-height:2;">
-        <div>👤 <b>User UID:</b> ${user.uid}</div>
-        <div>📧 <b>Email:</b> ${user.email}</div>
-        <div>🌐 <b>Language in Firestore:</b> <code style="background:#e8f0fe;padding:1px 6px;border-radius:4px;">${lang}</code></div>
-        <div>✅ <b>Status:</b> ${status}</div>
-        <div>📦 <b>Videos found:</b> ${videos.length}</div>
-        ${fetchError ? `<div style="color:#ef4444;">❌ <b>Fetch error:</b> ${fetchError.message}</div>` : ''}
-        ${videos.length > 0 ? `<div>🎬 <b>First video fields:</b> <code style="background:#e8f0fe;padding:1px 6px;border-radius:4px;">${Object.keys(videos[0]).join(', ')}</code></div>` : ''}
-        ${videos.length > 0 ? `<div>🔑 <b>bunnySrc sample:</b> <code style="background:#e8f0fe;padding:1px 6px;border-radius:4px;word-break:break-all;">${videos[0].bunnySrc || '(empty!)'}</code></div>` : ''}
-        <div style="margin-top:8px; color:#64748b; font-family:'Inter',sans-serif;">
-          ℹ️ Your Firestore <b>videos</b> documents must have <code>language == "${lang}"</code> and a <code>bunnySrc</code> field with the full Bunny player URL.
+    const data = userSnap.data();
+    const name = data.name || data.Name || 'Student';
+    const lang = data.language || data.Language || '';
+    const status = data.status || data.Status;
+    const meta = LANG_META[lang] || { flag: '🌐', label: lang };
+
+    // Sidebar user info
+    document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('userName').textContent = name;
+    if (lang) {
+      const wrap = document.getElementById('userLangWrap');
+      wrap.style.display = 'flex';
+      document.getElementById('userLangBadge').textContent = meta.flag + ' ' + meta.label;
+    }
+    document.getElementById('topbarTitle').textContent = name + "'s Course";
+
+    // ── Pending ──
+    if (status !== 'approved') {
+      renderContent(`
+        <div class="pending-card">
+          <div class="pending-icon">⏳</div>
+          <div class="pending-badge">Pending Approval</div>
+          <h2>Your account is under review</h2>
+          <p>An administrator will approve your account shortly. You'll be able to access your <strong>${meta.flag} ${meta.label}</strong> course once approved.</p>
         </div>
-      </div>
-    </details>
-  `;
+      `);
+      return;
+    }
 
-  if (fetchError) {
-    renderContent(debugHtml + `
-      <div class="empty-state">
-        <div class="ico">❌</div>
-        <h3>Could not load videos</h3>
-        <p>${fetchError.message}</p>
+    // ── Show search ──
+    document.getElementById('searchWrap').style.display = 'flex';
+
+    if (!lang) {
+      renderContent(`
+        <div class="empty-state">
+          <div class="ico">⚠️</div>
+          <h3>No language assigned</h3>
+          <p>Please contact support to have a language assigned to your profile.</p>
+        </div>
+      `);
+      return;
+    }
+
+    // ── Fetch videos for this language (no orderBy to avoid index errors) ──
+    const videosRef = collection(db, 'videos');
+    const q = query(videosRef, where('language', '==', lang));
+    const snapshot = await getDocs(q);
+    let videos = [];
+    snapshot.forEach(d => videos.push({ id: d.id, ...d.data() }));
+
+    // Sort client‑side by 'order' field if present, otherwise by title
+    videos.sort((a, b) => {
+      if (a.order != null && b.order != null) return a.order - b.order;
+      return (a.title || '').localeCompare(b.title || '');
+    });
+
+    renderDashboard(meta, videos);
+
+    // Search handler
+    document.getElementById('searchInput').addEventListener('input', () => {
+      const q2 = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = videos.filter(v =>
+        !q2 ||
+        (v.title || '').toLowerCase().includes(q2) ||
+        (v.category || v.cat || '').toLowerCase().includes(q2)
+      );
+      renderVideoGrid(filtered);
+      document.getElementById('vidCount').textContent = filtered.length + ' video' + (filtered.length !== 1 ? 's' : '');
+    });
+  } catch (err) {
+    console.error("Dashboard error:", err);
+    renderContent(`
+      <div class="error-state">
+        <span>⚠️</span> Failed to load your course. Please refresh the page or contact support.
       </div>
     `);
-    return;
   }
-
-  // Sort by order field if present, else title
-  videos.sort((a, b) => {
-    if (a.order != null && b.order != null) return a.order - b.order;
-    return (a.title || '').localeCompare(b.title || '');
-  });
-
-  renderDashboard(meta, videos, debugHtml);
-
-  // Search
-  document.getElementById('searchInput').addEventListener('input', () => {
-    const q2 = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = videos.filter(v =>
-      !q2 ||
-      (v.title || '').toLowerCase().includes(q2) ||
-      (v.category || v.cat || '').toLowerCase().includes(q2)
-    );
-    renderVideoGrid(filtered);
-    const countEl = document.getElementById('vidCount');
-    if (countEl) countEl.textContent = filtered.length + ' video' + (filtered.length !== 1 ? 's' : '');
-  });
 });
 
 // ── Render helpers ──
@@ -734,9 +694,9 @@ function renderContent(html) {
 
 let currentPlayingId = null;
 
-function renderDashboard(meta, videos, debugHtml = '') {
+function renderDashboard(meta, videos) {
   const area = document.getElementById('contentArea');
-  area.innerHTML = debugHtml + `
+  area.innerHTML = `
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-ico blue">🎥</div>
@@ -821,13 +781,12 @@ window.playVideo = function(videoId, bunnySrc) {
     return;
   }
 
-  // Reset previous
+  // Reset previous video's overlay
   if (currentPlayingId && currentPlayingId !== videoId) {
     const prevCard = document.getElementById('vc-' + currentPlayingId);
     const prevTw   = document.getElementById('tw-' + currentPlayingId);
     if (prevCard && prevTw) {
       prevCard.classList.remove('playing');
-      // Restore overlay (keep the vid-num)
       const numEl = prevTw.querySelector('.vid-num');
       const numTxt = numEl ? numEl.textContent : '';
       prevTw.innerHTML = `
@@ -847,11 +806,10 @@ window.playVideo = function(videoId, bunnySrc) {
   const numEl  = tw.querySelector('.vid-num');
   const numTxt = numEl ? numEl.textContent : '';
 
-  // Build Bunny iframe
-  // The src may already be a full URL or just an ID; handle both
+  // Use Bunny src as provided (already a full embed URL)
   let src = bunnySrc;
+  // If for some reason it's not a full URL, try to reconstruct (fallback)
   if (!src.startsWith('http')) {
-    // treat as raw embed URL fragment — shouldn't happen but guard it
     src = 'https://player.mediadelivery.net/embed/' + src;
   }
 
