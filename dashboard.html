@@ -651,16 +651,59 @@ onAuthStateChanged(auth, async (user) => {
 
   // ── Fetch videos for this language ONLY ──
   const videosRef = collection(db, 'videos');
-  let q;
+  let videos = [];
+  let fetchError = null;
+
   try {
-    q = query(videosRef, where('language', '==', lang), orderBy('order'));
-  } catch {
-    q = query(videosRef, where('language', '==', lang));
+    // Try with orderBy first (requires a Firestore composite index)
+    let q;
+    try {
+      q = query(videosRef, where('language', '==', lang), orderBy('order'));
+      const snap = await getDocs(q);
+      snap.forEach(d => videos.push({ id: d.id, ...d.data() }));
+    } catch (indexErr) {
+      // orderBy failed (no index) — fall back to simple where query
+      console.warn('orderBy failed, falling back:', indexErr.message);
+      q = query(videosRef, where('language', '==', lang));
+      const snap = await getDocs(q);
+      snap.forEach(d => videos.push({ id: d.id, ...d.data() }));
+    }
+  } catch (err) {
+    fetchError = err;
   }
 
-  const snapshot = await getDocs(q);
-  let videos = [];
-  snapshot.forEach(d => videos.push({ id: d.id, ...d.data() }));
+  // Show debug info panel (always visible so you can diagnose)
+  const debugHtml = `
+    <details style="margin-bottom:1rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px 16px; font-size:12px; font-family:monospace;">
+      <summary style="cursor:pointer; font-weight:700; font-family:'Inter',sans-serif; font-size:13px; color:#0B1E3D;">
+        🔍 Debug Info (click to expand)
+      </summary>
+      <div style="margin-top:10px; line-height:2;">
+        <div>👤 <b>User UID:</b> ${user.uid}</div>
+        <div>📧 <b>Email:</b> ${user.email}</div>
+        <div>🌐 <b>Language in Firestore:</b> <code style="background:#e8f0fe;padding:1px 6px;border-radius:4px;">${lang}</code></div>
+        <div>✅ <b>Status:</b> ${status}</div>
+        <div>📦 <b>Videos found:</b> ${videos.length}</div>
+        ${fetchError ? `<div style="color:#ef4444;">❌ <b>Fetch error:</b> ${fetchError.message}</div>` : ''}
+        ${videos.length > 0 ? `<div>🎬 <b>First video fields:</b> <code style="background:#e8f0fe;padding:1px 6px;border-radius:4px;">${Object.keys(videos[0]).join(', ')}</code></div>` : ''}
+        ${videos.length > 0 ? `<div>🔑 <b>bunnySrc sample:</b> <code style="background:#e8f0fe;padding:1px 6px;border-radius:4px;word-break:break-all;">${videos[0].bunnySrc || '(empty!)'}</code></div>` : ''}
+        <div style="margin-top:8px; color:#64748b; font-family:'Inter',sans-serif;">
+          ℹ️ Your Firestore <b>videos</b> documents must have <code>language == "${lang}"</code> and a <code>bunnySrc</code> field with the full Bunny player URL.
+        </div>
+      </div>
+    </details>
+  `;
+
+  if (fetchError) {
+    renderContent(debugHtml + `
+      <div class="empty-state">
+        <div class="ico">❌</div>
+        <h3>Could not load videos</h3>
+        <p>${fetchError.message}</p>
+      </div>
+    `);
+    return;
+  }
 
   // Sort by order field if present, else title
   videos.sort((a, b) => {
@@ -668,7 +711,7 @@ onAuthStateChanged(auth, async (user) => {
     return (a.title || '').localeCompare(b.title || '');
   });
 
-  renderDashboard(meta, videos);
+  renderDashboard(meta, videos, debugHtml);
 
   // Search
   document.getElementById('searchInput').addEventListener('input', () => {
@@ -679,7 +722,8 @@ onAuthStateChanged(auth, async (user) => {
       (v.category || v.cat || '').toLowerCase().includes(q2)
     );
     renderVideoGrid(filtered);
-    document.getElementById('vidCount').textContent = filtered.length + ' video' + (filtered.length !== 1 ? 's' : '');
+    const countEl = document.getElementById('vidCount');
+    if (countEl) countEl.textContent = filtered.length + ' video' + (filtered.length !== 1 ? 's' : '');
   });
 });
 
@@ -690,9 +734,9 @@ function renderContent(html) {
 
 let currentPlayingId = null;
 
-function renderDashboard(meta, videos) {
+function renderDashboard(meta, videos, debugHtml = '') {
   const area = document.getElementById('contentArea');
-  area.innerHTML = `
+  area.innerHTML = debugHtml + `
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-ico blue">🎥</div>
