@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account — Vocabulary Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0B1E3D;
+    --navy2:  #122649;
+    --gold:   #F5A623;
+    --sky:    #0EA5E9;
+    --muted:  #64748B;
+    --border: #E2E8F0;
+    --bg:     #F1F5FC;
+    --white:  #FFFFFF;
+    --error:  #EF4444;
+    --success:#10B981;
+  }
+
+  html, body {
+    min-height: 100%;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+  }
+
+  .page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* ── Left ── */
+  .panel-left {
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .panel-left::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: -100px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(245,166,35,.07);
+  }
+  .panel-left::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; right: -100px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(14,165,233,.06);
+  }
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .brand-icon {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--gold) 0%, #e8951a 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    box-shadow: 0 12px 32px rgba(245,166,35,.35);
+  }
+  .brand-name {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .brand-name span { color: var(--gold); }
+  .brand-tagline {
+    font-size: 13px;
+    color: rgba(255,255,255,.5);
+    font-weight: 500;
+    margin-top: -4px;
+  }
+  .steps {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 320px;
+  }
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .step-num {
+    width: 28px; height: 28px;
+    min-width: 28px;
+    background: var(--gold);
+    color: var(--navy);
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step-text {
+    color: rgba(255,255,255,.75);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .step-text strong { color: var(--white); }
+
+  /* ── Right ── */
+  .panel-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2.5rem 2rem;
+    overflow-y: auto;
+  }
+  .form-card {
+    width: 100%;
+    max-width: 440px;
+  }
+  .form-heading {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .form-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .field {
+    margin-bottom: 1.1rem;
+  }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .input-wrap {
+    position: relative;
+  }
+  .input-wrap .ico {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 17px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .input-wrap input {
+    width: 100%;
+    padding: 11px 14px 11px 40px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--navy);
+    background: var(--white);
+    outline: none;
+    transition: border-color .18s, box-shadow .18s;
+  }
+  .input-wrap input:focus {
+    border-color: var(--sky);
+    box-shadow: 0 0 0 3px rgba(14,165,233,.12);
+  }
+
+  /* Language picker */
+  .lang-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .lang-option {
+    position: relative;
+  }
+  .lang-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0; height: 0;
+  }
+  .lang-option label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    background: var(--white);
+    transition: border-color .18s, background .18s, box-shadow .18s;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    user-select: none;
+  }
+  .lang-option label:hover {
+    border-color: var(--sky);
+    background: #f0f9ff;
+  }
+  .lang-option input[type="radio"]:checked + label {
+    border-color: var(--navy);
+    background: #eef3ff;
+    box-shadow: 0 0 0 3px rgba(11,30,61,.08);
+  }
+  .lang-option label .flag {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background .18s, transform .12s;
+    margin-top: .75rem;
+  }
+  .btn-primary:hover { background: var(--navy2); }
+  .btn-primary:active { transform: scale(.98); }
+  .btn-primary.loading { pointer-events: none; opacity: .7; }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 1.4rem 0;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .alt-link {
+    text-align: center;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  .alt-link a {
+    color: var(--sky);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .alt-link a:hover { text-decoration: underline; }
+
+  .error-msg {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: var(--error);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    display: none;
+  }
+
+  .pending-notice {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 8px;
+  }
+  .pending-notice .ico { font-size: 16px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .page { grid-template-columns: 1fr; }
+    .panel-left { display: none; }
+    .panel-right { padding: 2rem 1.25rem; justify-content: flex-start; padding-top: 2.5rem; }
+    .form-card { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Left: Brand Panel -->
+  <div class="panel-left">
+    <div class="brand">
+      <div class="brand-icon">📘</div>
+      <div class="brand-name">Vocabulary<br><span>Academy</span></div>
+      <div class="brand-tagline">Master languages through video</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Create your account</strong> — fill in your details and pick a language.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Await approval</strong> — an admin reviews and activates your account.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Start learning</strong> — access your full video course immediately.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Form Panel -->
+  <div class="panel-right">
+    <div class="form-card">
+      <div class="form-heading">Create account</div>
+      <div class="form-sub">Join Vocabulary Academy and start your language journey.</div>
+
+      <div class="pending-notice">
+        <span class="ico">ℹ️</span>
+        After registering, your account is reviewed by an admin before you can access your course.
+      </div>
+
+      <div class="error-msg" id="errorMsg"></div>
+
+      <div class="field">
+        <label for="name">Full name</label>
+        <div class="input-wrap">
+          <span class="ico">👤</span>
+          <input id="name" type="text" placeholder="Your full name" autocomplete="name">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="whatsapp">WhatsApp number</label>
+        <div class="input-wrap">
+          <span class="ico">📱</span>
+          <input id="whatsapp" type="tel" placeholder="+1 234 567 8900">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email address</label>
+        <div class="input-wrap">
+          <span class="ico">✉️</span>
+          <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <span class="ico">🔒</span>
+          <input id="password" type="password" placeholder="Min. 6 characters" autocomplete="new-password">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Language to learn</label>
+        <div class="lang-grid">
+          <div class="lang-option">
+            <input type="radio" name="language" id="lang-en" value="American English">
+            <label for="lang-en"><span class="flag">🇺🇸</span> American English</label>
+          </div>
+          <div class="lang-option">
+            <input type="radio" name="language" id="lang-hi" value="Hindi">
+            <label for="lang-hi"><span class="flag">🇮🇳</span> Hindi</label>
+          </div>
+          <div class="lang-option">
+            <input type="radio" name="language" id="lang-ar" value="Arabic">
+            <label for="lang-ar"><span class="flag">🇸🇦</span> Arabic</label>
+          </div>
+          <div class="lang-option">
+            <input type="radio" name="language" id="lang-de" value="German">
+            <label for="lang-de"><span class="flag">🇩🇪</span> German</label>
+          </div>
+          <div class="lang-option">
+            <input type="radio" name="language" id="lang-zh" value="Mandarin">
+            <label for="lang-zh"><span class="flag">🇨🇳</span> Mandarin</label>
+          </div>
+          <div class="lang-option">
+            <input type="radio" name="language" id="lang-ja" value="Japanese">
+            <label for="lang-ja"><span class="flag">🇯🇵</span> Japanese</label>
+          </div>
+          <div class="lang-option" style="grid-column: span 2;">
+            <input type="radio" name="language" id="lang-fr" value="French">
+            <label for="lang-fr" style="justify-content: center;"><span class="flag">🇫🇷</span> French</label>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="registerBtn">Create Account →</button>
+
+      <div class="divider">or</div>
+
+      <div class="alt-link">
+        Already have an account? <a href="login.html">Sign in</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+import { app } from "./firebase-config.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+const btn = document.getElementById('registerBtn');
+const errorMsg = document.getElementById('errorMsg');
+
+function showError(msg) {
+  errorMsg.textContent = msg;
+  errorMsg.style.display = 'block';
+  errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+btn.addEventListener('click', async () => {
+  errorMsg.style.display = 'none';
+
+  const name = document.getElementById('name').value.trim();
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const langEl = document.querySelector('input[name="language"]:checked');
+
+  if (!name) { showError('Please enter your full name.'); return; }
+  if (!email) { showError('Please enter your email address.'); return; }
+  if (password.length < 6) { showError('Password must be at least 6 characters.'); return; }
+  if (!langEl) { showError('Please select a language to learn.'); return; }
+
+  const language = langEl.value;
+
+  btn.textContent = 'Creating account…';
+  btn.classList.add('loading');
+
+  try {
+    const credential = await createUserWithEmailAndPassword(auth, email, password);
+    await setDoc(doc(db, 'users', credential.user.uid), {
+      name,
+      whatsapp,
+      email,
+      language,
+      status: 'pending',
+      createdAt: new Date()
+    });
+    alert('✅ Registration successful! Your account is awaiting admin approval.');
+    window.location = 'login.html';
+  } catch (e) {
+    btn.textContent = 'Create Account →';
+    btn.classList.remove('loading');
+    const msgs = {
+      'auth/email-already-in-use': 'An account with this email already exists.',
+      'auth/invalid-email': 'Please enter a valid email address.',
+      'auth/weak-password': 'Password must be at least 6 characters.',
+    };
+    showError(msgs[e.code] || e.message);
+  }
+});
+</script>
+</body>
+</html>

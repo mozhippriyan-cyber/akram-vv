@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akram Visual Vocabulary — 6000 American English Words</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Baloo+Thambi+2:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0B1E3D;
+    --navy2:  #122649;
+    --gold:   #F5A623;
+    --gold2:  #E8951A;
+    --sky:    #0EA5E9;
+    --muted:  #64748B;
+    --border: #E2E8F0;
+    --bg:     #F1F5FC;
+    --white:  #FFFFFF;
+    --red:    #D4220E;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #071560 0%, #1a3fa8 55%, #0d7bd4 100%);
+    padding: 2.25rem 1.5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(245,166,35,.06);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: rgba(14,165,233,.07);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 3px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Baloo Thambi 2', cursive;
+    color: var(--white);
+    font-size: clamp(1.45rem, 4vw, 2.1rem);
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero-sub {
+    color: rgba(255,255,255,.7);
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+  .hero-sub strong { color: var(--white); font-weight: 700; }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.2);
+    color: var(--white);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .stat-pill .dot { color: var(--gold); }
+
+  /* ── Feature bar ── */
+  .feat-bar {
+    background: #071560;
+    padding: 0.7rem 1.25rem;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .feat-bar::-webkit-scrollbar { display: none; }
+  .feat {
+    flex-shrink: 0;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.13);
+    color: rgba(255,255,255,.85);
+    padding: 5px 12px;
+    border-radius: 7px;
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .feat .dot { color: var(--gold); font-size: 8px; }
+
+  /* ── Controls ── */
+  .controls {
+    background: var(--white);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .search-wrap {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 200px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    padding: 0 12px;
+    background: var(--bg);
+    gap: 8px;
+    transition: border-color .15s;
+  }
+  .search-wrap:focus-within { border-color: var(--sky); }
+  .search-wrap input {
+    border: none;
+    background: transparent;
+    padding: 8px 0;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    width: 100%;
+    color: var(--navy);
+  }
+  .series-tabs {
+    display: flex;
+    gap: 5px;
+  }
+  .s-tab {
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    color: var(--navy2);
+    cursor: pointer;
+    transition: all .15s;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+  }
+  .s-tab.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .s-tab:hover:not(.active) { border-color: var(--sky); color: var(--sky); }
+
+  /* ── Filter pills ── */
+  .filter-wrap {
+    background: var(--white);
+    padding: 0.55rem 1.25rem;
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #eaeffa;
+  }
+  .filter-btn {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 700;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .filter-btn.active, .filter-btn:hover { background: var(--navy); border-color: var(--navy); color: var(--white); }
+
+  /* ── Section header ── */
+  .section-hdr {
+    padding: 1rem 1.4rem 0.5rem;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .count-badge {
+    background: #eef2ff;
+    color: #3730a3;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-left: 2px;
+  }
+
+  /* ── Video grid ── */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 14px;
+    padding: 0.5rem 1.25rem 2.5rem;
+  }
+  .video-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 13px;
+    overflow: hidden;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+    cursor: pointer;
+  }
+  .video-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(11,30,61,.1);
+    border-color: #c7d7f8;
+  }
+  .video-card.playing {
+    border-color: var(--sky);
+    box-shadow: 0 0 0 3px rgba(14,165,233,.15);
+  }
+  .thumb-wrap {
+    position: relative;
+    padding-top: 56.25%;
+    background: var(--navy);
+    overflow: hidden;
+  }
+  .thumb-wrap iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+  }
+  .thumb-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, #071560 0%, #1a3fa8 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    transition: opacity .2s;
+  }
+  .thumb-overlay:hover { opacity: .9; }
+  .play-btn {
+    width: 48px; height: 48px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 6px 20px rgba(245,166,35,.45);
+    font-size: 0;
+  }
+  .play-btn::after {
+    content: '▶';
+    color: var(--navy);
+    font-size: 17px;
+    margin-left: 3px;
+  }
+  .play-btn:hover { transform: scale(1.1); }
+  .thumb-label {
+    color: rgba(255,255,255,.65);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+  }
+  .vid-num {
+    position: absolute;
+    top: 7px; left: 7px;
+    background: rgba(0,0,0,.7);
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 5px;
+    letter-spacing: 0.3px;
+  }
+  .series-tag {
+    position: absolute;
+    top: 7px; right: 7px;
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 5px;
+  }
+  .tag-s1 { background: var(--gold); color: var(--navy); }
+  .tag-s2 { background: var(--red); color: var(--white); }
+  .card-body { padding: 10px 12px 12px; }
+  .card-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 6px; line-height: 1.3; }
+  .card-meta { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .card-cat {
+    font-size: 10.5px; color: #3b82f6; font-weight: 700;
+    background: #eff6ff; padding: 2px 9px; border-radius: 6px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-width: 65%;
+  }
+  .card-series { font-size: 10.5px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+
+  /* ── No results ── */
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3.5rem 1rem;
+    color: var(--muted);
+  }
+  .no-results .ico { font-size: 40px; margin-bottom: 10px; }
+  .no-results p { font-size: 14px; }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,.6);
+    text-align: center;
+    padding: 1.5rem 1.25rem;
+    font-size: 12px;
+    line-height: 1.9;
+  }
+  footer strong { color: var(--gold); }
+
+  @media (max-width: 480px) {
+    .video-grid { grid-template-columns: 1fr; padding: 0.5rem 1rem 2rem; }
+    .series-tabs { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">
+  Akram Visual Vocabulary — 6000 American English words in 200 Tamil-medium videos by Dr. Mozhippriyan
+</h2>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🇺🇸 Tamil Medium · Ages 3–60</div>
+    <h1>தமிழ் வழியாக <span>6000</span> American English<br>வார்த்தைகளை கற்க</h1>
+    <p class="hero-sub">by <strong>Dr. Mozhippriyan</strong> · Akram Visual Vocabulary</p>
+    <div class="hero-stats">
+      <span class="stat-pill"><span class="dot">●</span> 200 Videos</span>
+      <span class="stat-pill"><span class="dot">●</span> 6000 Words</span>
+      <span class="stat-pill"><span class="dot">●</span> IPA Pronunciation</span>
+      <span class="stat-pill"><span class="dot">●</span> HD Streaming</span>
+    </div>
+  </div>
+</div>
+
+<!-- Feature bar -->
+<div class="feat-bar">
+  <span class="feat"><span class="dot">✦</span> Tamil + English</span>
+  <span class="feat"><span class="dot">✦</span> Visual Learning</span>
+  <span class="feat"><span class="dot">✦</span> Native Speaker Audio</span>
+  <span class="feat"><span class="dot">✦</span> Laptop &amp; Mobile</span>
+  <span class="feat"><span class="dot">✦</span> IPA Symbols</span>
+  <span class="feat"><span class="dot">✦</span> All Ages</span>
+  <span class="feat"><span class="dot">✦</span> HD Bunny Stream</span>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <div class="search-wrap">
+    <span>🔍</span>
+    <input type="text" id="searchInput" placeholder="Search by topic or video number…" oninput="filterVideos()" aria-label="Search videos">
+  </div>
+  <div class="series-tabs">
+    <button class="s-tab active" onclick="setSeries('all',this)">All 200</button>
+    <button class="s-tab" onclick="setSeries('s1',this)">Series 1 (150)</button>
+    <button class="s-tab" onclick="setSeries('s2',this)">Series 2 (50)</button>
+  </div>
+</div>
+
+<!-- Filter pills -->
+<div class="filter-wrap" id="filterWrap"></div>
+
+<!-- Section header -->
+<div class="section-hdr">
+  🎬 Video Lessons
+  <span class="count-badge" id="countBadge">200 videos</span>
+</div>
+
+<!-- Video grid -->
+<div class="video-grid" id="videoGrid"></div>
+
+<!-- Footer -->
+<footer>
+  <strong>Akram Visual Vocabulary</strong> · Dr. Mozhippriyan<br>
+  தமிழ் வழியாக 6000 American English வார்த்தைகளை கற்க · 200 வீடியோக்கள் · Ages 3–60<br>
+  ஒவ்வொரு ஆங்கில வார்த்தைக்கும் தமிழ் வார்த்தைகளுடன் · சரியான IPA ஒலிபெயர்ப்புடன்
+</footer>
+
+<script>
+// ── Bunny Stream configuration ──
+// Replace BUNNY_LIBRARY_ID with your actual Bunny.net library ID
+// Each video maps series+number to its Bunny video GUID
+// The sample embed provided: library 679120, video 85a6a0b7-28ba-4d84-a0b6-21c43c3b17eb
+const BUNNY_LIBRARY = '679120';
+
+// Video GUID map: key = "s1-001" or "s2-001", value = Bunny video GUID
+// Replace the GUIDs below with your actual Bunny video GUIDs.
+// The format for the embed URL is:
+//   https://player.mediadelivery.net/embed/{LIBRARY_ID}/{VIDEO_GUID}
+// Currently all map to the sample GUID — update each as you upload to Bunny.
+const SAMPLE_GUID = '85a6a0b7-28ba-4d84-a0b6-21c43c3b17eb';
+
+// You can populate this map as you upload videos:
+// const bunnyGuids = { 's1-001': 'guid-here', 's2-001': 'guid-here', ... };
+const bunnyGuids = {};
+
+function getBunnyUrl(series, n) {
+  const key = series + '-' + String(n).padStart(3, '0');
+  const guid = bunnyGuids[key] || SAMPLE_GUID;
+  return `https://player.mediadelivery.net/embed/${BUNNY_LIBRARY}/${guid}?autoplay=true&loop=false&muted=false&preload=true&responsive=true`;
+}
+
+// ── Video data ──
+const s1 = [
+  {n:1,title:'Cardinal Numerals',cat:'Numbers'},
+  {n:2,title:'Ordinal Numerals',cat:'Numbers'},
+  {n:3,title:'Colors',cat:'Colors'},
+  {n:4,title:'Calendar',cat:'Time & Measurement'},
+  {n:5,title:'Time',cat:'Time & Measurement'},
+  {n:6,title:'Sizes and Shapes',cat:'Time & Measurement'},
+  {n:7,title:'Units of Measurement',cat:'Time & Measurement'},
+  {n:8,title:'Fruits',cat:'Food & Drinks'},
+  {n:9,title:'Vegetables',cat:'Food & Drinks'},
+  {n:10,title:'Meat',cat:'Food & Drinks'},
+  {n:11,title:'Fish and Seafood',cat:'Food & Drinks'},
+  {n:12,title:'Dairy Products',cat:'Food & Drinks'},
+  {n:13,title:'Breads',cat:'Food & Drinks'},
+  {n:14,title:'Grains, Nuts and Seeds',cat:'Food & Drinks'},
+  {n:15,title:'Condiments',cat:'Food & Drinks'},
+  {n:16,title:'Sweets',cat:'Food & Drinks'},
+  {n:17,title:'Meals',cat:'Food & Drinks'},
+  {n:18,title:'Dishes',cat:'Food & Drinks'},
+  {n:19,title:'Describing Food',cat:'Food & Drinks'},
+  {n:20,title:'Non-Alcoholic Drinks',cat:'Food & Drinks'},
+  {n:21,title:'Domestic Animals',cat:'Animals'},
+  {n:22,title:'Domestic Birds',cat:'Animals'},
+  {n:23,title:'Wild Animals',cat:'Animals'},
+  {n:24,title:'Wild Birds',cat:'Animals'},
+  {n:25,title:'Fish',cat:'Animals'},
+  {n:26,title:'Amphibians and Reptiles',cat:'Animals'},
+  {n:27,title:'Aquatic Animals',cat:'Animals'},
+  {n:28,title:'Insects and Arachnids',cat:'Animals'},
+  {n:29,title:'Baby Animals',cat:'Animals'},
+  {n:30,title:'Parts of Animals',cat:'Animals'},
+  {n:31,title:'Animal Groups',cat:'Animals'},
+  {n:32,title:'Animal Sounds',cat:'Animals'},
+  {n:33,title:'Family',cat:'People & Society'},
+  {n:34,title:'Love and Friendship',cat:'People & Society'},
+  {n:35,title:'People',cat:'People & Society'},
+  {n:36,title:'Identity',cat:'People & Society'},
+  {n:37,title:'Age and Life Events',cat:'People & Society'},
+  {n:38,title:'Head and Face',cat:'Human Body'},
+  {n:39,title:'Body Parts',cat:'Human Body'},
+  {n:40,title:'Internal Organs',cat:'Human Body'},
+  {n:41,title:'Skeleton and Muscles',cat:'Human Body'},
+  {n:42,title:'Health Problems',cat:'Health & Medicine'},
+  {n:43,title:'Symptoms',cat:'Health & Medicine'},
+  {n:44,title:'Injuries',cat:'Health & Medicine'},
+  {n:45,title:'Treatment',cat:'Health & Medicine'},
+  {n:46,title:'Specialists',cat:'Health & Medicine'},
+  {n:47,title:'Pharmacy',cat:'Health & Medicine'},
+  {n:48,title:'Dentists',cat:'Health & Medicine'},
+  {n:49,title:'Optometrists',cat:'Health & Medicine'},
+  {n:50,title:'School',cat:'Education & Science'},
+  {n:51,title:'University',cat:'Education & Science'},
+  {n:52,title:'Mathematics',cat:'Education & Science'},
+  {n:53,title:'Physics',cat:'Education & Science'},
+  {n:54,title:'Astronomy',cat:'Education & Science'},
+  {n:55,title:'Chemistry',cat:'Education & Science'},
+  {n:56,title:'Biology',cat:'Education & Science'},
+  {n:57,title:'Geography',cat:'Education & Science'},
+  {n:58,title:'Linguistics',cat:'Education & Science'},
+  {n:59,title:'Scientists',cat:'Education & Science'},
+  {n:60,title:'Jobs Part 1',cat:'Work & Business'},
+  {n:61,title:'Jobs Part 2',cat:'Work & Business'},
+  {n:62,title:'Workplace',cat:'Work & Business'},
+  {n:63,title:'Business',cat:'Work & Business'},
+  {n:64,title:'Banks',cat:'Work & Business'},
+  {n:65,title:'Winter Sports',cat:'Sports'},
+  {n:66,title:'Summer Sports',cat:'Sports'},
+  {n:67,title:'Gym',cat:'Sports'},
+  {n:68,title:'Sports Equipment',cat:'Sports'},
+  {n:69,title:'About Sports',cat:'Sports'},
+  {n:70,title:'Sportsmen',cat:'Sports'},
+  {n:71,title:'Clothes',cat:'Fashion & Style'},
+  {n:72,title:'Footwear',cat:'Fashion & Style'},
+  {n:73,title:'Accessories',cat:'Fashion & Style'},
+  {n:74,title:'Beauty Shop',cat:'Fashion & Style'},
+  {n:75,title:'Tailor',cat:'Fashion & Style'},
+  {n:76,title:'Types of Houses',cat:'Home & Living'},
+  {n:77,title:'Rooms',cat:'Home & Living'},
+  {n:78,title:'Furniture',cat:'Home & Living'},
+  {n:79,title:'Home Decor',cat:'Home & Living'},
+  {n:80,title:'Parts of The House',cat:'Home & Living'},
+  {n:81,title:'Describing A House',cat:'Home & Living'},
+  {n:82,title:'Real Estate Office',cat:'Home & Living'},
+  {n:83,title:'Types of Stores',cat:'Shopping'},
+  {n:84,title:'Appliance Store',cat:'Shopping'},
+  {n:85,title:'Kitchenware',cat:'Shopping'},
+  {n:86,title:'Household Products',cat:'Shopping'},
+  {n:87,title:'Stationery',cat:'Shopping'},
+  {n:88,title:'Bookstore',cat:'Shopping'},
+  {n:89,title:'Kids Store',cat:'Shopping'},
+  {n:90,title:'Cosmetics',cat:'Shopping'},
+  {n:91,title:'Bath Products',cat:'Shopping'},
+  {n:92,title:'Hardware Store',cat:'Shopping'},
+  {n:93,title:'In-Store Shopping',cat:'Shopping'},
+  {n:94,title:'Online Shopping',cat:'Shopping'},
+  {n:95,title:'TV and Radio',cat:'Technology & Media'},
+  {n:96,title:'Computers',cat:'Technology & Media'},
+  {n:97,title:'Internet',cat:'Technology & Media'},
+  {n:98,title:'Phones',cat:'Technology & Media'},
+  {n:99,title:'Journalism',cat:'Technology & Media'},
+  {n:100,title:'Mail',cat:'Technology & Media'},
+  {n:101,title:'Trees',cat:'Nature & Plants'},
+  {n:102,title:'Fruit Trees',cat:'Nature & Plants'},
+  {n:103,title:'Shrubs',cat:'Nature & Plants'},
+  {n:104,title:'Flowers',cat:'Nature & Plants'},
+  {n:105,title:'Other Plants',cat:'Nature & Plants'},
+  {n:106,title:'About Plants',cat:'Nature & Plants'},
+  {n:107,title:'Agriculture',cat:'Nature & Plants'},
+  {n:108,title:'Hotel',cat:'Travel & Leisure'},
+  {n:109,title:'Restaurant and Bar',cat:'Travel & Leisure'},
+  {n:110,title:'Tourist Attractions',cat:'Travel & Leisure'},
+  {n:111,title:'Buildings',cat:'Travel & Leisure'},
+  {n:112,title:'Streets',cat:'Travel & Leisure'},
+  {n:113,title:'Regions',cat:'Travel & Leisure'},
+  {n:114,title:'Literature',cat:'Arts & Culture'},
+  {n:115,title:'Books',cat:'Arts & Culture'},
+  {n:116,title:'Music',cat:'Arts & Culture'},
+  {n:117,title:'Musical Instruments',cat:'Arts & Culture'},
+  {n:118,title:'Plastic Arts',cat:'Arts & Culture'},
+  {n:119,title:'Photography',cat:'Arts & Culture'},
+  {n:120,title:'Myths and Legends',cat:'Arts & Culture'},
+  {n:121,title:'Supernatural',cat:'Arts & Culture'},
+  {n:122,title:'Cinema',cat:'Arts & Culture'},
+  {n:123,title:'Theater',cat:'Arts & Culture'},
+  {n:124,title:'Hobbies',cat:'Hobbies & Games'},
+  {n:125,title:'Traveling',cat:'Hobbies & Games'},
+  {n:126,title:'At The Beach',cat:'Hobbies & Games'},
+  {n:127,title:'Camping',cat:'Hobbies & Games'},
+  {n:128,title:'Fishing',cat:'Hobbies & Games'},
+  {n:129,title:'Games',cat:'Hobbies & Games'},
+  {n:130,title:'Playground',cat:'Hobbies & Games'},
+  {n:131,title:'Road Transportation',cat:'Transport'},
+  {n:132,title:'Rail Transportation',cat:'Transport'},
+  {n:133,title:'Air Transportation',cat:'Transport'},
+  {n:134,title:'Water Transportation',cat:'Transport'},
+  {n:135,title:'Roads',cat:'Transport'},
+  {n:136,title:'Car Parts',cat:'Transport'},
+  {n:137,title:'Police',cat:'Law & Society'},
+  {n:138,title:'Crimes',cat:'Law & Society'},
+  {n:139,title:'Culprits',cat:'Law & Society'},
+  {n:140,title:'Law and Justice',cat:'Law & Society'},
+  {n:141,title:'Army and War',cat:'Law & Society'},
+  {n:142,title:'Weapons',cat:'Law & Society'},
+  {n:143,title:'Poverty and Charity',cat:'Law & Society'},
+  {n:144,title:'Weather',cat:'Environment'},
+  {n:145,title:'Natural Phenomena',cat:'Environment'},
+  {n:146,title:'Landscape',cat:'Environment'},
+  {n:147,title:'Water Bodies',cat:'Environment'},
+  {n:148,title:'Pollution',cat:'Environment'},
+  {n:149,title:'Rocks and Gemstones',cat:'Environment'},
+  {n:150,title:'Minerals and Metals',cat:'Environment'},
+];
+
+const s2 = [
+  {n:1,title:'Pronouns',cat:'Pronouns'},
+  {n:2,title:'Objective Pronouns',cat:'Pronouns'},
+  {n:3,title:'Possessive Pronouns',cat:'Pronouns'},
+  {n:4,title:'Reflexive Pronouns',cat:'Pronouns'},
+  {n:5,title:'Relative Pronouns',cat:'Pronouns'},
+  {n:6,title:'Prepositions',cat:'Grammar Essentials'},
+  {n:7,title:'Conjunctions',cat:'Grammar Essentials'},
+  {n:8,title:'Expressing Quantity',cat:'Grammar Essentials'},
+  {n:9,title:'Punctuations',cat:'Grammar Essentials'},
+  {n:10,title:'Nouns: Communication',cat:'Nouns'},
+  {n:11,title:'Nouns: Consciousness',cat:'Nouns'},
+  {n:12,title:'Nouns: Concrete Nouns',cat:'Nouns'},
+  {n:13,title:'Nouns: Abstract Nouns Part 1',cat:'Nouns'},
+  {n:14,title:'Nouns: Abstract Nouns Part 2',cat:'Nouns'},
+  {n:15,title:'Adjectives: Describing Objects',cat:'Adjectives'},
+  {n:16,title:'Adjectives: About People',cat:'Adjectives'},
+  {n:17,title:'Adjectives: Describing Art',cat:'Adjectives'},
+  {n:18,title:'Adjectives: Descriptions Part 1',cat:'Adjectives'},
+  {n:19,title:'Adjectives: Descriptions Part 2',cat:'Adjectives'},
+  {n:20,title:'Adjectives: Descriptions Part 3',cat:'Adjectives'},
+  {n:21,title:'Adjectives: Pairs Part 1',cat:'Adjectives'},
+  {n:22,title:'Adjectives: Pairs Part 2',cat:'Adjectives'},
+  {n:23,title:'Adverbs: Time and Frequency',cat:'Adverbs'},
+  {n:24,title:'Adverbs: Place',cat:'Adverbs'},
+  {n:25,title:'Adverbs: Manner Part 1',cat:'Adverbs'},
+  {n:26,title:'Adverbs: Manner Part 2',cat:'Adverbs'},
+  {n:27,title:'Adverbs: Manner Part 3',cat:'Adverbs'},
+  {n:28,title:'Adverbs: Degree',cat:'Adverbs'},
+  {n:29,title:'Adverbs: Interrogative and Linking Words',cat:'Adverbs'},
+  {n:30,title:'Verbs: Actions Part 1',cat:'Verbs'},
+  {n:31,title:'Verbs: Actions Part 2',cat:'Verbs'},
+  {n:32,title:'Verbs: Actions Part 3',cat:'Verbs'},
+  {n:33,title:'Verbs: Cooking',cat:'Verbs'},
+  {n:34,title:'Verbs: Management',cat:'Verbs'},
+  {n:35,title:'Verbs: Communications',cat:'Verbs'},
+  {n:36,title:'Verbs: Education and Research',cat:'Verbs'},
+  {n:37,title:'Verbs: Interpersonal Skills',cat:'Verbs'},
+  {n:38,title:'Verbs: Efficiency',cat:'Verbs'},
+  {n:39,title:'Verbs: Skills',cat:'Verbs'},
+  {n:40,title:'Verbs: Stative Verbs',cat:'Verbs'},
+  {n:41,title:'Verbs: Expressing Feelings',cat:'Verbs'},
+  {n:42,title:'Describing Noun Characteristics Part 1',cat:'Describing Nouns'},
+  {n:43,title:'Describing Noun Characteristics Part 2',cat:'Describing Nouns'},
+  {n:44,title:'Describing Noun Characteristics Part 3',cat:'Describing Nouns'},
+  {n:45,title:'Describing Noun: Physical Characteristics',cat:'Describing Nouns'},
+  {n:46,title:'Describing Noun: Physical States',cat:'Describing Nouns'},
+  {n:47,title:'Describing Noun: Emotional States',cat:'Describing Nouns'},
+  {n:48,title:'Describing Noun: Feelings',cat:'Describing Nouns'},
+  {n:49,title:'Describing Noun: People Opinions',cat:'Describing Nouns'},
+  {n:50,title:'Describing Noun: Values and Vices',cat:'Describing Nouns'},
+];
+
+const s1Cats = [...new Set(s1.map(v => v.cat))];
+const s2Cats = [...new Set(s2.map(v => v.cat))];
+
+let activeSeries = 'all';
+let activeCat    = 'All';
+let currentPlaying = null;
+
+function buildFilters() {
+  const wrap = document.getElementById('filterWrap');
+  if (activeSeries === 'all') {
+    wrap.innerHTML = '<button class="filter-btn active" onclick="setCat(\'All\',this)">All Topics</button>';
+    return;
+  }
+  const list = activeSeries === 's1' ? s1Cats : s2Cats;
+  wrap.innerHTML = '<button class="filter-btn active" onclick="setCat(\'All\',this)">All</button>' +
+    list.map(c => `<button class="filter-btn" onclick="setCat('${c.replace(/'/g,"\\'")}',this)">${c}</button>`).join('');
+  activeCat = 'All';
+}
+
+function setCat(c, btn) {
+  activeCat = c;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterVideos();
+}
+
+function setSeries(s, btn) {
+  activeSeries = s;
+  activeCat = 'All';
+  document.querySelectorAll('.s-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildFilters();
+  filterVideos();
+}
+
+function filterVideos() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let pool = [];
+  if (activeSeries === 'all' || activeSeries === 's1') s1.forEach(v => pool.push({...v, series:'s1', label:'Vocabulary'}));
+  if (activeSeries === 'all' || activeSeries === 's2') s2.forEach(v => pool.push({...v, series:'s2', label:'Grammar'}));
+  const filtered = pool.filter(v => {
+    const mc = activeCat === 'All' || v.cat === activeCat;
+    const mq = !q || v.title.toLowerCase().includes(q) || v.cat.toLowerCase().includes(q) || String(v.n).includes(q);
+    return mc && mq;
+  });
+  renderGrid(filtered);
+  document.getElementById('countBadge').textContent = filtered.length + ' video' + (filtered.length !== 1 ? 's' : '');
+}
+
+function playVideo(el, series, n) {
+  // Stop previous
+  if (currentPlaying && currentPlaying !== el) {
+    const prev = currentPlaying;
+    const tw = prev.querySelector('.thumb-wrap');
+    const numTxt = tw.querySelector('.vid-num')?.textContent || '';
+    const stag = tw.querySelector('.series-tag');
+    const stagHtml = stag ? stag.outerHTML : '';
+    tw.innerHTML = `
+      <div class="thumb-overlay">
+        <button class="play-btn"></button>
+        <span class="thumb-label">Click to Play</span>
+      </div>
+      ${numTxt ? `<div class="vid-num">${numTxt}</div>` : ''}
+      ${stagHtml}
+    `;
+    const prevId = prev.id;
+    const [, ps, pn] = prevId.split('-');
+    tw.querySelector('.thumb-overlay').onclick = () => playVideo(prev, ps, parseInt(pn));
+    prev.classList.remove('playing');
+  }
+
+  const tw = el.querySelector('.thumb-wrap');
+  const numTxt = tw.querySelector('.vid-num')?.textContent || '';
+  const stag = tw.querySelector('.series-tag');
+  const stagHtml = stag ? stag.outerHTML : '';
+  const src = getBunnyUrl(series, n);
+
+  tw.innerHTML = `
+    <iframe
+      src="${src}"
+      loading="lazy"
+      style="border:0;position:absolute;top:0;height:100%;width:100%;"
+      allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;"
+      allowfullscreen="true">
+    </iframe>
+    ${numTxt ? `<div class="vid-num">${numTxt}</div>` : ''}
+    ${stagHtml}
+  `;
+
+  el.classList.add('playing');
+  currentPlaying = el;
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function renderGrid(videos) {
+  const grid = document.getElementById('videoGrid');
+  if (!videos.length) {
+    grid.innerHTML = `<div class="no-results"><div class="ico">🔍</div><p>No videos found. Try a different search or filter.</p></div>`;
+    return;
+  }
+  grid.innerHTML = videos.map(v => {
+    const id = `vc-${v.series}-${v.n}`;
+    const tagCls = v.series === 's1' ? 'tag-s1' : 'tag-s2';
+    return `
+      <div class="video-card" id="${id}" onclick="playVideo(this,'${v.series}',${v.n})">
+        <div class="thumb-wrap">
+          <div class="thumb-overlay" onclick="event.stopPropagation(); playVideo(document.getElementById('${id}'),'${v.series}',${v.n})">
+            <button class="play-btn" title="Play ${v.title}"></button>
+            <span class="thumb-label">Click to Play</span>
+          </div>
+          <div class="vid-num">#${String(v.n).padStart(3,'0')}</div>
+          <div class="series-tag ${tagCls}">${v.label}</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">${v.title}</div>
+          <div class="card-meta">
+            <span class="card-cat">${v.cat}</span>
+            <span class="card-series">${v.label}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+buildFilters();
+filterVideos();
+</script>
+</body>
+</html>

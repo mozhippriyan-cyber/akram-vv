@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — Vocabulary Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0B1E3D;
+    --navy2:  #122649;
+    --gold:   #F5A623;
+    --gold2:  #E8951A;
+    --sky:    #0EA5E9;
+    --muted:  #64748B;
+    --border: #E2E8F0;
+    --bg:     #F1F5FC;
+    --white:  #FFFFFF;
+    --error:  #EF4444;
+    --radius: 14px;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+  }
+
+  .page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* ── Left panel ── */
+  .panel-left {
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .panel-left::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 380px; height: 380px;
+    border-radius: 50%;
+    background: rgba(245,166,35,.08);
+  }
+  .panel-left::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(14,165,233,.07);
+  }
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .brand-icon {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    box-shadow: 0 12px 32px rgba(245,166,35,.35);
+  }
+  .brand-name {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .brand-name span { color: var(--gold); }
+  .brand-tagline {
+    font-size: 13px;
+    color: rgba(255,255,255,.55);
+    font-weight: 500;
+    margin-top: -4px;
+  }
+  .lang-flags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  .flag-chip {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.12);
+    color: rgba(255,255,255,.75);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .flag-chip .fi { font-size: 15px; }
+  .panel-quote {
+    margin-top: 2.5rem;
+    background: rgba(255,255,255,.05);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    max-width: 340px;
+  }
+  .panel-quote p {
+    color: rgba(255,255,255,.7);
+    font-size: 13px;
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* ── Right panel ── */
+  .panel-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 2rem;
+  }
+  .form-card {
+    width: 100%;
+    max-width: 420px;
+  }
+  .form-heading {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .form-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .field {
+    margin-bottom: 1.1rem;
+  }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .input-wrap {
+    position: relative;
+  }
+  .input-wrap .ico {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 17px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .input-wrap input {
+    width: 100%;
+    padding: 11px 14px 11px 40px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--navy);
+    background: var(--white);
+    outline: none;
+    transition: border-color .18s, box-shadow .18s;
+  }
+  .input-wrap input:focus {
+    border-color: var(--sky);
+    box-shadow: 0 0 0 3px rgba(14,165,233,.12);
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background .18s, transform .12s;
+    margin-top: .5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary:hover { background: var(--navy2); }
+  .btn-primary:active { transform: scale(.98); }
+  .btn-primary.loading { pointer-events: none; opacity: .7; }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 1.5rem 0;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .alt-link {
+    text-align: center;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  .alt-link a {
+    color: var(--sky);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .alt-link a:hover { text-decoration: underline; }
+
+  .error-msg {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: var(--error);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    display: none;
+  }
+
+  /* Mobile */
+  @media (max-width: 700px) {
+    .page { grid-template-columns: 1fr; }
+    .panel-left { display: none; }
+    .panel-right { padding: 2rem 1.25rem; justify-content: flex-start; padding-top: 3rem; }
+    .form-card { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Left: Brand Panel -->
+  <div class="panel-left">
+    <div class="brand">
+      <div class="brand-icon">📘</div>
+      <div class="brand-name">Vocabulary<br><span>Academy</span></div>
+      <div class="brand-tagline">Master languages through video</div>
+      <div class="lang-flags">
+        <span class="flag-chip">🇺🇸 American English</span>
+        <span class="flag-chip">🇮🇳 Hindi</span>
+        <span class="flag-chip">🇸🇦 Arabic</span>
+        <span class="flag-chip">🇩🇪 German</span>
+        <span class="flag-chip">🇨🇳 Mandarin</span>
+        <span class="flag-chip">🇯🇵 Japanese</span>
+        <span class="flag-chip">🇫🇷 French</span>
+      </div>
+      <div class="panel-quote">
+        <p>"The limits of my language mean the limits of my world." — Ludwig Wittgenstein</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Form Panel -->
+  <div class="panel-right">
+    <div class="form-card">
+      <div class="form-heading">Welcome back</div>
+      <div class="form-sub">Sign in to continue your language journey.</div>
+
+      <div class="error-msg" id="errorMsg"></div>
+
+      <div class="field">
+        <label for="email">Email address</label>
+        <div class="input-wrap">
+          <span class="ico">✉️</span>
+          <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <span class="ico">🔒</span>
+          <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+      </div>
+
+      <button class="btn-primary" id="loginBtn">Sign In →</button>
+
+      <div class="divider">or</div>
+
+      <div class="alt-link">
+        New to Vocabulary Academy? <a href="register.html">Create an account</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+import { app } from "./firebase-config.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+const auth = getAuth(app);
+const btn = document.getElementById('loginBtn');
+const errorMsg = document.getElementById('errorMsg');
+
+function showError(msg) {
+  errorMsg.textContent = msg;
+  errorMsg.style.display = 'block';
+}
+
+btn.addEventListener('click', async () => {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  errorMsg.style.display = 'none';
+
+  if (!email || !password) { showError('Please enter your email and password.'); return; }
+
+  btn.textContent = 'Signing in…';
+  btn.classList.add('loading');
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location = 'dashboard.html';
+  } catch (e) {
+    btn.textContent = 'Sign In →';
+    btn.classList.remove('loading');
+    const msgs = {
+      'auth/user-not-found': 'No account found with this email.',
+      'auth/wrong-password': 'Incorrect password. Please try again.',
+      'auth/invalid-email': 'Please enter a valid email address.',
+      'auth/too-many-requests': 'Too many attempts. Please wait a moment.',
+    };
+    showError(msgs[e.code] || e.message);
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') btn.click();
+});
+</script>
+</body>
+</html>

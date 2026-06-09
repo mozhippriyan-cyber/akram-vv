@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Vocabulary Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0B1E3D;
+    --navy2:  #122649;
+    --gold:   #F5A623;
+    --sky:    #0EA5E9;
+    --muted:  #64748B;
+    --border: #E2E8F0;
+    --bg:     #F1F5FC;
+    --white:  #FFFFFF;
+    --error:  #EF4444;
+    --sidebar-w: 260px;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+  }
+
+  /* ── Layout ── */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1.5rem 1.25rem 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+  .sidebar-brand .icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--gold) 0%, #e8951a 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .sidebar-brand .name {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.2;
+  }
+  .sidebar-brand .name span { color: var(--gold); }
+
+  .sidebar-user {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+  .user-avatar {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--sky) 0%, #0284c7 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+  .user-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 2px;
+  }
+  .user-lang {
+    font-size: 12px;
+    color: rgba(255,255,255,.5);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .lang-badge {
+    background: rgba(245,166,35,.18);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .sidebar-section {
+    padding: 0.75rem 1.25rem 0.5rem;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,.3);
+  }
+  .sidebar-nav {
+    flex: 1;
+    padding: 0 0.75rem;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: rgba(255,255,255,.65);
+    cursor: pointer;
+    transition: background .15s, color .15s;
+    margin-bottom: 2px;
+    text-decoration: none;
+  }
+  .nav-item:hover, .nav-item.active {
+    background: rgba(255,255,255,.08);
+    color: var(--white);
+  }
+  .nav-item.active { background: rgba(245,166,35,.15); color: var(--gold); }
+  .nav-item .nav-ico { font-size: 16px; }
+
+  .sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid rgba(255,255,255,.07);
+  }
+  .btn-logout {
+    width: 100%;
+    padding: 9px;
+    background: rgba(239,68,68,.12);
+    color: #fca5a5;
+    border: 1px solid rgba(239,68,68,.2);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background .15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-logout:hover { background: rgba(239,68,68,.22); }
+
+  /* ── Main ── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0.9rem 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+  .topbar-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--navy);
+  }
+  .search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    flex: 1;
+    max-width: 320px;
+  }
+  .search-wrap input {
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--navy);
+    outline: none;
+    width: 100%;
+  }
+  .search-wrap input::placeholder { color: var(--muted); }
+
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.75rem;
+  }
+
+  /* ── Status / Pending ── */
+  .pending-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    max-width: 500px;
+    margin: 2rem auto;
+  }
+  .pending-icon { font-size: 52px; margin-bottom: 1rem; }
+  .pending-card h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .pending-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .pending-badge {
+    display: inline-block;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+
+  /* ── Stats row ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .stat-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .stat-ico {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .stat-ico.blue { background: #eff6ff; }
+  .stat-ico.gold { background: #fffbeb; }
+  .stat-ico.green { background: #f0fdf4; }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .stat-value {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.1;
+  }
+
+  /* ── Section header ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .count-pill {
+    background: #eef2ff;
+    color: #3730a3;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── Video grid ── */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .video-card {
+    background: var(--white);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    border: 1.5px solid var(--border);
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+  }
+  .video-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(11,30,61,.12);
+    border-color: #c7d7f8;
+  }
+  .video-card.playing {
+    border-color: var(--sky);
+    box-shadow: 0 0 0 3px rgba(14,165,233,.15);
+  }
+
+  .thumb-wrap {
+    position: relative;
+    padding-top: 56.25%;
+    background: var(--navy);
+    overflow: hidden;
+  }
+  .thumb-wrap iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+  }
+  .thumb-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, #0B1E3D 0%, #1a3fa8 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .thumb-overlay:hover { opacity: 0.9; }
+  .play-btn {
+    width: 52px; height: 52px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 6px 20px rgba(245,166,35,.45);
+  }
+  .play-btn:hover { transform: scale(1.1); }
+  .play-btn::after {
+    content: '▶';
+    color: var(--navy);
+    font-size: 18px;
+    margin-left: 3px;
+  }
+  .thumb-label {
+    color: rgba(255,255,255,.7);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .vid-num {
+    position: absolute;
+    top: 8px; left: 8px;
+    background: rgba(0,0,0,.7);
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+  }
+
+  .card-body {
+    padding: 12px 14px 14px;
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-cat {
+    font-size: 11px;
+    font-weight: 700;
+    color: #3b82f6;
+    background: #eff6ff;
+    padding: 2px 9px;
+    border-radius: 6px;
+  }
+  .card-order {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--muted);
+  }
+  .empty-state .ico { font-size: 48px; margin-bottom: 12px; }
+  .empty-state h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .empty-state p { font-size: 13.5px; }
+
+  /* ── Loading ── */
+  .loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .spinner {
+    width: 22px; height: 22px;
+    border: 3px solid var(--border);
+    border-top-color: var(--sky);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Mobile sidebar toggle ── */
+  .menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--navy);
+    padding: 4px;
+  }
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 10;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      left: -280px;
+      top: 0; bottom: 0;
+      z-index: 20;
+      transition: left .25s ease;
+      height: 100%;
+    }
+    .sidebar.open { left: 0; }
+    .sidebar-overlay.show { display: block; }
+    .menu-btn { display: block; }
+    .content { padding: 1.25rem; }
+    .topbar { padding: 0.9rem 1.25rem; }
+    .video-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="icon">📘</div>
+      <div class="name">Vocabulary<br><span>Academy</span></div>
+    </div>
+
+    <div class="sidebar-user" id="sidebarUser">
+      <div class="user-avatar" id="userAvatar">…</div>
+      <div class="user-name" id="userName">Loading…</div>
+      <div class="user-lang" id="userLangWrap" style="display:none">
+        <span id="userLangBadge" class="lang-badge"></span>
+      </div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="sidebar-section">Navigation</div>
+      <a class="nav-item active" href="#">
+        <span class="nav-ico">🎓</span> My Course
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" id="logoutBtn">🚪 Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- Sidebar overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main content -->
+  <div class="main">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button class="menu-btn" id="menuBtn">☰</button>
+        <div class="topbar-title" id="topbarTitle">My Course</div>
+      </div>
+      <div class="search-wrap" id="searchWrap" style="display:none">
+        <span>🔍</span>
+        <input type="text" id="searchInput" placeholder="Search videos…">
+      </div>
+    </div>
+
+    <!-- Content area -->
+    <div class="content" id="contentArea">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        Loading your course…
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+import { app } from "./firebase-config.js";
+import {
+  getAuth, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc,
+  collection, getDocs, query, where, orderBy
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const LANG_META = {
+  'American English': { flag: '🇺🇸', label: 'American English' },
+  'Hindi':            { flag: '🇮🇳', label: 'Hindi' },
+  'Arabic':           { flag: '🇸🇦', label: 'Arabic' },
+  'German':           { flag: '🇩🇪', label: 'German' },
+  'Mandarin':         { flag: '🇨🇳', label: 'Mandarin' },
+  'Japanese':         { flag: '🇯🇵', label: 'Japanese' },
+  'French':           { flag: '🇫🇷', label: 'French' },
+};
+
+// ── Mobile sidebar ──
+const sidebar       = document.getElementById('sidebar');
+const sidebarOverlay= document.getElementById('sidebarOverlay');
+document.getElementById('menuBtn').addEventListener('click', () => {
+  sidebar.classList.add('open');
+  sidebarOverlay.classList.add('show');
+});
+sidebarOverlay.addEventListener('click', () => {
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('show');
+});
+
+// ── Logout ──
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await signOut(auth);
+  window.location = 'login.html';
+});
+
+// ── Auth ──
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location = 'login.html'; return; }
+
+  const userSnap = await getDoc(doc(db, 'users', user.uid));
+  if (!userSnap.exists()) {
+    renderContent(`<div class="empty-state"><div class="ico">❌</div><h3>Profile not found</h3><p>Please contact support.</p></div>`);
+    return;
+  }
+
+  const data = userSnap.data();
+  const name = data.name || data.Name || 'Student';
+  const lang = data.language || data.Language || '';
+  const status = data.status || data.Status;
+  const meta = LANG_META[lang] || { flag: '🌐', label: lang };
+
+  // Sidebar user info
+  document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('userName').textContent = name;
+  if (lang) {
+    const wrap = document.getElementById('userLangWrap');
+    wrap.style.display = 'flex';
+    document.getElementById('userLangBadge').textContent = meta.flag + ' ' + meta.label;
+  }
+  document.getElementById('topbarTitle').textContent = name + "'s Course";
+
+  // ── Pending ──
+  if (status !== 'approved') {
+    renderContent(`
+      <div class="pending-card">
+        <div class="pending-icon">⏳</div>
+        <div class="pending-badge">Pending Approval</div>
+        <h2>Your account is under review</h2>
+        <p>An administrator will approve your account shortly. You'll be able to access your <strong>${meta.flag} ${meta.label}</strong> course once approved.</p>
+      </div>
+    `);
+    return;
+  }
+
+  // ── Show search ──
+  document.getElementById('searchWrap').style.display = 'flex';
+
+  if (!lang) {
+    renderContent(`
+      <div class="empty-state">
+        <div class="ico">⚠️</div>
+        <h3>No language assigned</h3>
+        <p>Please contact support to have a language assigned to your profile.</p>
+      </div>
+    `);
+    return;
+  }
+
+  // ── Fetch videos for this language ONLY ──
+  const videosRef = collection(db, 'videos');
+  let q;
+  try {
+    q = query(videosRef, where('language', '==', lang), orderBy('order'));
+  } catch {
+    q = query(videosRef, where('language', '==', lang));
+  }
+
+  const snapshot = await getDocs(q);
+  let videos = [];
+  snapshot.forEach(d => videos.push({ id: d.id, ...d.data() }));
+
+  // Sort by order field if present, else title
+  videos.sort((a, b) => {
+    if (a.order != null && b.order != null) return a.order - b.order;
+    return (a.title || '').localeCompare(b.title || '');
+  });
+
+  renderDashboard(meta, videos);
+
+  // Search
+  document.getElementById('searchInput').addEventListener('input', () => {
+    const q2 = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = videos.filter(v =>
+      !q2 ||
+      (v.title || '').toLowerCase().includes(q2) ||
+      (v.category || v.cat || '').toLowerCase().includes(q2)
+    );
+    renderVideoGrid(filtered);
+    document.getElementById('vidCount').textContent = filtered.length + ' video' + (filtered.length !== 1 ? 's' : '');
+  });
+});
+
+// ── Render helpers ──
+function renderContent(html) {
+  document.getElementById('contentArea').innerHTML = html;
+}
+
+let currentPlayingId = null;
+
+function renderDashboard(meta, videos) {
+  const area = document.getElementById('contentArea');
+  area.innerHTML = `
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-ico blue">🎥</div>
+        <div>
+          <div class="stat-label">Total Videos</div>
+          <div class="stat-value">${videos.length}</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico gold">${meta.flag}</div>
+        <div>
+          <div class="stat-label">Your Language</div>
+          <div class="stat-value" style="font-size:1rem; line-height:1.3;">${meta.label}</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico green">✅</div>
+        <div>
+          <div class="stat-label">Status</div>
+          <div class="stat-value" style="font-size:1rem; color:#10B981; line-height:1.3;">Active</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">
+        ${meta.flag} ${meta.label} Lessons
+        <span class="count-pill" id="vidCount">${videos.length} video${videos.length !== 1 ? 's' : ''}</span>
+      </div>
+    </div>
+
+    <div class="video-grid" id="videoGrid"></div>
+  `;
+
+  renderVideoGrid(videos);
+}
+
+function renderVideoGrid(videos) {
+  const grid = document.getElementById('videoGrid');
+  if (!grid) return;
+
+  if (!videos.length) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="ico">📭</div>
+        <h3>No videos found</h3>
+        <p>No lessons are available yet, or nothing matches your search. Check back soon!</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = videos.map((v, i) => {
+    const title    = escHtml(v.title || 'Untitled Lesson');
+    const category = escHtml(v.category || v.cat || '');
+    const order    = v.order != null ? v.order : (i + 1);
+    const bunnySrc = (v.bunnySrc || '').trim();
+    const cardId   = 'vc-' + v.id;
+
+    return `
+      <div class="video-card" id="${cardId}">
+        <div class="thumb-wrap" id="tw-${v.id}">
+          <div class="thumb-overlay" onclick="playVideo('${v.id}', '${escAttr(bunnySrc)}')">
+            <button class="play-btn" title="Play ${title}"></button>
+            <span class="thumb-label">Click to Play</span>
+          </div>
+          <div class="vid-num">#${String(order).padStart(3, '0')}</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">${title}</div>
+          <div class="card-meta">
+            ${category ? `<span class="card-cat">${category}</span>` : '<span></span>'}
+            <span class="card-order">Lesson ${order}</span>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+window.playVideo = function(videoId, bunnySrc) {
+  if (!bunnySrc) {
+    alert('No video source available for this lesson.');
+    return;
+  }
+
+  // Reset previous
+  if (currentPlayingId && currentPlayingId !== videoId) {
+    const prevCard = document.getElementById('vc-' + currentPlayingId);
+    const prevTw   = document.getElementById('tw-' + currentPlayingId);
+    if (prevCard && prevTw) {
+      prevCard.classList.remove('playing');
+      // Restore overlay (keep the vid-num)
+      const numEl = prevTw.querySelector('.vid-num');
+      const numTxt = numEl ? numEl.textContent : '';
+      prevTw.innerHTML = `
+        <div class="thumb-overlay" onclick="playVideo('${currentPlayingId}', '${escAttr(bunnySrc)}')">
+          <button class="play-btn"></button>
+          <span class="thumb-label">Click to Play</span>
+        </div>
+        ${numTxt ? `<div class="vid-num">${numTxt}</div>` : ''}
+      `;
+    }
+  }
+
+  const card = document.getElementById('vc-' + videoId);
+  const tw   = document.getElementById('tw-' + videoId);
+  if (!card || !tw) return;
+
+  const numEl  = tw.querySelector('.vid-num');
+  const numTxt = numEl ? numEl.textContent : '';
+
+  // Build Bunny iframe
+  // The src may already be a full URL or just an ID; handle both
+  let src = bunnySrc;
+  if (!src.startsWith('http')) {
+    // treat as raw embed URL fragment — shouldn't happen but guard it
+    src = 'https://player.mediadelivery.net/embed/' + src;
+  }
+
+  tw.innerHTML = `
+    <iframe
+      src="${src}"
+      loading="lazy"
+      style="border:0;position:absolute;top:0;height:100%;width:100%;"
+      allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;"
+      allowfullscreen="true">
+    </iframe>
+    ${numTxt ? `<div class="vid-num">${numTxt}</div>` : ''}
+  `;
+
+  card.classList.add('playing');
+  currentPlayingId = videoId;
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+};
+
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]);
+}
+function escAttr(str) {
+  if (!str) return '';
+  return str.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>
