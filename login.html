@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sign In — Vocabulary Academy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Sign In — Akram Vocabulary Academy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* (same styles as provided – no changes needed) */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --navy:   #0B1E3D;
     --navy2:  #122649;
@@ -22,312 +22,120 @@
     --error:  #EF4444;
     --radius: 14px;
   }
-
-  html, body {
-    height: 100%;
-    font-family: 'Inter', system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--navy);
-  }
-
-  .page {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  /* ── Left panel ── */
+  html, body { height: 100%; font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--navy); }
+  .page { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
   .panel-left {
-    background: var(--navy);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 3rem 2.5rem;
-    position: relative;
-    overflow: hidden;
+    background: var(--navy); display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 2.5rem 2rem; position: relative; overflow-y: auto; overflow-x: hidden;
   }
-  .panel-left::before {
-    content: '';
-    position: absolute;
-    top: -120px; right: -120px;
-    width: 380px; height: 380px;
-    border-radius: 50%;
-    background: rgba(245,166,35,.08);
-  }
-  .panel-left::after {
-    content: '';
-    position: absolute;
-    bottom: -80px; left: -80px;
-    width: 260px; height: 260px;
-    border-radius: 50%;
-    background: rgba(14,165,233,.07);
-  }
-  .brand {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
-  .brand-icon {
-    width: 72px; height: 72px;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 34px;
-    box-shadow: 0 12px 32px rgba(245,166,35,.35);
-  }
-  .brand-name {
-    font-size: 1.65rem;
-    font-weight: 800;
-    color: var(--white);
-    letter-spacing: -0.5px;
-    line-height: 1.2;
-  }
+  .panel-left::-webkit-scrollbar { width: 4px; }
+  .panel-left::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+  .panel-left::-webkit-scrollbar-thumb { background: rgba(245,166,35,0.5); border-radius: 6px; }
+  .panel-left::before { content: ''; position: absolute; top: -120px; right: -120px; width: 380px; height: 380px; border-radius: 50%; background: rgba(245,166,35,.08); }
+  .panel-left::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(14,165,233,.07); }
+  .brand { display: flex; flex-direction: column; align-items: center; gap: 0.85rem; text-align: center; position: relative; z-index: 1; width: 100%; }
+  .brand-icon { width: 72px; height: 72px; background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 34px; box-shadow: 0 12px 32px rgba(245,166,35,.35); }
+  .brand-name { font-size: 1.7rem; font-weight: 800; color: var(--white); letter-spacing: -0.5px; line-height: 1.2; }
   .brand-name span { color: var(--gold); }
-  .brand-tagline {
-    font-size: 13px;
-    color: rgba(255,255,255,.55);
-    font-weight: 500;
-    margin-top: -4px;
-  }
-  .lang-flags {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 2rem;
-  }
-  .flag-chip {
-    background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.12);
-    color: rgba(255,255,255,.75);
-    font-size: 12px;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .flag-chip .fi { font-size: 15px; }
-  .panel-quote {
-    margin-top: 2.5rem;
-    background: rgba(255,255,255,.05);
-    border-left: 3px solid var(--gold);
-    border-radius: 0 10px 10px 0;
-    padding: 14px 18px;
-    max-width: 340px;
-  }
-  .panel-quote p {
-    color: rgba(255,255,255,.7);
-    font-size: 13px;
-    line-height: 1.7;
-    font-style: italic;
-  }
-
-  /* ── Right panel ── */
-  .panel-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 3rem 2rem;
-  }
-  .form-card {
-    width: 100%;
-    max-width: 420px;
-  }
-  .form-heading {
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: var(--navy);
-    letter-spacing: -0.5px;
-    margin-bottom: 6px;
-  }
-  .form-sub {
-    font-size: 14px;
-    color: var(--muted);
-    margin-bottom: 2rem;
-  }
-
-  .field {
-    margin-bottom: 1.1rem;
-  }
-  .field label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 6px;
-  }
-  .input-wrap {
-    position: relative;
-  }
-  .input-wrap .ico {
-    position: absolute;
-    left: 13px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 17px;
-    color: var(--muted);
-    pointer-events: none;
-  }
-  .input-wrap input {
-    width: 100%;
-    padding: 11px 14px 11px 40px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    font-size: 14px;
-    font-family: 'Inter', sans-serif;
-    color: var(--navy);
-    background: var(--white);
-    outline: none;
-    transition: border-color .18s, box-shadow .18s;
-  }
-  .input-wrap input:focus {
-    border-color: var(--sky);
-    box-shadow: 0 0 0 3px rgba(14,165,233,.12);
-  }
-
-  .btn-primary {
-    width: 100%;
-    padding: 13px;
-    background: var(--navy);
-    color: var(--white);
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 700;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    transition: background .18s, transform .12s;
-    margin-top: .5rem;
-    position: relative;
-    overflow: hidden;
-  }
+  .company-legal { font-size: 11px; font-weight: 500; letter-spacing: 0.2px; background: rgba(255,255,255,0.06); padding: 6px 12px; border-radius: 40px; margin-top: 2px; color: rgba(255,255,255,0.7); }
+  .tamil-name { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.5); font-family: 'Inter', system-ui; margin-top: -4px; letter-spacing: 0.2px; }
+  .brand-tagline { font-size: 13px; color: rgba(255,255,255,.6); font-weight: 500; margin-top: 4px; }
+  .lang-flags { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 1.75rem; margin-bottom: 1.5rem; width: 100%; max-width: 420px; }
+  .flag-chip { border: 1px solid rgba(255,255,255,0.2); border-radius: 40px; padding: 7px 10px; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; backdrop-filter: blur(2px); font-weight: 500; }
+  .flag-chip:nth-child(16n+1), .flag-chip:nth-child(16n+5), .flag-chip:nth-child(16n+9), .flag-chip:nth-child(16n+13) { background: rgba(245, 166, 35, 0.12); border-left: 3px solid #F5A623; }
+  .flag-chip:nth-child(16n+2), .flag-chip:nth-child(16n+6), .flag-chip:nth-child(16n+10), .flag-chip:nth-child(16n+14) { background: rgba(14, 165, 233, 0.12); border-left: 3px solid #0EA5E9; }
+  .flag-chip:nth-child(16n+3), .flag-chip:nth-child(16n+7), .flag-chip:nth-child(16n+11), .flag-chip:nth-child(16n+15) { background: rgba(168, 85, 247, 0.12); border-left: 3px solid #A855F7; }
+  .flag-chip:nth-child(16n+4), .flag-chip:nth-child(16n+8), .flag-chip:nth-child(16n+12), .flag-chip:nth-child(16n+16) { background: rgba(34, 197, 94, 0.12); border-left: 3px solid #22C55E; }
+  .flag-chip:hover { transform: translateY(-1px); filter: brightness(1.05); border-color: rgba(255,255,255,0.4); background-blend-mode: overlay; }
+  .lang-number { font-weight: 800; color: var(--gold); opacity: 0.9; font-size: 10px; background: rgba(0,0,0,0.3); border-radius: 20px; padding: 2px 5px; min-width: 26px; text-align: center; letter-spacing: 0.3px; }
+  .flag-img { width: 22px; height: 16px; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.2); border: 0.5px solid rgba(255,255,255,0.3); }
+  .lang-name { flex: 1; text-align: left; font-weight: 500; letter-spacing: -0.2px; font-size: 12px; color: rgba(255,255,255,0.92); }
+  .panel-quote { margin-top: 1rem; background: rgba(255,255,255,.05); border-left: 3px solid var(--gold); border-radius: 0 12px 12px 0; padding: 12px 16px; max-width: 360px; width: 100%; }
+  .panel-quote p { color: rgba(255,255,255,.7); font-size: 12px; line-height: 1.6; font-style: italic; }
+  .panel-right { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3rem 2rem; background: var(--bg); }
+  .form-card { width: 100%; max-width: 420px; }
+  .form-heading { font-size: 1.75rem; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; margin-bottom: 6px; }
+  .form-sub { font-size: 14px; color: var(--muted); margin-bottom: 2rem; }
+  .field { margin-bottom: 1.1rem; }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .input-wrap { position: relative; }
+  .input-wrap .ico { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 17px; color: var(--muted); pointer-events: none; }
+  .input-wrap input { width: 100%; padding: 11px 14px 11px 40px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: 'Inter', sans-serif; color: var(--navy); background: var(--white); outline: none; transition: border-color .18s, box-shadow .18s; }
+  .input-wrap input:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,.12); }
+  .btn-primary { width: 100%; padding: 13px; background: var(--navy); color: var(--white); border: none; border-radius: 10px; font-size: 15px; font-weight: 700; font-family: 'Inter', sans-serif; cursor: pointer; transition: background .18s, transform .12s; margin-top: .5rem; }
   .btn-primary:hover { background: var(--navy2); }
   .btn-primary:active { transform: scale(.98); }
   .btn-primary.loading { pointer-events: none; opacity: .7; }
-
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 1.5rem 0;
-    color: var(--muted);
-    font-size: 12px;
-  }
-  .divider::before, .divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .alt-link {
-    text-align: center;
-    font-size: 13.5px;
-    color: var(--muted);
-  }
-  .alt-link a {
-    color: var(--sky);
-    font-weight: 600;
-    text-decoration: none;
-  }
+  .divider { display: flex; align-items: center; gap: 10px; margin: 1.5rem 0; color: var(--muted); font-size: 12px; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .alt-link { text-align: center; font-size: 13.5px; color: var(--muted); }
+  .alt-link a { color: var(--sky); font-weight: 600; text-decoration: none; }
   .alt-link a:hover { text-decoration: underline; }
-
-  .error-msg {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: var(--error);
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 13px;
-    font-weight: 500;
-    margin-bottom: 1rem;
-    display: none;
-  }
-
-  /* Mobile */
-  @media (max-width: 700px) {
-    .page { grid-template-columns: 1fr; }
-    .panel-left { display: none; }
-    .panel-right { padding: 2rem 1.25rem; justify-content: flex-start; padding-top: 3rem; }
-    .form-card { max-width: 100%; }
-  }
+  .error-msg { background: #fef2f2; border: 1px solid #fecaca; color: var(--error); border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 500; margin-bottom: 1rem; display: none; }
+  @media (max-width: 700px) { .page { grid-template-columns: 1fr; } .panel-left { display: none; } .panel-right { padding: 2rem 1.25rem; justify-content: flex-start; padding-top: 3rem; } .form-card { max-width: 100%; } }
+  @media (max-width: 950px) { .flag-chip { padding: 6px 8px; } .lang-name { font-size: 11px; } .lang-number { font-size: 9px; min-width: 22px; } .flag-img { width: 18px; height: 13px; } }
 </style>
 </head>
 <body>
 <div class="page">
-
-  <!-- Left: Brand Panel -->
+  <!-- LEFT PANEL (same as before) -->
   <div class="panel-left">
     <div class="brand">
       <div class="brand-icon">📘</div>
-      <div class="brand-name">Vocabulary<br><span>Academy</span></div>
+      <div class="brand-name">Akram Vocabulary<br><span>Academy</span></div>
+      <div class="company-legal">Akram Global Languages Institute Pvt. Ltd.</div>
+      <div class="tamil-name">அக்ரம் உலக மொழிகள் பயிற்சி நிலையம்</div>
       <div class="brand-tagline">Master languages through video</div>
       <div class="lang-flags">
-        <span class="flag-chip">🇺🇸 American English</span>
-        <span class="flag-chip">🇮🇳 Hindi</span>
-        <span class="flag-chip">🇸🇦 Arabic</span>
-        <span class="flag-chip">🇩🇪 German</span>
-        <span class="flag-chip">🇨🇳 Mandarin</span>
-        <span class="flag-chip">🇯🇵 Japanese</span>
-        <span class="flag-chip">🇫🇷 French</span>
+        <div class="flag-chip"><span class="lang-number">01</span><img class="flag-img" src="https://flagcdn.com/us.svg" alt="US flag"><span class="lang-name">US English</span></div>
+        <div class="flag-chip"><span class="lang-number">02</span><img class="flag-img" src="https://flagcdn.com/gb.svg" alt="UK flag"><span class="lang-name">UK English</span></div>
+        <div class="flag-chip"><span class="lang-number">03</span><img class="flag-img" src="https://flagcdn.com/es.svg" alt="Spanish flag"><span class="lang-name">Spanish</span></div>
+        <div class="flag-chip"><span class="lang-number">04</span><img class="flag-img" src="https://flagcdn.com/de.svg" alt="German flag"><span class="lang-name">German</span></div>
+        <div class="flag-chip"><span class="lang-number">05</span><img class="flag-img" src="https://flagcdn.com/in.svg" alt="Hindi"><span class="lang-name">Hindi</span></div>
+        <div class="flag-chip"><span class="lang-number">06</span><img class="flag-img" src="https://flagcdn.com/sa.svg" alt="Arabic"><span class="lang-name">Arabic</span></div>
+        <div class="flag-chip"><span class="lang-number">07</span><img class="flag-img" src="https://flagcdn.com/fr.svg" alt="French flag"><span class="lang-name">French</span></div>
+        <div class="flag-chip"><span class="lang-number">08</span><img class="flag-img" src="https://flagcdn.com/kr.svg" alt="Korean flag"><span class="lang-name">Korean</span></div>
+        <div class="flag-chip"><span class="lang-number">09</span><img class="flag-img" src="https://flagcdn.com/cn.svg" alt="Chinese flag"><span class="lang-name">Chinese</span></div>
+        <div class="flag-chip"><span class="lang-number">10</span><img class="flag-img" src="https://flagcdn.com/in.svg" alt="Tamil"><span class="lang-name">Tamil</span></div>
+        <div class="flag-chip"><span class="lang-number">11</span><img class="flag-img" src="https://flagcdn.com/ru.svg" alt="Russian flag"><span class="lang-name">Russian</span></div>
+        <div class="flag-chip"><span class="lang-number">12</span><img class="flag-img" src="https://flagcdn.com/pt.svg" alt="Portuguese flag"><span class="lang-name">Portuguese</span></div>
+        <div class="flag-chip"><span class="lang-number">13</span><img class="flag-img" src="https://flagcdn.com/jp.svg" alt="Japanese flag"><span class="lang-name">Japanese</span></div>
+        <div class="flag-chip"><span class="lang-number">14</span><img class="flag-img" src="https://flagcdn.com/it.svg" alt="Italian flag"><span class="lang-name">Italian</span></div>
+        <div class="flag-chip"><span class="lang-number">15</span><img class="flag-img" src="https://flagcdn.com/il.svg" alt="Israeli flag"><span class="lang-name">Hebrew</span></div>
+        <div class="flag-chip"><span class="lang-number">16</span><img class="flag-img" src="https://flagcdn.com/nl.svg" alt="Dutch flag"><span class="lang-name">Dutch</span></div>
       </div>
-      <div class="panel-quote">
-        <p>"The limits of my language mean the limits of my world." — Ludwig Wittgenstein</p>
-      </div>
+      <div class="panel-quote"><p>"The limits of my language mean the limits of my world." — Ludwig Wittgenstein</p></div>
     </div>
   </div>
 
-  <!-- Right: Form Panel -->
+  <!-- RIGHT PANEL: Sign In Form -->
   <div class="panel-right">
     <div class="form-card">
       <div class="form-heading">Welcome back</div>
       <div class="form-sub">Sign in to continue your language journey.</div>
-
       <div class="error-msg" id="errorMsg"></div>
-
       <div class="field">
         <label for="email">Email address</label>
-        <div class="input-wrap">
-          <span class="ico">✉️</span>
-          <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
-        </div>
+        <div class="input-wrap"><span class="ico">✉️</span><input id="email" type="email" placeholder="you@example.com" autocomplete="email"></div>
       </div>
-
       <div class="field">
         <label for="password">Password</label>
-        <div class="input-wrap">
-          <span class="ico">🔒</span>
-          <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
-        </div>
+        <div class="input-wrap"><span class="ico">🔒</span><input id="password" type="password" placeholder="••••••••" autocomplete="current-password"></div>
       </div>
-
       <button class="btn-primary" id="loginBtn">Sign In →</button>
-
       <div class="divider">or</div>
-
-      <div class="alt-link">
-        New to Vocabulary Academy? <a href="register.html">Create an account</a>
-      </div>
+      <div class="alt-link">New to Akram Vocabulary Academy? <a href="register.html">Create an account</a></div>
     </div>
   </div>
-
 </div>
 
 <script type="module">
 import { app } from "./firebase-config.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const auth = getAuth(app);
+const db = getFirestore(app);
 const btn = document.getElementById('loginBtn');
 const errorMsg = document.getElementById('errorMsg');
 
@@ -347,8 +155,31 @@ btn.addEventListener('click', async () => {
   btn.classList.add('loading');
 
   try {
-    await signInWithEmailAndPassword(auth, email, password);
-    window.location = 'dashboard.html';
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    if (!userDoc.exists()) {
+      showError('User profile not found. Please contact support.');
+      return;
+    }
+    const userData = userDoc.data();
+    const language = userData.language || '';
+    const status = userData.status || 'pending';
+
+    if (status !== 'approved') {
+      showError('Your account is pending admin approval. You will be notified once activated.');
+      btn.textContent = 'Sign In →';
+      btn.classList.remove('loading');
+      await auth.signOut();
+      return;
+    }
+
+    // Redirect based on language
+    if (language === 'Hindi') {
+      window.location = 'dashboard_hindi.html';
+    } else {
+      window.location = 'dashboard.html';
+    }
   } catch (e) {
     btn.textContent = 'Sign In →';
     btn.classList.remove('loading');

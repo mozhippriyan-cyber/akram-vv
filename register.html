@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Create Account — Vocabulary Academy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Create Account — Akram Vocabulary Academy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -13,17 +13,19 @@
     --navy:   #0B1E3D;
     --navy2:  #122649;
     --gold:   #F5A623;
+    --gold2:  #E8951A;
     --sky:    #0EA5E9;
     --muted:  #64748B;
     --border: #E2E8F0;
     --bg:     #F1F5FC;
     --white:  #FFFFFF;
     --error:  #EF4444;
-    --success:#10B981;
+    --success: #10B981;
+    --radius: 14px;
   }
 
   html, body {
-    min-height: 100%;
+    height: 100%;
     font-family: 'Inter', system-ui, sans-serif;
     background: var(--bg);
     color: var(--navy);
@@ -35,45 +37,57 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  /* ── Left ── */
+  /* ── Left panel (identical to login page) ── */
   .panel-left {
     background: var(--navy);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 3rem 2.5rem;
+    padding: 2.5rem 2rem;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .panel-left::-webkit-scrollbar {
+    width: 4px;
+  }
+  .panel-left::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+  }
+  .panel-left::-webkit-scrollbar-thumb {
+    background: rgba(245,166,35,0.5);
+    border-radius: 6px;
   }
   .panel-left::before {
     content: '';
     position: absolute;
-    top: -100px; left: -100px;
-    width: 320px; height: 320px;
+    top: -120px; right: -120px;
+    width: 380px; height: 380px;
     border-radius: 50%;
-    background: rgba(245,166,35,.07);
+    background: rgba(245,166,35,.08);
   }
   .panel-left::after {
     content: '';
     position: absolute;
-    bottom: -100px; right: -100px;
-    width: 300px; height: 300px;
+    bottom: -80px; left: -80px;
+    width: 260px; height: 260px;
     border-radius: 50%;
-    background: rgba(14,165,233,.06);
+    background: rgba(14,165,233,.07);
   }
   .brand {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.85rem;
     text-align: center;
     position: relative;
     z-index: 1;
+    width: 100%;
   }
   .brand-icon {
     width: 72px; height: 72px;
-    background: linear-gradient(135deg, var(--gold) 0%, #e8951a 100%);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -82,57 +96,147 @@
     box-shadow: 0 12px 32px rgba(245,166,35,.35);
   }
   .brand-name {
-    font-size: 1.65rem;
+    font-size: 1.7rem;
     font-weight: 800;
     color: var(--white);
     letter-spacing: -0.5px;
     line-height: 1.2;
   }
   .brand-name span { color: var(--gold); }
+  .company-legal {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    background: rgba(255,255,255,0.06);
+    padding: 6px 12px;
+    border-radius: 40px;
+    margin-top: 2px;
+    color: rgba(255,255,255,0.7);
+  }
+  .tamil-name {
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.5);
+    font-family: 'Inter', system-ui;
+    margin-top: -4px;
+    letter-spacing: 0.2px;
+  }
   .brand-tagline {
     font-size: 13px;
-    color: rgba(255,255,255,.5);
+    color: rgba(255,255,255,.6);
     font-weight: 500;
-    margin-top: -4px;
+    margin-top: 4px;
   }
-  .steps {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    max-width: 320px;
+  
+  /* languages grid — multi‑color boxes (16 languages) */
+  .lang-flags {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 1.75rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    max-width: 420px;
   }
-  .step {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .step-num {
-    width: 28px; height: 28px;
-    min-width: 28px;
-    background: var(--gold);
-    color: var(--navy);
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: 800;
+  
+  .flag-chip {
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 40px;
+    padding: 7px 10px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(2px);
+    font-weight: 500;
   }
-  .step-text {
-    color: rgba(255,255,255,.75);
-    font-size: 13px;
-    line-height: 1.5;
+  
+  /* color variations */
+  .flag-chip:nth-child(16n+1),
+  .flag-chip:nth-child(16n+5),
+  .flag-chip:nth-child(16n+9),
+  .flag-chip:nth-child(16n+13) {
+    background: rgba(245, 166, 35, 0.12);
+    border-left: 3px solid #F5A623;
   }
-  .step-text strong { color: var(--white); }
+  .flag-chip:nth-child(16n+2),
+  .flag-chip:nth-child(16n+6),
+  .flag-chip:nth-child(16n+10),
+  .flag-chip:nth-child(16n+14) {
+    background: rgba(14, 165, 233, 0.12);
+    border-left: 3px solid #0EA5E9;
+  }
+  .flag-chip:nth-child(16n+3),
+  .flag-chip:nth-child(16n+7),
+  .flag-chip:nth-child(16n+11),
+  .flag-chip:nth-child(16n+15) {
+    background: rgba(168, 85, 247, 0.12);
+    border-left: 3px solid #A855F7;
+  }
+  .flag-chip:nth-child(16n+4),
+  .flag-chip:nth-child(16n+8),
+  .flag-chip:nth-child(16n+12),
+  .flag-chip:nth-child(16n+16) {
+    background: rgba(34, 197, 94, 0.12);
+    border-left: 3px solid #22C55E;
+  }
+  .flag-chip:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+    border-color: rgba(255,255,255,0.4);
+  }
+  
+  .lang-number {
+    font-weight: 800;
+    color: var(--gold);
+    opacity: 0.9;
+    font-size: 10px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 20px;
+    padding: 2px 5px;
+    min-width: 26px;
+    text-align: center;
+  }
+  .flag-img {
+    width: 22px;
+    height: 16px;
+    object-fit: cover;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    border: 0.5px solid rgba(255,255,255,0.3);
+  }
+  .lang-name {
+    flex: 1;
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    color: rgba(255,255,255,0.92);
+  }
+  
+  .panel-quote {
+    margin-top: 1rem;
+    background: rgba(255,255,255,.05);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 12px 12px 0;
+    padding: 12px 16px;
+    max-width: 360px;
+    width: 100%;
+  }
+  .panel-quote p {
+    color: rgba(255,255,255,.7);
+    font-size: 12px;
+    line-height: 1.6;
+    font-style: italic;
+  }
 
-  /* ── Right ── */
+  /* ── Right panel (registration form) ── */
   .panel-right {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 2.5rem 2rem;
+    background: var(--bg);
     overflow-y: auto;
   }
   .form-card {
@@ -174,7 +278,8 @@
     color: var(--muted);
     pointer-events: none;
   }
-  .input-wrap input {
+  .input-wrap input,
+  .input-wrap select {
     width: 100%;
     padding: 11px 14px 11px 40px;
     border: 1.5px solid var(--border);
@@ -186,53 +291,18 @@
     outline: none;
     transition: border-color .18s, box-shadow .18s;
   }
-  .input-wrap input:focus {
+  .input-wrap select {
+    appearance: none;
+    cursor: pointer;
+    padding-right: 30px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+  .input-wrap input:focus,
+  .input-wrap select:focus {
     border-color: var(--sky);
     box-shadow: 0 0 0 3px rgba(14,165,233,.12);
-  }
-
-  /* Language picker */
-  .lang-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: 4px;
-  }
-  .lang-option {
-    position: relative;
-  }
-  .lang-option input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    width: 0; height: 0;
-  }
-  .lang-option label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 12px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    cursor: pointer;
-    background: var(--white);
-    transition: border-color .18s, background .18s, box-shadow .18s;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    user-select: none;
-  }
-  .lang-option label:hover {
-    border-color: var(--sky);
-    background: #f0f9ff;
-  }
-  .lang-option input[type="radio"]:checked + label {
-    border-color: var(--navy);
-    background: #eef3ff;
-    box-shadow: 0 0 0 3px rgba(11,30,61,.08);
-  }
-  .lang-option label .flag {
-    font-size: 20px;
-    line-height: 1;
   }
 
   .btn-primary {
@@ -312,43 +382,61 @@
     .panel-right { padding: 2rem 1.25rem; justify-content: flex-start; padding-top: 2.5rem; }
     .form-card { max-width: 100%; }
   }
+  @media (max-width: 950px) {
+    .flag-chip { padding: 6px 8px; }
+    .lang-name { font-size: 11px; }
+    .lang-number { font-size: 9px; min-width: 22px; }
+    .flag-img { width: 18px; height: 13px; }
+  }
 </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- Left: Brand Panel -->
+  <!-- LEFT PANEL: identical to login page (Akram branding + 16 languages) -->
   <div class="panel-left">
     <div class="brand">
       <div class="brand-icon">📘</div>
-      <div class="brand-name">Vocabulary<br><span>Academy</span></div>
+      <div class="brand-name">Akram Vocabulary<br><span>Academy</span></div>
+      <div class="company-legal">Akram Global Languages Institute Pvt. Ltd.</div>
+      <div class="tamil-name">அக்ரம் உலக மொழிகள் பயிற்சி நிலையம்</div>
       <div class="brand-tagline">Master languages through video</div>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-text"><strong>Create your account</strong> — fill in your details and pick a language.</div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-text"><strong>Await approval</strong> — an admin reviews and activates your account.</div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-text"><strong>Start learning</strong> — access your full video course immediately.</div>
-        </div>
+      
+      <!-- 16 languages with flag images & color boxes -->
+      <div class="lang-flags">
+        <div class="flag-chip"><span class="lang-number">01</span><img class="flag-img" src="https://flagcdn.com/us.svg" alt="US flag" loading="lazy"><span class="lang-name">US English</span></div>
+        <div class="flag-chip"><span class="lang-number">02</span><img class="flag-img" src="https://flagcdn.com/gb.svg" alt="UK flag" loading="lazy"><span class="lang-name">UK English</span></div>
+        <div class="flag-chip"><span class="lang-number">03</span><img class="flag-img" src="https://flagcdn.com/es.svg" alt="Spanish flag" loading="lazy"><span class="lang-name">Spanish</span></div>
+        <div class="flag-chip"><span class="lang-number">04</span><img class="flag-img" src="https://flagcdn.com/de.svg" alt="German flag" loading="lazy"><span class="lang-name">German</span></div>
+        <div class="flag-chip"><span class="lang-number">05</span><img class="flag-img" src="https://flagcdn.com/in.svg" alt="India flag" loading="lazy"><span class="lang-name">Hindi</span></div>
+        <div class="flag-chip"><span class="lang-number">06</span><img class="flag-img" src="https://flagcdn.com/sa.svg" alt="Saudi Arabia flag" loading="lazy"><span class="lang-name">Arabic</span></div>
+        <div class="flag-chip"><span class="lang-number">07</span><img class="flag-img" src="https://flagcdn.com/fr.svg" alt="French flag" loading="lazy"><span class="lang-name">French</span></div>
+        <div class="flag-chip"><span class="lang-number">08</span><img class="flag-img" src="https://flagcdn.com/kr.svg" alt="South Korea flag" loading="lazy"><span class="lang-name">Korean</span></div>
+        <div class="flag-chip"><span class="lang-number">09</span><img class="flag-img" src="https://flagcdn.com/cn.svg" alt="China flag" loading="lazy"><span class="lang-name">Chinese</span></div>
+        <div class="flag-chip"><span class="lang-number">10</span><img class="flag-img" src="https://flagcdn.com/in.svg" alt="India flag" loading="lazy"><span class="lang-name">Tamil</span></div>
+        <div class="flag-chip"><span class="lang-number">11</span><img class="flag-img" src="https://flagcdn.com/ru.svg" alt="Russia flag" loading="lazy"><span class="lang-name">Russian</span></div>
+        <div class="flag-chip"><span class="lang-number">12</span><img class="flag-img" src="https://flagcdn.com/pt.svg" alt="Portugal flag" loading="lazy"><span class="lang-name">Portuguese</span></div>
+        <div class="flag-chip"><span class="lang-number">13</span><img class="flag-img" src="https://flagcdn.com/jp.svg" alt="Japan flag" loading="lazy"><span class="lang-name">Japanese</span></div>
+        <div class="flag-chip"><span class="lang-number">14</span><img class="flag-img" src="https://flagcdn.com/it.svg" alt="Italy flag" loading="lazy"><span class="lang-name">Italian</span></div>
+        <div class="flag-chip"><span class="lang-number">15</span><img class="flag-img" src="https://flagcdn.com/il.svg" alt="Israel flag" loading="lazy"><span class="lang-name">Hebrew</span></div>
+        <div class="flag-chip"><span class="lang-number">16</span><img class="flag-img" src="https://flagcdn.com/nl.svg" alt="Netherlands flag" loading="lazy"><span class="lang-name">Dutch</span></div>
+      </div>
+      
+      <div class="panel-quote">
+        <p>"The limits of my language mean the limits of my world." — Ludwig Wittgenstein</p>
       </div>
     </div>
   </div>
 
-  <!-- Right: Form Panel -->
+  <!-- RIGHT PANEL: Registration Form -->
   <div class="panel-right">
     <div class="form-card">
       <div class="form-heading">Create account</div>
-      <div class="form-sub">Join Vocabulary Academy and start your language journey.</div>
+      <div class="form-sub">Join Akram Vocabulary Academy and start your journey.</div>
 
       <div class="pending-notice">
         <span class="ico">ℹ️</span>
-        After registering, your account is reviewed by an admin before you can access your course.
+        After registration, your account will be reviewed by an admin. You'll receive access upon approval.
       </div>
 
       <div class="error-msg" id="errorMsg"></div>
@@ -386,36 +474,28 @@
       </div>
 
       <div class="field">
-        <label>Language to learn</label>
-        <div class="lang-grid">
-          <div class="lang-option">
-            <input type="radio" name="language" id="lang-en" value="American English">
-            <label for="lang-en"><span class="flag">🇺🇸</span> American English</label>
-          </div>
-          <div class="lang-option">
-            <input type="radio" name="language" id="lang-hi" value="Hindi">
-            <label for="lang-hi"><span class="flag">🇮🇳</span> Hindi</label>
-          </div>
-          <div class="lang-option">
-            <input type="radio" name="language" id="lang-ar" value="Arabic">
-            <label for="lang-ar"><span class="flag">🇸🇦</span> Arabic</label>
-          </div>
-          <div class="lang-option">
-            <input type="radio" name="language" id="lang-de" value="German">
-            <label for="lang-de"><span class="flag">🇩🇪</span> German</label>
-          </div>
-          <div class="lang-option">
-            <input type="radio" name="language" id="lang-zh" value="Mandarin">
-            <label for="lang-zh"><span class="flag">🇨🇳</span> Mandarin</label>
-          </div>
-          <div class="lang-option">
-            <input type="radio" name="language" id="lang-ja" value="Japanese">
-            <label for="lang-ja"><span class="flag">🇯🇵</span> Japanese</label>
-          </div>
-          <div class="lang-option" style="grid-column: span 2;">
-            <input type="radio" name="language" id="lang-fr" value="French">
-            <label for="lang-fr" style="justify-content: center;"><span class="flag">🇫🇷</span> French</label>
-          </div>
+        <label for="language">Language to learn</label>
+        <div class="input-wrap">
+          <span class="ico">🌐</span>
+          <select id="language">
+            <option value="" disabled selected>Select your target language</option>
+            <option value="American English">🇺🇸 American English</option>
+            <option value="UK English">🇬🇧 UK English</option>
+            <option value="Spanish">🇪🇸 Spanish</option>
+            <option value="German">🇩🇪 German</option>
+            <option value="Hindi">🇮🇳 Hindi</option>
+            <option value="Arabic">🇸🇦 Arabic</option>
+            <option value="French">🇫🇷 French</option>
+            <option value="Korean">🇰🇷 Korean</option>
+            <option value="Chinese">🇨🇳 Chinese</option>
+            <option value="Tamil">🇮🇳 Tamil</option>
+            <option value="Russian">🇷🇺 Russian</option>
+            <option value="Portuguese">🇵🇹 Portuguese</option>
+            <option value="Japanese">🇯🇵 Japanese</option>
+            <option value="Italian">🇮🇹 Italian</option>
+            <option value="Hebrew">🇮🇱 Hebrew</option>
+            <option value="Dutch">🇳🇱 Dutch</option>
+          </select>
         </div>
       </div>
 
@@ -454,21 +534,20 @@ btn.addEventListener('click', async () => {
   const whatsapp = document.getElementById('whatsapp').value.trim();
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
-  const langEl = document.querySelector('input[name="language"]:checked');
+  const languageSelect = document.getElementById('language');
+  const language = languageSelect.value;
 
   if (!name) { showError('Please enter your full name.'); return; }
   if (!email) { showError('Please enter your email address.'); return; }
   if (password.length < 6) { showError('Password must be at least 6 characters.'); return; }
-  if (!langEl) { showError('Please select a language to learn.'); return; }
-
-  const language = langEl.value;
+  if (!language) { showError('Please select a language to learn.'); return; }
 
   btn.textContent = 'Creating account…';
   btn.classList.add('loading');
 
   try {
-    const credential = await createUserWithEmailAndPassword(auth, email, password);
-    await setDoc(doc(db, 'users', credential.user.uid), {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await setDoc(doc(db, 'users', userCredential.user.uid), {
       name,
       whatsapp,
       email,
@@ -487,6 +566,12 @@ btn.addEventListener('click', async () => {
       'auth/weak-password': 'Password must be at least 6 characters.',
     };
     showError(msgs[e.code] || e.message);
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && document.activeElement?.tagName !== 'BUTTON') {
+    btn.click();
   }
 });
 </script>
