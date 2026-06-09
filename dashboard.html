@@ -73,7 +73,7 @@
         }
         .video-wrapper {
             position: relative;
-            padding-top: 56.25%; /* 16:9 aspect ratio */
+            padding-top: 56.25%;
             background: #000;
             border-radius: 0.75rem;
             overflow: hidden;
@@ -86,16 +86,21 @@
             height: 100%;
             border: 0;
         }
-        .fallback-youtube {
-            max-width: 100%;
-            border-radius: 0.75rem;
-        }
         .no-video {
             background: #f1f5f9;
             padding: 1rem;
             border-radius: 0.5rem;
             text-align: center;
             color: #475569;
+        }
+        .debug-info {
+            background: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            margin-top: 20px;
+            display: none;
         }
         @media (max-width: 640px) {
             body { padding: 12px; }
@@ -122,6 +127,9 @@
         </div>
         <div id="videos"></div>
     </div>
+
+    <!-- Hidden debug panel (press Ctrl+Shift+D to toggle) -->
+    <div id="debugPanel" class="card debug-info"></div>
 </div>
 
 <script type="module">
@@ -144,7 +152,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Helper to prevent XSS
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -154,6 +161,35 @@
             return m;
         });
     }
+
+    // Debug helper
+    let debugMode = false;
+    function debugLog(...args) {
+        if (debugMode) {
+            console.log(...args);
+            const panel = document.getElementById('debugPanel');
+            if (panel) {
+                panel.style.display = 'block';
+                panel.innerHTML += `<div>${args.join(' ')}</div>`;
+            }
+        }
+    }
+
+    // Toggle debug with Ctrl+Shift+D
+    window.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+            debugMode = !debugMode;
+            const panel = document.getElementById('debugPanel');
+            if (panel) {
+                if (debugMode) {
+                    panel.style.display = 'block';
+                    panel.innerHTML = '<strong>Debug mode ON</strong><br>';
+                } else {
+                    panel.style.display = 'none';
+                }
+            }
+        }
+    });
 
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
@@ -170,31 +206,43 @@
         }
 
         const data = userSnap.data();
-        document.getElementById("welcome").textContent = `Welcome, ${escapeHtml(data.name)}`;
+        debugLog("User data:", data);
 
-        if (data.status !== "approved") {
+        // FIX: Support both "language" (lowercase) and "Language" (uppercase L)
+        const userLanguage = data.language || data.Language;
+        debugLog("Detected user language:", userLanguage);
+
+        document.getElementById("welcome").textContent = `Welcome, ${escapeHtml(data.name || data.Name)}`;
+
+        if ((data.status || data.Status) !== "approved") {
             document.getElementById("statusMessage").innerHTML = 
                 `<div class="status-message">⏳ Your account is awaiting approval by an administrator.</div>`;
             return;
         }
 
-        // Show the main content
         document.getElementById("content").style.display = "block";
-        document.getElementById("language").textContent = escapeHtml(data.language);
+        document.getElementById("language").textContent = escapeHtml(userLanguage);
 
-        // Fetch videos for the student's language
-        const q = query(collection(db, "videos"), where("language", "==", data.language));
+        if (!userLanguage) {
+            document.getElementById("videos").innerHTML = 
+                `<div class="card no-video">⚠️ No language assigned to your profile. Please contact support.</div>`;
+            return;
+        }
+
+        // Query videos collection by language
+        const videosRef = collection(db, "videos");
+        const q = query(videosRef, where("language", "==", userLanguage));
         const snapshot = await getDocs(q);
 
-        let html = "";
+        debugLog(`Query for language "${userLanguage}" returned ${snapshot.size} videos`);
 
+        let html = "";
         snapshot.forEach((doc) => {
             const v = doc.data();
+            debugLog("Video doc:", v);
             const title = escapeHtml(v.title) || "Untitled Video";
 
-            // PRIORITY 1: Bunny.net embed URL (clean, no logo)
             if (v.bunnySrc && v.bunnySrc.trim() !== "") {
-                // Bunny.net responsive player (16:9)
                 html += `
                     <div class="video-container">
                         <div class="video-title">📺 ${title}</div>
@@ -209,9 +257,7 @@
                         <hr>
                     </div>
                 `;
-            }
-            // PRIORITY 2: YouTube fallback (with modest branding)
-            else if (v.youtubeId && v.youtubeId.trim() !== "") {
+            } else if (v.youtubeId && v.youtubeId.trim() !== "") {
                 html += `
                     <div class="video-container">
                         <div class="video-title">📺 ${title}</div>
@@ -226,9 +272,7 @@
                         <hr>
                     </div>
                 `;
-            }
-            else {
-                // No valid source
+            } else {
                 html += `
                     <div class="video-container">
                         <div class="video-title">⚠️ ${title}</div>
@@ -240,7 +284,7 @@
         });
 
         if (html === "") {
-            html = `<div class="card no-video" style="text-align:center;">📭 No videos found for "${escapeHtml(data.language)}" yet. Check back soon!</div>`;
+            html = `<div class="card no-video">📭 No videos found for "${escapeHtml(userLanguage)}" yet. Check back soon!</div>`;
         }
 
         document.getElementById("videos").innerHTML = html;
