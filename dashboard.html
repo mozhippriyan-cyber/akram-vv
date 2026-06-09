@@ -1,33 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vocabulary Academy Dashboard</title>
     <style>
-        /* Optional: simple responsive spacing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            padding: 20px;
+            color: #1e293b;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #0f3b5c;
+            margin-bottom: 0.5rem;
+        }
+        .card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        .welcome {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        .status-message {
+            padding: 0.75rem;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+        button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #dc2626;
+        }
+        hr {
+            margin: 1.5rem 0;
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
         .video-container {
             margin-bottom: 2rem;
         }
         .video-title {
-            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #0f3b5c;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            background: #000;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .fallback-youtube {
+            max-width: 100%;
+            border-radius: 0.75rem;
+        }
+        .no-video {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            color: #475569;
+        }
+        @media (max-width: 640px) {
+            body { padding: 12px; }
+            .card { padding: 1rem; }
         }
     </style>
 </head>
 <body>
+<div class="container">
+    <h1>📘 Vocabulary Academy</h1>
 
-<h1>Vocabulary Academy</h1>
+    <div class="card">
+        <p class="welcome" id="welcome">Loading...</p>
+        <div id="statusMessage"></div>
+        <div style="margin-top: 1rem;">
+            <button id="logoutBtn">Logout</button>
+        </div>
+    </div>
 
-<p id="welcome">Loading...</p>
-<p id="statusMessage"></p>
-
-<button id="logoutBtn">Logout</button>
-
-<hr>
-
-<div id="content" style="display:none;">
-    <h2>Your Language Course</h2>
-    <p><strong>Language:</strong> <span id="language"></span></p>
-    <div id="videos"></div>
+    <div id="content" style="display: none;">
+        <div class="card">
+            <h2>🎓 Your Language Course</h2>
+            <p><strong>Language:</strong> <span id="language"></span></p>
+        </div>
+        <div id="videos"></div>
+    </div>
 </div>
 
 <script type="module">
@@ -50,6 +144,17 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // Helper to prevent XSS
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
             window.location = "login.html";
@@ -65,54 +170,79 @@
         }
 
         const data = userSnap.data();
-        document.getElementById("welcome").textContent = "Welcome, " + data.name;
+        document.getElementById("welcome").textContent = `Welcome, ${escapeHtml(data.name)}`;
 
         if (data.status !== "approved") {
-            document.getElementById("statusMessage").innerHTML = "<b>Your account is awaiting approval.</b>";
+            document.getElementById("statusMessage").innerHTML = 
+                `<div class="status-message">⏳ Your account is awaiting approval by an administrator.</div>`;
             return;
         }
 
+        // Show the main content
         document.getElementById("content").style.display = "block";
-        document.getElementById("language").textContent = data.language;
+        document.getElementById("language").textContent = escapeHtml(data.language);
 
         // Fetch videos for the student's language
         const q = query(collection(db, "videos"), where("language", "==", data.language));
         const snapshot = await getDocs(q);
 
         let html = "";
+
         snapshot.forEach((doc) => {
             const v = doc.data();
+            const title = escapeHtml(v.title) || "Untitled Video";
 
-            // Expect each video document to have:
-            // - title (string)
-            // - bunnySrc (string) = the embed URL from Bunny.net
-            //   Example: "https://player.mediadelivery.net/embed/679120/85a6a0b7-28ba-4d84-a0b6-21c43c3b17eb?autoplay=true&loop=false&muted=true&preload=true&responsive=true"
-            if (!v.bunnySrc) {
-                console.warn("Missing bunnySrc for video:", v.title);
-                return;
-            }
-
-            // Build a responsive Bunny.net player (16:9)
-            html += `
-                <div class="video-container">
-                    <h3 class="video-title">${escapeHtml(v.title)}</h3>
-                    <div style="position:relative;padding-top:56.25%;">
-                        <iframe
-                            src="${v.bunnySrc}"
-                            loading="lazy"
-                            style="border:0;position:absolute;top:0;height:100%;width:100%;"
-                            allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;"
-                            allowfullscreen="true">
-                        </iframe>
+            // PRIORITY 1: Bunny.net embed URL (clean, no logo)
+            if (v.bunnySrc && v.bunnySrc.trim() !== "") {
+                // Bunny.net responsive player (16:9)
+                html += `
+                    <div class="video-container">
+                        <div class="video-title">📺 ${title}</div>
+                        <div class="video-wrapper">
+                            <iframe
+                                src="${v.bunnySrc}"
+                                loading="lazy"
+                                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+                                allowfullscreen="true">
+                            </iframe>
+                        </div>
+                        <hr>
                     </div>
-                    <hr>
-                </div>
-            `;
+                `;
+            }
+            // PRIORITY 2: YouTube fallback (with modest branding)
+            else if (v.youtubeId && v.youtubeId.trim() !== "") {
+                html += `
+                    <div class="video-container">
+                        <div class="video-title">📺 ${title}</div>
+                        <div class="video-wrapper">
+                            <iframe
+                                src="https://www.youtube-nocookie.com/embed/${v.youtubeId}?rel=0&modestbranding=1"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <hr>
+                    </div>
+                `;
+            }
+            else {
+                // No valid source
+                html += `
+                    <div class="video-container">
+                        <div class="video-title">⚠️ ${title}</div>
+                        <div class="no-video">No video source available for this lesson.</div>
+                        <hr>
+                    </div>
+                `;
+            }
         });
 
         if (html === "") {
-            html = "<p>No videos found for your language yet.</p>";
+            html = `<div class="card no-video" style="text-align:center;">📭 No videos found for "${escapeHtml(data.language)}" yet. Check back soon!</div>`;
         }
+
         document.getElementById("videos").innerHTML = html;
     });
 
@@ -120,17 +250,6 @@
         await signOut(auth);
         window.location = "login.html";
     });
-
-    // Simple helper to prevent XSS
-    function escapeHtml(str) {
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === "&") return "&amp;";
-            if (m === "<") return "&lt;";
-            if (m === ">") return "&gt;";
-            return m;
-        });
-    }
 </script>
-
 </body>
 </html>
