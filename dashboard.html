@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* (same styles as before - keep your existing CSS) */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
@@ -29,13 +30,11 @@
     color: var(--navy);
   }
 
-  /* ── Layout ── */
   .layout {
     display: flex;
     min-height: 100vh;
   }
 
-  /* ── Sidebar ── */
   .sidebar {
     width: var(--sidebar-w);
     min-width: var(--sidebar-w);
@@ -63,7 +62,6 @@
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    flex-shrink: 0;
   }
   .sidebar-brand .name {
     font-size: 15px;
@@ -171,7 +169,6 @@
   }
   .btn-logout:hover { background: rgba(239,68,68,.22); }
 
-  /* ── Main ── */
   .main {
     flex: 1;
     display: flex;
@@ -222,7 +219,6 @@
     padding: 1.75rem;
   }
 
-  /* ── Status / Pending ── */
   .pending-card {
     background: var(--white);
     border-radius: 16px;
@@ -247,7 +243,6 @@
     margin-bottom: 1rem;
   }
 
-  /* ── Stats row ── */
   .stats-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -289,7 +284,6 @@
     line-height: 1.1;
   }
 
-  /* ── Section header ── */
   .section-header {
     display: flex;
     align-items: center;
@@ -313,7 +307,6 @@
     border-radius: 20px;
   }
 
-  /* ── Video grid ── */
   .video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -429,7 +422,6 @@
     font-weight: 500;
   }
 
-  /* ── Empty state ── */
   .empty-state {
     grid-column: 1 / -1;
     text-align: center;
@@ -440,7 +432,6 @@
   .empty-state h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
   .empty-state p { font-size: 13.5px; }
 
-  /* ── Loading ── */
   .loading-state {
     display: flex;
     align-items: center;
@@ -459,7 +450,6 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── Mobile sidebar toggle ── */
   .menu-btn {
     display: none;
     background: none;
@@ -475,6 +465,20 @@
     inset: 0;
     background: rgba(0,0,0,.45);
     z-index: 10;
+  }
+
+  /* Debug panel (temporary, will show if no videos) */
+  .debug-panel {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 20px;
+    font-size: 12px;
+    font-family: monospace;
+    text-align: left;
+    max-width: 100%;
+    overflow-x: auto;
   }
 
   @media (max-width: 768px) {
@@ -499,13 +503,11 @@
 
 <div class="layout">
 
-  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <div class="icon">📘</div>
       <div class="name">Vocabulary<br><span>Academy</span></div>
     </div>
-
     <div class="sidebar-user" id="sidebarUser">
       <div class="user-avatar" id="userAvatar">…</div>
       <div class="user-name" id="userName">Loading…</div>
@@ -513,26 +515,18 @@
         <span id="userLangBadge" class="lang-badge"></span>
       </div>
     </div>
-
     <div class="sidebar-nav">
       <div class="sidebar-section">Navigation</div>
-      <a class="nav-item active" href="#">
-        <span class="nav-ico">🎓</span> My Course
-      </a>
+      <a class="nav-item active" href="#"><span class="nav-ico">🎓</span> My Course</a>
     </div>
-
     <div class="sidebar-footer">
       <button class="btn-logout" id="logoutBtn">🚪 Sign Out</button>
     </div>
   </aside>
 
-  <!-- Sidebar overlay (mobile) -->
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-  <!-- Main content -->
   <div class="main">
-
-    <!-- Top bar -->
     <div class="topbar">
       <div style="display:flex; align-items:center; gap:10px;">
         <button class="menu-btn" id="menuBtn">☰</button>
@@ -543,15 +537,12 @@
         <input type="text" id="searchInput" placeholder="Search videos…">
       </div>
     </div>
-
-    <!-- Content area -->
     <div class="content" id="contentArea">
       <div class="loading-state">
         <div class="spinner"></div>
         Loading your course…
       </div>
     </div>
-
   </div>
 </div>
 
@@ -562,7 +553,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 import {
   getFirestore, doc, getDoc,
-  collection, getDocs, query, where, orderBy
+  collection, getDocs, query, where
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const auth = getAuth(app);
@@ -570,6 +561,7 @@ const db   = getFirestore(app);
 
 const LANG_META = {
   'American English': { flag: '🇺🇸', label: 'American English' },
+  'English': { flag: '🇺🇸', label: 'English' },
   'Hindi':            { flag: '🇮🇳', label: 'Hindi' },
   'Arabic':           { flag: '🇸🇦', label: 'Arabic' },
   'German':           { flag: '🇩🇪', label: 'German' },
@@ -578,9 +570,9 @@ const LANG_META = {
   'French':           { flag: '🇫🇷', label: 'French' },
 };
 
-// ── Mobile sidebar ──
-const sidebar       = document.getElementById('sidebar');
-const sidebarOverlay= document.getElementById('sidebarOverlay');
+// Mobile sidebar
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
 document.getElementById('menuBtn').addEventListener('click', () => {
   sidebar.classList.add('open');
   sidebarOverlay.classList.add('show');
@@ -590,49 +582,54 @@ sidebarOverlay.addEventListener('click', () => {
   sidebarOverlay.classList.remove('show');
 });
 
-// ── Logout ──
+// Logout
 document.getElementById('logoutBtn').addEventListener('click', async () => {
   await signOut(auth);
   window.location = 'login.html';
 });
 
-// Store current playing video ID and its iframe state
 let currentPlayingId = null;
 
-// ── Helper: Fetch videos with language fallback (fix for "American English" vs "English" mismatch) ──
+// Simple function to fetch videos WITHOUT orderBy to avoid index issues
 async function fetchVideosForLanguage(language) {
+  console.log("🔍 Fetching videos for language:", language);
   const videosRef = collection(db, 'videos');
   
-  // First try exact match
-  let q;
-  try {
-    q = query(videosRef, where('language', '==', language), orderBy('order'));
-  } catch {
-    q = query(videosRef, where('language', '==', language));
-  }
-  
-  let snapshot = await getDocs(q);
+  // Try exact match
+  const q = query(videosRef, where('language', '==', language));
+  const snapshot = await getDocs(q);
   let videos = [];
-  snapshot.forEach(d => videos.push({ id: d.id, ...d.data() }));
+  snapshot.forEach(doc => {
+    videos.push({ id: doc.id, ...doc.data() });
+  });
+  console.log(`📊 Found ${videos.length} videos with exact match for "${language}"`);
   
-  // FALLBACK: If user language is "American English" but no videos found, try "English"
-  if (videos.length === 0 && language === 'American English') {
-    console.log('No videos found for American English, trying fallback: English');
-    let fallbackQ;
-    try {
-      fallbackQ = query(videosRef, where('language', '==', 'English'), orderBy('order'));
-    } catch {
-      fallbackQ = query(videosRef, where('language', '==', 'English'));
-    }
-    const fallbackSnapshot = await getDocs(fallbackQ);
-    fallbackSnapshot.forEach(d => videos.push({ id: d.id, ...d.data() }));
-    
-    if (videos.length > 0) {
-      console.log(`Found ${videos.length} videos with language "English" as fallback`);
-    }
+  // If no results and language is 'English' or 'American English', try the other
+  if (videos.length === 0 && (language === 'English' || language === 'American English')) {
+    const altLang = language === 'English' ? 'American English' : 'English';
+    console.log(`🔄 Trying alternate language: "${altLang}"`);
+    const altQ = query(videosRef, where('language', '==', altLang));
+    const altSnapshot = await getDocs(altQ);
+    altSnapshot.forEach(doc => {
+      videos.push({ id: doc.id, ...doc.data() });
+    });
+    console.log(`📊 Found ${videos.length} videos with alternate match for "${altLang}"`);
   }
   
-  // Sort by order field if present, else title
+  // If still no videos, try case-insensitive by fetching all and filtering (fallback)
+  if (videos.length === 0) {
+    console.log("⚠️ No videos found with where clause, fetching all videos and filtering client-side...");
+    const allSnapshot = await getDocs(videosRef);
+    allSnapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.language && data.language.toLowerCase() === language.toLowerCase()) {
+        videos.push({ id: doc.id, ...data });
+      }
+    });
+    console.log(`📊 Found ${videos.length} videos after case-insensitive filter`);
+  }
+  
+  // Sort by order if exists
   videos.sort((a, b) => {
     if (a.order != null && b.order != null) return a.order - b.order;
     return (a.title || '').localeCompare(b.title || '');
@@ -641,7 +638,6 @@ async function fetchVideosForLanguage(language) {
   return videos;
 }
 
-// ── Auth ──
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location = 'login.html'; return; }
 
@@ -657,7 +653,6 @@ onAuthStateChanged(auth, async (user) => {
   const status = data.status || data.Status;
   const meta = LANG_META[lang] || { flag: '🌐', label: lang || 'Not assigned' };
 
-  // Sidebar user info
   document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
   document.getElementById('userName').textContent = name;
   if (lang) {
@@ -667,20 +662,18 @@ onAuthStateChanged(auth, async (user) => {
   }
   document.getElementById('topbarTitle').textContent = name + "'s Course";
 
-  // ── Pending ──
   if (status !== 'approved') {
     renderContent(`
       <div class="pending-card">
         <div class="pending-icon">⏳</div>
         <div class="pending-badge">Pending Approval</div>
         <h2>Your account is under review</h2>
-        <p>An administrator will approve your account shortly. You'll be able to access your <strong>${meta.flag} ${meta.label}</strong> course once approved.</p>
+        <p>An administrator will approve your account shortly.</p>
       </div>
     `);
     return;
   }
 
-  // ── Show search ──
   document.getElementById('searchWrap').style.display = 'flex';
 
   if (!lang) {
@@ -694,15 +687,33 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // ── Fetch videos with fallback support ──
   let videos = await fetchVideosForLanguage(lang);
-  
-  // Store videos globally for search
   window.currentVideos = videos;
   
   renderDashboard(meta, videos);
+  
+  // If still no videos, show debug info
+  if (videos.length === 0) {
+    console.error("❌ CRITICAL: No videos found after all fallbacks!");
+    // Show debug panel with instructions
+    const debugHtml = `
+      <div class="debug-panel">
+        <strong>🔧 Debug Info:</strong><br>
+        User language: <code>${lang}</code><br>
+        Videos collection exists? Check Firestore.<br>
+        Make sure at least one document in "videos" collection has field <code>language</code> = "${lang}" (case-sensitive).<br>
+        <hr>
+        <strong>Try this in Firestore console:</strong><br>
+        Add a test video document with:<br>
+        <code>language: "${lang}"</code><br>
+        <code>title: "Test Video"</code><br>
+        <code>bunnySrc: "https://player.mediadelivery.net/embed/679120/85a6a0b7-28ba-4d84-a0b6-21c43c3b17eb?autoplay=true"</code>
+      </div>
+    `;
+    const grid = document.getElementById('videoGrid');
+    if (grid) grid.innerHTML = debugHtml;
+  }
 
-  // Search functionality
   const searchInput = document.getElementById('searchInput');
   if (searchInput) {
     searchInput.addEventListener('input', () => {
@@ -719,7 +730,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// ── Render helpers ──
 function renderContent(html) {
   document.getElementById('contentArea').innerHTML = html;
 }
@@ -750,17 +760,14 @@ function renderDashboard(meta, videos) {
         </div>
       </div>
     </div>
-
     <div class="section-header">
       <div class="section-title">
         ${meta.flag} ${meta.label} Lessons
         <span class="count-pill" id="vidCount">${videos.length} video${videos.length !== 1 ? 's' : ''}</span>
       </div>
     </div>
-
     <div class="video-grid" id="videoGrid"></div>
   `;
-
   renderVideoGrid(videos);
 }
 
@@ -805,30 +812,23 @@ function renderVideoGrid(videos) {
   }).join('');
 }
 
-// ── Fixed playVideo function with proper reset and src handling ──
 window.playVideo = function(videoId, bunnySrc) {
   if (!bunnySrc) {
     alert('No video source available for this lesson.');
     return;
   }
 
-  // Get the video card element
   const currentCard = document.getElementById('vc-' + videoId);
   if (!currentCard) return;
 
-  // If there's a previously playing video and it's not the current one, reset it
   if (currentPlayingId && currentPlayingId !== videoId) {
     const prevCard = document.getElementById('vc-' + currentPlayingId);
     if (prevCard) {
-      // Get the original bunny src from data attribute
       const prevSrc = prevCard.getAttribute('data-bunny-src');
       const prevTw = document.getElementById('tw-' + currentPlayingId);
       if (prevTw) {
-        // Get the video number text to preserve
         const numEl = prevTw.querySelector('.vid-num');
         const numTxt = numEl ? numEl.innerHTML : '';
-        
-        // Restore overlay with the correct src
         prevTw.innerHTML = `
           <div class="thumb-overlay" onclick="event.stopPropagation(); playVideo('${currentPlayingId}', '${escAttr(prevSrc)}')">
             <button class="play-btn"></button>
@@ -841,27 +841,20 @@ window.playVideo = function(videoId, bunnySrc) {
     }
   }
 
-  // Now play the current video
   const tw = document.getElementById('tw-' + videoId);
   if (!tw) return;
 
-  // Get the video number text to preserve
   const numEl = tw.querySelector('.vid-num');
   const numTxt = numEl ? numEl.innerHTML : '';
 
-  // Ensure bunnySrc is a proper embed URL
   let src = bunnySrc;
   if (src && !src.startsWith('http')) {
-    // If it's just an ID, construct the full URL
     src = 'https://player.mediadelivery.net/embed/679120/' + src;
   }
-  
-  // Add autoplay parameter if not present
   if (src && !src.includes('autoplay')) {
     src += (src.includes('?') ? '&' : '?') + 'autoplay=true';
   }
 
-  // Replace the thumbnail with iframe
   tw.innerHTML = `
     <iframe
       src="${src}"
@@ -875,8 +868,6 @@ window.playVideo = function(videoId, bunnySrc) {
 
   currentCard.classList.add('playing');
   currentPlayingId = videoId;
-  
-  // Scroll the video into view smoothly
   currentCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 };
 
