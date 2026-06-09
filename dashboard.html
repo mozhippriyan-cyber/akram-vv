@@ -7,8 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* ===== SAME STYLES AS BEFORE (copy from your working CSS) ===== */
-  /* I'm including the essential styles – replace with your full CSS if needed */
+  /* ===== STYLES (keep your existing CSS – same as before) ===== */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --navy: #0B1E3D; --navy2: #122649; --gold: #F5A623;
@@ -93,10 +92,10 @@ import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gsta
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Helper: remove surrounding double quotes from a string
-function unquote(str) {
+// Helper: aggressively remove surrounding quotes and trim
+function cleanString(str) {
   if (typeof str !== 'string') return str;
-  return str.replace(/^"(.*)"$/, '$1');
+  return str.replace(/^["']|["']$/g, '').trim();
 }
 
 // Mobile sidebar
@@ -119,15 +118,14 @@ function escAttr(str) { return str.replace(/'/g, '&#39;').replace(/"/g, '&quot;'
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location = 'login.html'; return; }
 
-  // Fetch user data
+  // Fetch user data and clean fields
   const userDocRef = doc(db, 'users', user.uid);
   const userSnap = await getDoc(userDocRef);
   if (!userSnap.exists()) { renderError('User profile not found'); return; }
   const userData = userSnap.data();
-  // Unquote user fields as well (just in case)
-  const name = unquote(userData.name || userData.Name || 'Student');
-  let lang = unquote(userData.language || userData.Language || '');
-  const status = unquote(userData.status || userData.Status);
+  const name = cleanString(userData.name || userData.Name || 'Student');
+  let lang = cleanString(userData.language || userData.Language || '');
+  const status = cleanString(userData.status || userData.Status);
 
   const meta = { flag: '🌐', label: lang || 'Not assigned' };
   if (lang === 'American English') meta.flag = '🇺🇸';
@@ -152,28 +150,27 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById('searchWrap').style.display = 'flex';
   if (!lang) { renderError('No language assigned. Contact support.'); return; }
 
-  // Fetch ALL videos from 'videos' collection and unquote string fields
+  // Fetch ALL videos from 'videos' collection and clean every string field
   const videosSnapshot = await getDocs(collection(db, 'videos'));
   let allDocs = [];
   videosSnapshot.forEach(doc => {
     const data = doc.data();
-    // Unquote title, language, bunnySrc, category, etc.
     const cleaned = {
       id: doc.id,
-      title: unquote(data.title),
-      language: unquote(data.language),
-      bunnySrc: unquote(data.bunnySrc),
-      category: unquote(data.category || data.cat || ''),
+      title: cleanString(data.title),
+      language: cleanString(data.language),
+      bunnySrc: cleanString(data.bunnySrc),
+      category: cleanString(data.category || data.cat || ''),
       order: data.order
     };
     allDocs.push(cleaned);
   });
   console.log('Cleaned videos:', allDocs);
 
-  // Filter by language (exact match after unquoting)
+  // Filter by language (exact match after cleaning)
   let filtered = allDocs.filter(v => v.language === lang);
   
-  // Fallback: if lang is 'American English' and no matches, try 'English'
+  // Fallback between English and American English
   if (filtered.length === 0 && lang === 'American English') {
     filtered = allDocs.filter(v => v.language === 'English');
   } else if (filtered.length === 0 && lang === 'English') {
@@ -188,8 +185,8 @@ onAuthStateChanged(auth, async (user) => {
       <div class="empty-state">
         <div class="ico">🔍</div>
         <h3>No videos for "${lang}"</h3>
-        <p>Make sure your video document has language = "${lang}" (without extra quotes).</p>
-        <p>Currently found languages: ${[...new Set(allDocs.map(v => v.language))].join(', ') || 'none'}</p>
+        <p>Your Firestore document has language = "${allDocs[0]?.language || 'unknown'}" (after cleaning).</p>
+        <p>Make sure your video document language field is exactly "${lang}" (no extra spaces or quotes).</p>
       </div>
     `);
     return;
@@ -230,7 +227,7 @@ function renderVideoGrid(videos) {
   grid.innerHTML = videos.map((v, idx) => {
     const title = esc(v.title || 'Untitled');
     const order = v.order != null ? v.order : idx+1;
-    let bunnySrc = (v.bunnySrc || '').trim();
+    let bunnySrc = v.bunnySrc || '';
     // Ensure the src is a valid URL (strip any leftover quotes)
     bunnySrc = bunnySrc.replace(/^"|"$/g, '');
     const vidId = v.id;
