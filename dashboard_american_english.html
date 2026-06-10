@@ -522,7 +522,7 @@ footer strong { color: var(--gold); }
     <span class="iso-badge">ISO 9001:2015</span>
   </div>
   <div class="top-bar-langs">
-    <span class="lang-pill highlight">Hindi Video Course</span>
+    <span class="lang-pill highlight">American English Video Course</span>
     <span class="lang-pill">200 Videos</span>
     <span class="lang-pill">Playable</span>
     <button id="signOutBtn" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.85);font-size:11px;font-weight:700;padding:4px 12px;border-radius:5px;cursor:pointer;font-family:inherit;">Sign Out</button>
@@ -532,7 +532,7 @@ footer strong { color: var(--gold); }
 <!-- HERO SECTION -->
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-eyebrow">🇮🇳 हिंदी · पूरा वीडियो पाठ्यक्रम</div>
+    <div class="hero-eyebrow">🇺🇸 American English · Complete Video Course</div>
     <h1 class="hero-title">
       <span>Akram Visual Vocabulary</span>
       <span class="big">6000 Words</span>
@@ -606,7 +606,7 @@ footer strong { color: var(--gold); }
     </div>
     <div class="modal-body">
       <div class="video-container">
-        <video id="lessonVideo" controls controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture oncontextmenu="return false;" preload="metadata">
+        <video id="lessonVideo" controls controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture oncontextmenu="return false;" preload="metadata" playsinline>
           <source id="videoSource" src="" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -640,7 +640,7 @@ document.getElementById('signOutBtn').addEventListener('click', async () => {
 });
 
 // ======================== ARCHIVE.ORG VIDEO URLs ========================
-// Grammar (s2) base: https://archive.org/download/036-verbs-education-and-research-engtam-mob/
+// Grammar (s2) — all 50 grammar files
 const grammarBase = "https://archive.org/download/036-verbs-education-and-research-engtam-mob/";
 const grammarFilenames = {
   1: "001_Pronouns_ENGTAM_MOB.mp4", 2: "002_Objective_Pronouns_ENGTAM_MOB.mp4", 3: "003_Possessive_Pronouns_ENGTAM_MOB.mp4",
@@ -663,8 +663,9 @@ const grammarFilenames = {
 };
 const grammarUrlsArchive = {};
 for (let i = 1; i <= 50; i++) grammarUrlsArchive[i] = grammarBase + grammarFilenames[i];
+window.grammarUrlsArchive = grammarUrlsArchive;
 
-// Vocabulary (s1) base: https://archive.org/download/061-jobs-2-engtam-mob/
+// Vocabulary (s1) — all 150 vocab files
 const vocabBase = "https://archive.org/download/061-jobs-2-engtam-mob/";
 const vocabFilenames = {
   1: "001_Cardinal_Numerals_ENGTAM_MOB.mp4", 2: "002_Ordinal_Numerals_ENGTAM_MOB.mp4", 3: "003_Colors_ENGTAM_MOB.mp4",
@@ -720,6 +721,7 @@ const vocabFilenames = {
 };
 const vocabUrlsArchive = {};
 for (let i = 1; i <= 150; i++) vocabUrlsArchive[i] = vocabBase + vocabFilenames[i];
+window.vocabUrlsArchive = vocabUrlsArchive;
 
 // ----- TOPICS DATA (unchanged) -----
 const s1 = [
@@ -834,7 +836,7 @@ function renderGrid() {
   grid.innerHTML = items.map(v => {
     const color = catColors[v.cat] || '#3b82f6';
     const badgeCls = v.series === 's1' ? 'badge-s1' : 'badge-s2';
-    const videoUrl = v.series === 's1' ? vocabUrlsArchive[v.n] : grammarUrlsArchive[v.n];
+    const videoUrl = v.series === 's1' ? window.vocabUrlsArchive[v.n] : window.grammarUrlsArchive[v.n];
     return `<div class="topic-card" data-title="${escapeHtml(v.title)}" data-video="${videoUrl}" data-num="${v.n}" data-series="${v.series}">
       <div class="card-color-bar" style="background:${color}"></div>
       <div class="card-inner">
@@ -881,6 +883,12 @@ renderGrid(); buildFilters();
 const modal = document.getElementById('videoModal');
 const closeBtn = document.getElementById('closeModalBtn');
 const videoPlayer = document.getElementById('lessonVideo');
+
+// Enforce protection attributes via JS (belt-and-suspenders)
+videoPlayer.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
+videoPlayer.setAttribute('disablePictureInPicture', '');
+videoPlayer.disablePictureInPicture = true;
+videoPlayer.addEventListener('enterpictureinpicture', (e) => { e.preventDefault(); videoPlayer.exitPictureInPicture && videoPlayer.exitPictureInPicture(); });
 closeBtn.onclick = () => { modal.style.display = 'none'; videoPlayer.pause(); videoPlayer.src = ''; document.getElementById('videoSource').src = ''; };
 window.onclick = (e) => { if (e.target === modal) { modal.style.display = 'none'; videoPlayer.pause(); videoPlayer.src = ''; document.getElementById('videoSource').src = ''; } };
 
