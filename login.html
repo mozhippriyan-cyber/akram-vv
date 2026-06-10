@@ -130,10 +130,19 @@
 </div>
 
 <script type="module">
-import { app } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyBUzO90MhDWaRn_3kkWB1aJOYai7aeKE-8",
+  authDomain: "vocabulary-academy.firebaseapp.com",
+  projectId: "vocabulary-academy",
+  storageBucket: "vocabulary-academy.firebasestorage.app",
+  messagingSenderId: "507242998830",
+  appId: "1:507242998830:web:53820d4213de0ea54943bf"
+};
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const btn = document.getElementById('loginBtn');
