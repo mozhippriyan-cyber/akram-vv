@@ -184,13 +184,26 @@ btn.addEventListener('click', async () => {
     }
 
     // Redirect based on language
-    if (language === 'Hindi') {
-      window.location = 'dashboard_hindi.html';
-    } else if (language === 'American English') {
-      window.location = 'dashboard_american_english.html';
-    } else {
-      window.location = 'dashboard_american_english.html';
-    }
+    const dashboardMap = {
+      'American English': 'dashboard_american_english.html',
+      'UK English':       'dashboard_uk_english.html',
+      'Spanish':          'dashboard_spanish.html',
+      'German':           'dashboard_german.html',
+      'Hindi':            'dashboard_hindi.html',
+      'Arabic':           'dashboard_arabic.html',
+      'French':           'dashboard_french.html',
+      'Korean':           'dashboard_korean.html',
+      'Chinese':          'dashboard_chinese.html',
+      'Tamil':            'dashboard_tamil.html',
+      'Russian':          'dashboard_russian.html',
+      'Portuguese':       'dashboard_portuguese.html',
+      'Japanese':         'dashboard_japanese.html',
+      'Italian':          'dashboard_italian.html',
+      'Hebrew':           'dashboard_hebrew.html',
+      'Dutch':            'dashboard_dutch.html',
+    };
+    const destination = dashboardMap[language] || 'dashboard_american_english.html';
+    window.location = destination;
   } catch (e) {
     btn.textContent = 'Sign In →';
     btn.classList.remove('loading');
