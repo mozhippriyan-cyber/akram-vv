@@ -186,8 +186,10 @@ btn.addEventListener('click', async () => {
     // Redirect based on language
     if (language === 'Hindi') {
       window.location = 'dashboard_hindi.html';
+    } else if (language === 'American English') {
+      window.location = 'dashboard_american_english.html';
     } else {
-      window.location = 'dashboard.html';
+      window.location = 'dashboard_american_english.html';
     }
   } catch (e) {
     btn.textContent = 'Sign In →';
