@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Akram Visual Vocabulary — 6000 Words · 200 Chinese Mandarin Videos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Baloo+Thambi+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:   #071560;
+  --navy2:  #0e2070;
+  --blue:   #1a3fa8;
+  --sky:    #0d7bd4;
+  --gold:   #F5A623;
+  --gold2:  #d48a12;
+  --red:    #D4220E;
+  --white:  #FFFFFF;
+  --bg:     #f0f4fc;
+  --border: #dde5f5;
+  --muted:  #6b7da8;
+  --text:   #0B1E3D;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.top-bar {
+  background: var(--navy);
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.top-bar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.iso-badge {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.85);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 5px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.brand-name {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.brand-en {
+  color: var(--white);
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+.brand-ta {
+  color: rgba(255,255,255,0.6);
+  font-family: 'Baloo Thambi 2', cursive;
+  font-size: 11px;
+  font-weight: 600;
+}
+.top-bar-langs {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.lang-pill {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.7);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.lang-pill.highlight {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy);
+}
+
+.hero {
+  background: linear-gradient(140deg, #071560 0%, #1a3fa8 50%, #0d7bd4 100%);
+  padding: 3.5rem 2rem 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; }
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(245,166,35,0.18);
+  border: 1px solid rgba(245,166,35,0.35);
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 16px;
+  border-radius: 30px;
+  margin-bottom: 18px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+.hero-title {
+  font-family: 'Baloo Thambi 2', cursive;
+  color: var(--white);
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.hero-title .gold { color: var(--gold); }
+.hero-title .big {
+  display: block;
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  line-height: 1;
+  background: linear-gradient(135deg, #FFD700 0%, #F5A623 50%, #FF8C00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -1px;
+}
+.hero-subtitle {
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+.hero-subtitle strong { color: var(--white); font-weight: 700; }
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(8px);
+  padding: 12px 22px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 90px;
+}
+.stat-num { color: var(--gold); font-size: 22px; font-weight: 900; }
+.stat-lbl { color: rgba(255,255,255,0.65); font-size: 10px; font-weight: 600; text-transform: uppercase; }
+.hero-tagline {
+  display: inline-block;
+  color: rgba(255,255,255,0.55);
+  font-size: 12px;
+  font-style: italic;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 18px;
+}
+
+.feat-bar {
+  background: #050f45;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.feat-ticker {
+  display: flex;
+  gap: 0;
+  padding: 10px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-left: 20px;
+}
+.feat-ticker::-webkit-scrollbar { display: none; }
+.feat-item {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  color: rgba(255,255,255,0.72);
+  font-size: 11.5px;
+  font-weight: 600;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+.feat-dot { color: var(--gold); font-size: 16px; }
+
+.controls-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(7,21,96,0.07);
+}
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  flex-wrap: wrap;
+}
+.search-wrap {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 0 14px;
+  transition: border-color 0.15s;
+}
+.search-wrap:focus-within { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(13,123,212,0.1); }
+.search-wrap input {
+  border: none; background: transparent;
+  padding: 9px 0; font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  outline: none; width: 100%;
+}
+.series-tabs {
+  display: flex;
+  gap: 5px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+}
+.s-tab {
+  padding: 6px 14px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+}
+.s-tab.active { background: var(--navy); color: var(--white); box-shadow: 0 2px 8px rgba(7,21,96,0.25); }
+
+.filter-wrap {
+  display: flex;
+  gap: 6px;
+  padding: 8px 20px 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-top: 1px solid #edf1fb;
+}
+.filter-wrap::-webkit-scrollbar { display: none; }
+.filter-btn {
+  flex-shrink: 0;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
+
+.section-hdr {
+  padding: 20px 20px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 800;
+}
+.section-icon {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, var(--navy), var(--sky));
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: white;
+}
+.count-badge {
+  background: #e8eeff;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  padding: 4px 20px 40px;
+}
+.topic-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.18s, box-shadow 0.18s;
+  cursor: pointer;
+}
+.topic-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(7,21,96,0.12);
+  border-color: var(--sky);
+}
+.card-color-bar { height: 5px; width: 100%; }
+.card-inner { padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 9px; }
+.card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.card-num {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--muted);
+  background: var(--bg);
+  border-radius: 5px;
+  padding: 2px 8px;
+}
+.series-badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+.badge-s1 { background: #fff4e0; color: #c07808; }
+.badge-s2 { background: #fff0ef; color: #b91c1c; }
+.card-title { font-size: 13.5px; font-weight: 700; color: var(--text); line-height: 1.35; }
+.card-cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--sky);
+  background: #eef6ff;
+  border-radius: 6px;
+  padding: 3px 9px;
+  width: fit-content;
+}
+.cat-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+
+/* VIDEO MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.92);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.modal-content {
+  background: #0B1E3D;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 1100px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  animation: modalFadeIn 0.2s ease;
+  position: relative;
+  z-index: 1001;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 22px;
+  background: #071560;
+  color: white;
+  border-bottom: 2px solid var(--gold);
+}
+.modal-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+.close-modal {
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.4);
+  font-size: 26px;
+  cursor: pointer;
+  color: white;
+  line-height: 1;
+  padding: 2px 10px 4px;
+  border-radius: 8px;
+  transition: background 0.15s, border-color 0.15s;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.close-modal:hover {
+  background: rgba(255,255,255,0.3);
+  border-color: rgba(255,255,255,0.8);
+}
+.modal-body {
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.video-container {
+  width: 100%;
+  background: #000;
+}
+.video-container video {
+  width: 100%;
+  display: block;
+  background: #000;
+  outline: none;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.langs-section {
+  background: linear-gradient(135deg, #071560 0%, #1a3fa8 100%);
+  padding: 40px 20px;
+}
+.langs-section-title {
+  text-align: center;
+  color: rgba(255,255,255,0.9);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+}
+.langs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.lang-card {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lang-num {
+  width: 24px; height: 24px;
+  background: rgba(245,166,35,0.25);
+  border: 1px solid rgba(245,166,35,0.4);
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lang-name { color: rgba(255,255,255,0.9); font-size: 12px; font-weight: 700; }
+footer {
+  background: #050e40;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 2rem 1.5rem;
+  font-size: 12px;
+}
+footer strong { color: var(--gold); }
+
+@media (max-width: 600px) {
+  .topic-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 4px 12px 32px; }
+  .controls-row { padding: 10px 12px; }
+  .hero { padding: 2rem 1rem; }
+  .langs-grid { grid-template-columns: repeat(2, 1fr); }
+  .modal-content { width: 95%; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP HEADER -->
+<div class="top-bar">
+  <div class="top-bar-brand">
+    <div class="brand-name">
+      <span class="brand-en">Akram Global Languages Institute Pvt Ltd</span>
+      <span class="brand-ta">அக்ரம் உலக மொழிகள் பயிற்சி நிலையம்</span>
+    </div>
+    <span class="iso-badge">ISO 9001:2015</span>
+  </div>
+  <div class="top-bar-langs">
+    <span class="lang-pill highlight">Chinese Mandarin Video Course</span>
+    <span class="lang-pill">200 Videos</span>
+    <span class="lang-pill">Playable</span>
+    <button id="signOutBtn" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.85);font-size:11px;font-weight:700;padding:4px 12px;border-radius:5px;cursor:pointer;font-family:inherit;">Sign Out</button>
+  </div>
+</div>
+
+<!-- HERO SECTION -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">🇨🇳 Chinese Mandarin · Complete Video Course</div>
+    <h1 class="hero-title">
+      <span>Akram Visual Vocabulary</span>
+      <span class="big">6000 Words</span>
+      <span class="gold">200 Chinese Mandarin Videos</span>
+    </h1>
+    <p class="hero-subtitle">
+      by <strong>Dr. Mozhippriyan</strong> · Complete video lessons<br>
+      <strong>150 Vocabulary + 50 Grammar</strong> · Tap any card to play
+    </p>
+    <div class="hero-stats">
+      <div class="stat-card"><span class="stat-num">6000</span><span class="stat-lbl">Words</span></div>
+      <div class="stat-card"><span class="stat-num">200</span><span class="stat-lbl">Videos</span></div>
+      <div class="stat-card"><span class="stat-num">150</span><span class="stat-lbl">Vocabulary</span></div>
+      <div class="stat-card"><span class="stat-num">50</span><span class="stat-lbl">Grammar</span></div>
+      <div class="stat-card"><span class="stat-num">CHI</span><span class="stat-lbl">Language</span></div>
+    </div>
+    <p class="hero-tagline"><strong>Click on any lesson → Watch HD video instantly</strong></p>
+  </div>
+</div>
+
+<!-- FEATURE TICKER -->
+<div class="feat-bar">
+  <div class="feat-ticker">
+    <span class="feat-item"><span class="feat-dot">✦</span> 200 Chinese Mandarin Video Lessons</span>
+    <span class="feat-item"><span class="feat-dot">✦</span> HD Streaming</span>
+    <span class="feat-item"><span class="feat-dot">✦</span> Vocabulary + Grammar</span>
+    <span class="feat-item"><span class="feat-dot">✦</span> Mobile friendly</span>
+    <span class="feat-item"><span class="feat-dot">✦</span> Fullscreen support</span>
+  </div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls-wrap">
+  <div class="controls-row">
+    <div class="search-wrap"><span>🔍</span><input type="text" id="searchInput" placeholder="Search topics, categories..."></div>
+    <div class="series-tabs">
+      <button class="s-tab active" data-series="all">All 200</button>
+      <button class="s-tab" data-series="s1">Vocabulary (150)</button>
+      <button class="s-tab" data-series="s2">Grammar (50)</button>
+    </div>
+  </div>
+  <div class="filter-wrap" id="filterWrap"></div>
+</div>
+
+<!-- SECTION HEADER -->
+<div class="section-hdr">
+  <div class="section-title"><div class="section-icon">🎬</div> Chinese Mandarin Video Lessons</div>
+  <span class="count-badge" id="countBadge">200 lessons</span>
+</div>
+
+<!-- TOPIC GRID -->
+<div class="topic-grid" id="topicGrid"></div>
+
+<!-- LANGUAGES GRID -->
+<div class="langs-section">
+  <p class="langs-section-title">Available in 16 Languages</p>
+  <div class="langs-grid" id="langsGrid"></div>
+</div>
+
+<footer>
+  <strong>Akram Visual Vocabulary</strong> · Dr. Mozhippriyan · Akram Global Languages Institute Pvt Ltd<br>
+  Complete Chinese Mandarin video course with 200 playable lessons
+</footer>
+
+<!-- VIDEO MODAL -->
+<div id="videoModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalTitle">Loading video...</h3>
+      <button class="close-modal" id="closeModalBtn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="video-container">
+        <video id="lessonVideo" controls controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture oncontextmenu="return false;" preload="metadata" playsinline>
+          <source id="videoSource" src="" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBUzO90MhDWaRn_3kkWB1aJOYai7aeKE-8",
+  authDomain: "vocabulary-academy.firebaseapp.com",
+  projectId: "vocabulary-academy",
+  storageBucket: "vocabulary-academy.firebasestorage.app",
+  messagingSenderId: "507242998830",
+  appId: "1:507242998830:web:53820d4213de0ea54943bf"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, user => {
+  if (!user) { window.location.href = 'login.html'; }
+});
+
+document.getElementById('signOutBtn').addEventListener('click', async () => {
+  await signOut(auth);
+  window.location.href = 'login.html';
+});
+</script>
+
+<script>
+// ======================== VIDEO URLs ========================
+const chiBase = "https://archive.org/download/6000_Chinese/";
+
+const vocabUrlsArchive = {
+  1: chiBase+"001_Cardinal_Numerals_CHI_MOB.mp4",
+  2: chiBase+"002_Ordinal_Numerals_CHI_MOB.mp4",
+  3: chiBase+"003_Colors_CHI_MOB.mp4",
+  4: chiBase+"004_Calendar_CHI_MOB.mp4",
+  5: chiBase+"005_Time_CHI_MOB.mp4",
+  6: chiBase+"006_Sizes_and_Shapes_CHI_MOB.mp4",
+  7: chiBase+"007_Units_of_Measurement_CHI_MOB.mp4",
+  8: chiBase+"008_Fruits_CHI_MOB.mp4",
+  9: chiBase+"009_Vegetables_CHI_MOB.mp4",
+  10: chiBase+"010_Meat_CHI_MOB.mp4",
+  11: chiBase+"011_Fish_and_Seafood_CHI_MOB.mp4",
+  12: chiBase+"012_Dairy_Products_CHI_MOB.mp4",
+  13: chiBase+"013_Breads_CHI_MOB.mp4",
+  14: chiBase+"014_Grains_Nuts_and_Seeds_CHI_MOB.mp4",
+  15: chiBase+"015_Condiments_CHI_MOB.mp4",
+  16: chiBase+"016_Sweets_CHI_MOB.mp4",
+  17: chiBase+"017_Meals_CHI_MOB.mp4",
+  18: chiBase+"018_Dishes_CHI_MOB.mp4",
+  19: chiBase+"019_Describing_Food_CHI_MOB.mp4",
+  20: chiBase+"020_Non-Alcoholic_Drinks_CHI_MOB.mp4",
+  21: chiBase+"021_Domestic_Animals_CHI_MOB.mp4",
+  22: chiBase+"022_Domestic_Birds_CHI_MOB.mp4",
+  23: chiBase+"023_Wild_Animals_CHI_MOB.mp4",
+  24: chiBase+"024_Wild_Birds_CHI_MOB.mp4",
+  25: chiBase+"025_Fish_CHI_MOB.mp4",
+  26: chiBase+"026_Amphibians_and_Reptiles_CHI_MOB.mp4",
+  27: chiBase+"027_Aquatic_Animals_CHI_MOB.mp4",
+  28: chiBase+"028_Insects_and_Arachnids_CHI_MOB.mp4",
+  29: chiBase+"029_Baby_Animals_CHI_MOB.mp4",
+  30: chiBase+"030_Parts_Of_Animals_CHI_MOB.mp4",
+  31: chiBase+"031_Animal_Groups_CHI_MOB.mp4",
+  32: chiBase+"032_Animal_Sounds_CHI_MOB.mp4",
+  33: chiBase+"033_Family_CHI_MOB.mp4",
+  34: chiBase+"034_Love_and_Friendship_CHI_MOB.mp4",
+  35: chiBase+"035_People_CHI_MOB.mp4",
+  36: chiBase+"036_Identify_CHI_MOB.mp4",
+  37: chiBase+"037_Age_and_Life_Events_CHI_MOB.mp4",
+  38: chiBase+"038_Head_and_Face_CHI_MOB.mp4",
+  39: chiBase+"039_Body_Parts_CHI_MOB.mp4",
+  40: chiBase+"040_Internal_Organs_CHI_MOB.mp4",
+  41: chiBase+"041_Skeleton_and_Muscles_CHI_MOB.mp4",
+  42: chiBase+"042_Health_Problems_CHI_MOB.mp4",
+  43: chiBase+"043_Symptoms_CHI_MOB.mp4",
+  44: chiBase+"044_Injuries_CHI_MOB.mp4",
+  45: chiBase+"045_Treatment_CHI_MOB.mp4",
+  46: chiBase+"046_Specialists_CHI_MOB.mp4",
+  47: chiBase+"047_Pharmacy_CHI_MOB.mp4",
+  48: chiBase+"048_Dentists_CHI_MOB.mp4",
+  49: chiBase+"049_Optometrists_CHI_MOB.mp4",
+  50: chiBase+"050_School_CHI_MOB.mp4",
+  51: chiBase+"051_University_CHI_MOB.mp4",
+  52: chiBase+"052_Mathematics_CHI_MOB.mp4",
+  53: chiBase+"053_Physics_CHI_MOB.mp4",
+  54: chiBase+"054_Astronomy_CHI_MOB.mp4",
+  55: chiBase+"055_Chemistry_CHI_MOB.mp4",
+  56: chiBase+"056_Biology_CHI_MOB.mp4",
+  57: chiBase+"057_Geography_CHI_MOB.mp4",
+  58: chiBase+"058_Lingistics_CHI_MOB.mp4",
+  59: chiBase+"059_Scientists_CHI_MOB.mp4",
+  60: chiBase+"060_Jobs_1_CHI_MOB.mp4",
+  61: chiBase+"061_Jobs_2_CHI_MOB.mp4",
+  62: chiBase+"062_Workplace_CHI_MOB.mp4",
+  63: chiBase+"063_Business_CHI_MOB.mp4",
+  64: chiBase+"064_Banks_CHI_MOB.mp4",
+  65: chiBase+"065_Winter_Sports_CHI_MOB.mp4",
+  66: chiBase+"066_Summer_Sports_CHI_MOB.mp4",
+  67: chiBase+"067_Gym_CHI_MOB.mp4",
+  68: chiBase+"068_Sports_Equipment_CHI_MOB.mp4",
+  69: chiBase+"069_About_Sports_CHI_MOB.mp4",
+  70: chiBase+"070_Sportsmen_CHI_MOB.mp4",
+  71: chiBase+"071_Clothes_CHI_MOB.mp4",
+  72: chiBase+"072_Footwear_CHI_MOB.mp4",
+  73: chiBase+"073_Accessories_CHI_MOB.mp4",
+  74: chiBase+"074_Beauty_Shop_CHI_MOB.mp4",
+  75: chiBase+"075_Tailor_CHI_MOB.mp4",
+  76: chiBase+"076_Types_of_Houses_CHI_MOB.mp4",
+  77: chiBase+"077_Rooms_CHI_MOB.mp4",
+  78: chiBase+"078_Furniture_CHI_MOB.mp4",
+  79: chiBase+"079_Home_Decor_CHI_MOB.mp4",
+  80: chiBase+"080_Parts_of_The_House_CHI_MOB.mp4",
+  81: chiBase+"081_Describing_A_House_CHI_MOB.mp4",
+  82: chiBase+"082_Real_Estate_Office_CHI_MOB.mp4",
+  83: chiBase+"083_Types_of_Stores__CHI_MOB.mp4",
+  84: chiBase+"084_Appliance_Store_CHI_MOB.mp4",
+  85: chiBase+"085_Kitchenware_CHI_MOB.mp4",
+  86: chiBase+"086_Household_Products_CHI_MOB.mp4",
+  87: chiBase+"087_Stationery_CHI_MOB.mp4",
+  88: chiBase+"088_Bookstore__CHI_MOB.mp4",
+  89: chiBase+"089_Kids_Store_CHI_MOB.mp4",
+  90: chiBase+"090_Cosmetics_CHI_MOB.mp4",
+  91: chiBase+"091_Bath_Products_CHI_MOB.mp4",
+  92: chiBase+"092_Hardware_Store_CHI_MOB.mp4",
+  93: chiBase+"093_In-Store_Shopping_CHI_MOB.mp4",
+  94: chiBase+"094_Online_Shopping_CHI_MOB.mp4",
+  95: chiBase+"095_Tv_and_Radio_CHI_MOB.mp4",
+  96: chiBase+"096_Computers_CHI_MOB.mp4",
+  97: chiBase+"097_Internet_CHI_MOB.mp4",
+  98: chiBase+"098_Phones_CHI_MOB.mp4",
+  99: chiBase+"099_Journalism_CHI_MOB.mp4",
+  100: chiBase+"100_Mail_CHI_MOB.mp4",
+  101: chiBase+"101_Trees_CHI_MOB.mp4",
+  102: chiBase+"102_Fruit_Trees_CHI_MOB.mp4",
+  103: chiBase+"103_Shrubs_CHI_MOB.mp4",
+  104: chiBase+"104_Flowers_CHI_MOB.mp4",
+  105: chiBase+"105_Other_Plants_CHI_MOB.mp4",
+  106: chiBase+"106_About_Plants_CHI_MOB.mp4",
+  107: chiBase+"107_Agriculture_CHI_MOB.mp4",
+  108: chiBase+"108_Hotel_CHI_MOB.mp4",
+  109: chiBase+"109_Restaurant_and_Bar_CHI_MOB.mp4",
+  110: chiBase+"110_Tourist_Attractions_CHI_MOB.mp4",
+  111: chiBase+"111_Buildings_CHI_MOB.mp4",
+  112: chiBase+"112_Streets_CHI_MOB.mp4",
+  113: chiBase+"113_Regions_CHI_MOB.mp4",
+  114: chiBase+"114_Literature_CHI_MOB.mp4",
+  115: chiBase+"115_Books_CHI_MOB.mp4",
+  116: chiBase+"116_Music_CHI_MOB.mp4",
+  117: chiBase+"117_Musical_Instruments_CHI_MOB.mp4",
+  118: chiBase+"118_Plastic_Arts_CHI_MOB.mp4",
+  119: chiBase+"119_Photography_CHI_MOB.mp4",
+  120: chiBase+"120_MythsandLegends_CHI_MOB.mp4",
+  121: chiBase+"121_Supernatural_CHI_MOB.mp4",
+  122: chiBase+"122_Cinema_CHI_MOB.mp4",
+  123: chiBase+"123_Theater_CHI_MOB.mp4",
+  124: chiBase+"124_Hobbies_CHI_MOB.mp4",
+  125: chiBase+"125_Traveling_CHI_MOB.mp4",
+  126: chiBase+"126_At_The_Beach_CHI_MOB.mp4",
+  127: chiBase+"127_Camping_CHI_MOB.mp4",
+  128: chiBase+"128_Fishing_CHI_MOB.mp4",
+  129: chiBase+"129_Games_CHI_MOB.mp4",
+  130: chiBase+"130_Playground_CHI_MOB.mp4",
+  131: chiBase+"131_Road_Transportation_CHI_MOB.mp4",
+  132: chiBase+"132_Rail_Transportation_CHI_MOB.mp4",
+  133: chiBase+"133_Air_Transportation_CHI_MOB.mp4",
+  134: chiBase+"134_Water_Transportation_CHI_MOB.mp4",
+  135: chiBase+"135_Roads_CHI_MOB.mp4",
+  136: chiBase+"136_Car_Parts_CHI_MOB.mp4",
+  137: chiBase+"137_Police_CHI_MOB.mp4",
+  138: chiBase+"138_Crimes_CHI_MOB.mp4",
+  139: chiBase+"139_Culprits_CHI_MOB.mp4",
+  140: chiBase+"140_Law_and_Justice_CHI_MOB.mp4",
+  141: chiBase+"141_Army_and_War_CHI_MOB.mp4",
+  142: chiBase+"142_Weapons_CHI_MOB.mp4",
+  143: chiBase+"143_Poverty_and_Charity_CHI_MOB.mp4",
+  144: chiBase+"144_Weather_CHI_MOB.mp4",
+  145: chiBase+"145_Natural_Phenomena_CHI_MOB.mp4",
+  146: chiBase+"146_Landscape_CHI_MOB.mp4",
+  147: chiBase+"147_Water_Bodies_CHI_MOB.mp4",
+  148: chiBase+"148_Pollution_CHI_MOB.mp4",
+  149: chiBase+"149_Rocks_Gemstones_CHI_MOB.mp4",
+  150: chiBase+"150_Minerals_and_Metals_CHI_MOB.mp4"
+};
+
+const grammarUrlsArchive = {
+  1: chiBase+"001_Pronouns_CHI_MOB.mp4",
+  2: chiBase+"002_Objective_Pronouns_CHI_MOB.mp4",
+  3: chiBase+"003_Possessive_Pronouns_CHI_MOB.mp4",
+  4: chiBase+"004_Reflexive_Pronouns_CHI_MOB.mp4",
+  5: chiBase+"005_Relative_Pronouns_CHI_MOB.mp4",
+  6: chiBase+"006_Prepositions_CHI_MOB.mp4",
+  7: chiBase+"007_Conjuctions_CHI_MOB.mp4",
+  8: chiBase+"008_Expressing_Quantity_CHI_MOB.mp4",
+  9: chiBase+"009_Punctuations_CHI_MOB.mp4",
+  10: chiBase+"010_Nouns_Communication_CHI_MOB.mp4",
+  11: chiBase+"011_Nouns_Consciousness_CHI_MOB.mp4",
+  12: chiBase+"012_Nouns_Concrete_Nouns_CHI_MOB.mp4",
+  13: chiBase+"013_Nouns_Abstract_Nouns_1_CHI_MOB.mp4",
+  14: chiBase+"014_Nouns_Abstract_Nouns_2_CHI_MOB.mp4",
+  15: chiBase+"015_Adjectives_Describing_Objects_CHI_MOB.mp4",
+  16: chiBase+"016_Adjectives_About_People_CHI_MOB.mp4",
+  17: chiBase+"017_Adjectives_Describing_Art_CHI_MOB.mp4",
+  18: chiBase+"018_Adjectives_Descriptions_1_CHI_MOB.mp4",
+  19: chiBase+"019_Adjectives_Descriptions_2_CHI_MOB.mp4",
+  20: chiBase+"020_Adjectives_Descriptions_3_CHI_MOB.mp4",
+  21: chiBase+"021_Adjectives_Pairs_1_CHI_MOB.mp4",
+  22: chiBase+"022_Adjectives_Pairs_2_CHI_MOB.mp4",
+  23: chiBase+"023_Adverbs_Time_and_Frequency_CHI_MOB.mp4",
+  24: chiBase+"024_Adverbs_Place_CHI_MOB.mp4",
+  25: chiBase+"025_Adverbs_Manner_1_CHI_MOB.mp4",
+  26: chiBase+"026_Adverbs_Manner_2_CHI_MOB.mp4",
+  27: chiBase+"027_Adverbs_Manner_3_CHI_MOB.mp4",
+  28: chiBase+"028_Adverbs_Degree_CHI_MOB.mp4",
+  29: chiBase+"029_Adverbs_Interrogative_and_Linking_Words_CHI_MOB.mp4",
+  30: chiBase+"030_Verbs_Actions_1_CHI_MOB.mp4",
+  31: chiBase+"031_Verbs_Actions_2_CHI_MOB.mp4",
+  32: chiBase+"032_Verbs_Actions_3_CHI_MOB.mp4",
+  33: chiBase+"033_Verbs_Cooking_CHI_MOB.mp4",
+  34: chiBase+"034_Verbs_Management_CHI_MOB.mp4",
+  35: chiBase+"035_Verbs_Communications_CHI_MOB.mp4",
+  36: chiBase+"036_Verbs_Education_and_Research_CHI_MOB.mp4",
+  37: chiBase+"037_Verbs_Interpersonal_Skills_CHI_MOB.mp4",
+  38: chiBase+"038_Verbs_Efficiency_CHI_MOB.mp4",
+  39: chiBase+"039_Verbs_Skills_CHI_MOB.mp4",
+  40: chiBase+"040_Verbs_Stative_Verbs_CHI_MOB.mp4",
+  41: chiBase+"041_Verbs_Expressing_Feelings_CHI_MOB.mp4",
+  42: chiBase+"042_Describing_Noun_Characteristice_1_CHI_MOB.mp4",
+  43: chiBase+"043_Describing_Noun_Characteristice_2_CHI_MOB.mp4",
+  44: chiBase+"044_Describing_Noun_Characteristice_3_CHI_MOB.mp4",
+  45: chiBase+"045_Describing_Noun_Physical_Characteristics_CHI_MOB.mp4",
+  46: chiBase+"046_Describing_Noun_Physical_States_CHI_MOB.mp4",
+  47: chiBase+"047_Describing_Noun_Emotional_States_CHI_MOB.mp4",
+  48: chiBase+"048_Describing_Noun_Feelings_CHI_MOB.mp4",
+  49: chiBase+"049_Describing_Noun_People_Opinions_CHI_MOB.mp4",
+  50: chiBase+"050_Describing_Noun_Values_and_Vices_CHI_MOB.mp4"
+};
+
+// ======================== TOPICS DATA ========================
+const s1_full = [
+  {n:1,title:'Cardinal Numerals',cat:'Numbers'},{n:2,title:'Ordinal Numerals',cat:'Numbers'},{n:3,title:'Colors',cat:'Colors'},
+  {n:4,title:'Calendar',cat:'Time & Measurement'},{n:5,title:'Time',cat:'Time & Measurement'},{n:6,title:'Sizes and Shapes',cat:'Time & Measurement'},
+  {n:7,title:'Units of Measurement',cat:'Time & Measurement'},{n:8,title:'Fruits',cat:'Food & Drinks'},{n:9,title:'Vegetables',cat:'Food & Drinks'},
+  {n:10,title:'Meat',cat:'Food & Drinks'},{n:11,title:'Fish and Seafood',cat:'Food & Drinks'},{n:12,title:'Dairy Products',cat:'Food & Drinks'},
+  {n:13,title:'Breads',cat:'Food & Drinks'},{n:14,title:'Grains, Nuts and Seeds',cat:'Food & Drinks'},{n:15,title:'Condiments',cat:'Food & Drinks'},
+  {n:16,title:'Sweets',cat:'Food & Drinks'},{n:17,title:'Meals',cat:'Food & Drinks'},{n:18,title:'Dishes',cat:'Food & Drinks'},
+  {n:19,title:'Describing Food',cat:'Food & Drinks'},{n:20,title:'Non-Alcoholic Drinks',cat:'Food & Drinks'},{n:21,title:'Domestic Animals',cat:'Animals'},
+  {n:22,title:'Domestic Birds',cat:'Animals'},{n:23,title:'Wild Animals',cat:'Animals'},{n:24,title:'Wild Birds',cat:'Animals'},
+  {n:25,title:'Fish',cat:'Animals'},{n:26,title:'Amphibians and Reptiles',cat:'Animals'},{n:27,title:'Aquatic Animals',cat:'Animals'},
+  {n:28,title:'Insects and Arachnids',cat:'Animals'},{n:29,title:'Baby Animals',cat:'Animals'},{n:30,title:'Parts of Animals',cat:'Animals'},
+  {n:31,title:'Animal Groups',cat:'Animals'},{n:32,title:'Animal Sounds',cat:'Animals'},{n:33,title:'Family',cat:'People & Society'},
+  {n:34,title:'Love and Friendship',cat:'People & Society'},{n:35,title:'People',cat:'People & Society'},{n:36,title:'Identity',cat:'People & Society'},
+  {n:37,title:'Age and Life Events',cat:'People & Society'},{n:38,title:'Head and Face',cat:'Human Body'},{n:39,title:'Body Parts',cat:'Human Body'},
+  {n:40,title:'Internal Organs',cat:'Human Body'},{n:41,title:'Skeleton and Muscles',cat:'Human Body'},{n:42,title:'Health Problems',cat:'Health & Medicine'},
+  {n:43,title:'Symptoms',cat:'Health & Medicine'},{n:44,title:'Injuries',cat:'Health & Medicine'},{n:45,title:'Treatment',cat:'Health & Medicine'},
+  {n:46,title:'Specialists',cat:'Health & Medicine'},{n:47,title:'Pharmacy',cat:'Health & Medicine'},{n:48,title:'Dentists',cat:'Health & Medicine'},
+  {n:49,title:'Optometrists',cat:'Health & Medicine'},{n:50,title:'School',cat:'Education & Science'},{n:51,title:'University',cat:'Education & Science'},
+  {n:52,title:'Mathematics',cat:'Education & Science'},{n:53,title:'Physics',cat:'Education & Science'},{n:54,title:'Astronomy',cat:'Education & Science'},
+  {n:55,title:'Chemistry',cat:'Education & Science'},{n:56,title:'Biology',cat:'Education & Science'},{n:57,title:'Geography',cat:'Education & Science'},
+  {n:58,title:'Linguistics',cat:'Education & Science'},{n:59,title:'Scientists',cat:'Education & Science'},{n:60,title:'Jobs Part 1',cat:'Work & Business'},
+  {n:61,title:'Jobs Part 2',cat:'Work & Business'},{n:62,title:'Workplace',cat:'Work & Business'},{n:63,title:'Business',cat:'Work & Business'},
+  {n:64,title:'Banks',cat:'Work & Business'},{n:65,title:'Winter Sports',cat:'Sports'},{n:66,title:'Summer Sports',cat:'Sports'},
+  {n:67,title:'Gym',cat:'Sports'},{n:68,title:'Sports Equipment',cat:'Sports'},{n:69,title:'About Sports',cat:'Sports'},{n:70,title:'Sportsmen',cat:'Sports'},
+  {n:71,title:'Clothes',cat:'Fashion & Style'},{n:72,title:'Footwear',cat:'Fashion & Style'},{n:73,title:'Accessories',cat:'Fashion & Style'},
+  {n:74,title:'Beauty Shop',cat:'Fashion & Style'},{n:75,title:'Tailor',cat:'Fashion & Style'},{n:76,title:'Types of Houses',cat:'Home & Living'},
+  {n:77,title:'Rooms',cat:'Home & Living'},{n:78,title:'Furniture',cat:'Home & Living'},{n:79,title:'Home Decor',cat:'Home & Living'},
+  {n:80,title:'Parts of The House',cat:'Home & Living'},{n:81,title:'Describing A House',cat:'Home & Living'},{n:82,title:'Real Estate Office',cat:'Home & Living'},
+  {n:83,title:'Types of Stores',cat:'Shopping'},{n:84,title:'Appliance Store',cat:'Shopping'},{n:85,title:'Kitchenware',cat:'Shopping'},
+  {n:86,title:'Household Products',cat:'Shopping'},{n:87,title:'Stationery',cat:'Shopping'},{n:88,title:'Bookstore',cat:'Shopping'},
+  {n:89,title:'Kids Store',cat:'Shopping'},{n:90,title:'Cosmetics',cat:'Shopping'},{n:91,title:'Bath Products',cat:'Shopping'},
+  {n:92,title:'Hardware Store',cat:'Shopping'},{n:93,title:'In-Store Shopping',cat:'Shopping'},{n:94,title:'Online Shopping',cat:'Shopping'},
+  {n:95,title:'TV and Radio',cat:'Technology & Media'},{n:96,title:'Computers',cat:'Technology & Media'},{n:97,title:'Internet',cat:'Technology & Media'},
+  {n:98,title:'Phones',cat:'Technology & Media'},{n:99,title:'Journalism',cat:'Technology & Media'},{n:100,title:'Mail',cat:'Technology & Media'},
+  {n:101,title:'Trees',cat:'Nature & Plants'},{n:102,title:'Fruit Trees',cat:'Nature & Plants'},{n:103,title:'Shrubs',cat:'Nature & Plants'},
+  {n:104,title:'Flowers',cat:'Nature & Plants'},{n:105,title:'Other Plants',cat:'Nature & Plants'},{n:106,title:'About Plants',cat:'Nature & Plants'},
+  {n:107,title:'Agriculture',cat:'Nature & Plants'},{n:108,title:'Hotel',cat:'Travel & Leisure'},{n:109,title:'Restaurant and Bar',cat:'Travel & Leisure'},
+  {n:110,title:'Tourist Attractions',cat:'Travel & Leisure'},{n:111,title:'Buildings',cat:'Travel & Leisure'},{n:112,title:'Streets',cat:'Travel & Leisure'},
+  {n:113,title:'Regions',cat:'Travel & Leisure'},{n:114,title:'Literature',cat:'Arts & Culture'},{n:115,title:'Books',cat:'Arts & Culture'},
+  {n:116,title:'Music',cat:'Arts & Culture'},{n:117,title:'Musical Instruments',cat:'Arts & Culture'},{n:118,title:'Plastic Arts',cat:'Arts & Culture'},
+  {n:119,title:'Photography',cat:'Arts & Culture'},{n:120,title:'Myths and Legends',cat:'Arts & Culture'},{n:121,title:'Supernatural',cat:'Arts & Culture'},
+  {n:122,title:'Cinema',cat:'Arts & Culture'},{n:123,title:'Theater',cat:'Arts & Culture'},{n:124,title:'Hobbies',cat:'Hobbies & Games'},
+  {n:125,title:'Traveling',cat:'Hobbies & Games'},{n:126,title:'At The Beach',cat:'Hobbies & Games'},{n:127,title:'Camping',cat:'Hobbies & Games'},
+  {n:128,title:'Fishing',cat:'Hobbies & Games'},{n:129,title:'Games',cat:'Hobbies & Games'},{n:130,title:'Playground',cat:'Hobbies & Games'},
+  {n:131,title:'Road Transportation',cat:'Transport'},{n:132,title:'Rail Transportation',cat:'Transport'},{n:133,title:'Air Transportation',cat:'Transport'},
+  {n:134,title:'Water Transportation',cat:'Transport'},{n:135,title:'Roads',cat:'Transport'},{n:136,title:'Car Parts',cat:'Transport'},
+  {n:137,title:'Police',cat:'Law & Society'},{n:138,title:'Crimes',cat:'Law & Society'},{n:139,title:'Culprits',cat:'Law & Society'},
+  {n:140,title:'Law and Justice',cat:'Law & Society'},{n:141,title:'Army and War',cat:'Law & Society'},{n:142,title:'Weapons',cat:'Law & Society'},
+  {n:143,title:'Poverty and Charity',cat:'Law & Society'},{n:144,title:'Weather',cat:'Environment'},{n:145,title:'Natural Phenomena',cat:'Environment'},
+  {n:146,title:'Landscape',cat:'Environment'},{n:147,title:'Water Bodies',cat:'Environment'},{n:148,title:'Pollution',cat:'Environment'},
+  {n:149,title:'Rocks and Gemstones',cat:'Environment'},{n:150,title:'Minerals and Metals',cat:'Environment'}
+];
+
+const s2_full = [
+  {n:1,title:'Pronouns',cat:'Pronouns'},{n:2,title:'Objective Pronouns',cat:'Pronouns'},{n:3,title:'Possessive Pronouns',cat:'Pronouns'},
+  {n:4,title:'Reflexive Pronouns',cat:'Pronouns'},{n:5,title:'Relative Pronouns',cat:'Pronouns'},{n:6,title:'Prepositions',cat:'Grammar Essentials'},
+  {n:7,title:'Conjunctions',cat:'Grammar Essentials'},{n:8,title:'Expressing Quantity',cat:'Grammar Essentials'},{n:9,title:'Punctuations',cat:'Grammar Essentials'},
+  {n:10,title:'Nouns: Communication',cat:'Nouns'},{n:11,title:'Nouns: Consciousness',cat:'Nouns'},{n:12,title:'Nouns: Concrete Nouns',cat:'Nouns'},
+  {n:13,title:'Nouns: Abstract Nouns Part 1',cat:'Nouns'},{n:14,title:'Nouns: Abstract Nouns Part 2',cat:'Nouns'},
+  {n:15,title:'Adjectives: Describing Objects',cat:'Adjectives'},{n:16,title:'Adjectives: About People',cat:'Adjectives'},
+  {n:17,title:'Adjectives: Describing Art',cat:'Adjectives'},{n:18,title:'Adjectives: Descriptions Part 1',cat:'Adjectives'},
+  {n:19,title:'Adjectives: Descriptions Part 2',cat:'Adjectives'},{n:20,title:'Adjectives: Descriptions Part 3',cat:'Adjectives'},
+  {n:21,title:'Adjectives: Pairs Part 1',cat:'Adjectives'},{n:22,title:'Adjectives: Pairs Part 2',cat:'Adjectives'},
+  {n:23,title:'Adverbs: Time and Frequency',cat:'Adverbs'},{n:24,title:'Adverbs: Place',cat:'Adverbs'},
+  {n:25,title:'Adverbs: Manner Part 1',cat:'Adverbs'},{n:26,title:'Adverbs: Manner Part 2',cat:'Adverbs'},
+  {n:27,title:'Adverbs: Manner Part 3',cat:'Adverbs'},{n:28,title:'Adverbs: Degree',cat:'Adverbs'},
+  {n:29,title:'Adverbs: Interrogative and Linking Words',cat:'Adverbs'},{n:30,title:'Verbs: Actions Part 1',cat:'Verbs'},
+  {n:31,title:'Verbs: Actions Part 2',cat:'Verbs'},{n:32,title:'Verbs: Actions Part 3',cat:'Verbs'},
+  {n:33,title:'Verbs: Cooking',cat:'Verbs'},{n:34,title:'Verbs: Management',cat:'Verbs'},
+  {n:35,title:'Verbs: Communications',cat:'Verbs'},{n:36,title:'Verbs: Education and Research',cat:'Verbs'},
+  {n:37,title:'Verbs: Interpersonal Skills',cat:'Verbs'},{n:38,title:'Verbs: Efficiency',cat:'Verbs'},
+  {n:39,title:'Verbs: Skills',cat:'Verbs'},{n:40,title:'Verbs: Stative Verbs',cat:'Verbs'},
+  {n:41,title:'Verbs: Expressing Feelings',cat:'Verbs'},{n:42,title:'Describing Noun Characteristics Part 1',cat:'Describing Nouns'},
+  {n:43,title:'Describing Noun Characteristics Part 2',cat:'Describing Nouns'},{n:44,title:'Describing Noun Characteristics Part 3',cat:'Describing Nouns'},
+  {n:45,title:'Describing Noun: Physical Characteristics',cat:'Describing Nouns'},{n:46,title:'Describing Noun: Physical States',cat:'Describing Nouns'},
+  {n:47,title:'Describing Noun: Emotional States',cat:'Describing Nouns'},{n:48,title:'Describing Noun: Feelings',cat:'Describing Nouns'},
+  {n:49,title:'Describing Noun: People Opinions',cat:'Describing Nouns'},{n:50,title:'Describing Noun: Values and Vices',cat:'Describing Nouns'}
+];
+
+const allTopics = [
+  ...s1_full.map(t => ({...t, series:'s1', label:'Vocabulary'})),
+  ...s2_full.map(t => ({...t, series:'s2', label:'Grammar'}))
+];
+
+const catColorPalette = ['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#ef4444','#14b8a6','#a855f7','#06b6d4','#84cc16','#64748b','#dc2626'];
+const catColors = {};
+[...new Set(allTopics.map(t => t.cat))].forEach((c, i) => catColors[c] = catColorPalette[i % catColorPalette.length]);
+
+let activeSeries = 'all', activeCat = 'All';
+
+function getFiltered() {
+  let items = activeSeries === 'all' ? allTopics : allTopics.filter(t => t.series === activeSeries);
+  if (activeCat !== 'All') items = items.filter(t => t.cat === activeCat);
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  if (search) items = items.filter(t => t.title.toLowerCase().includes(search) || t.cat.toLowerCase().includes(search) || t.n.toString().includes(search));
+  return items;
+}
+
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
+}
+
+function renderGrid() {
+  const items = getFiltered();
+  const grid = document.getElementById('topicGrid');
+  if (!items.length) {
+    grid.innerHTML = `<div class="no-results"><div style="font-size:2rem">🔍</div><p>No lessons found</p></div>`;
+    document.getElementById('countBadge').innerHTML = '0 lessons';
+    return;
+  }
+  grid.innerHTML = items.map(v => {
+    const color = catColors[v.cat] || '#3b82f6';
+    const badgeCls = v.series === 's1' ? 'badge-s1' : 'badge-s2';
+    const videoUrl = v.series === 's1' ? vocabUrlsArchive[v.n] : grammarUrlsArchive[v.n];
+    return `<div class="topic-card" data-title="${escapeHtml(v.title)}" data-video="${videoUrl}">
+      <div class="card-color-bar" style="background:${color}"></div>
+      <div class="card-inner">
+        <div class="card-top">
+          <span class="card-num">#${String(v.n).padStart(3,'0')}</span>
+          <span class="series-badge ${badgeCls}">${v.label}</span>
+        </div>
+        <div class="card-title">${escapeHtml(v.title)}</div>
+        <div class="card-cat"><span class="cat-dot" style="background:${color}"></span>${escapeHtml(v.cat)}</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('countBadge').innerHTML = items.length + ' lesson' + (items.length !== 1 ? 's' : '');
+
+  document.querySelectorAll('.topic-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const videoSrc = card.dataset.video;
+      const title = card.dataset.title;
+      if (!videoSrc) { alert('Video URL missing'); return; }
+      const videoEl = document.getElementById('lessonVideo');
+      const sourceEl = document.getElementById('videoSource');
+      sourceEl.src = videoSrc;
+      videoEl.load();
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('videoModal').style.display = 'flex';
+      videoEl.play().catch(e => console.log('Autoplay prevented:', e));
+    });
+  });
+}
+
+function buildFilters() {
+  const wrap = document.getElementById('filterWrap');
+  const cats = [...new Set(allTopics.filter(t => activeSeries === 'all' || t.series === activeSeries).map(t => t.cat))].sort();
+  wrap.innerHTML =
+    `<button class="filter-btn ${activeCat === 'All' ? 'active' : ''}" data-cat="All">All</button>` +
+    cats.map(c => `<button class="filter-btn ${activeCat === c ? 'active' : ''}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join('');
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => { activeCat = btn.dataset.cat; renderGrid(); buildFilters(); });
+  });
+}
+
+document.querySelectorAll('.s-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeSeries = btn.dataset.series;
+    activeCat = 'All';
+    document.querySelectorAll('.s-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGrid();
+    buildFilters();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', () => renderGrid());
+
+// Languages grid
+const langs = [
+  '01 US American English','02 UK British English','03 Spanish','04 German',
+  '05 Hindi','06 Arabic','07 French','08 Korean',
+  '09 Chinese','10 Tamil','11 Russian','12 Portuguese',
+  '13 Japanese','14 Italian','15 Hebrew','16 Dutch'
+];
+document.getElementById('langsGrid').innerHTML = langs.map(l =>
+  `<div class="lang-card"><span class="lang-num">${l.slice(0,2)}</span><span class="lang-name">${l.slice(3)}</span></div>`
+).join('');
+
+// Init
+renderGrid();
+buildFilters();
+
+// ======================== MODAL CLOSE ========================
+function closeVideoModal() {
+  const modal = document.getElementById('videoModal');
+  const videoEl = document.getElementById('lessonVideo');
+  const sourceEl = document.getElementById('videoSource');
+  modal.style.display = 'none';
+  videoEl.pause();
+  videoEl.currentTime = 0;
+  sourceEl.src = '';
+  videoEl.load();
+}
+
+document.getElementById('closeModalBtn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  closeVideoModal();
+});
+
+document.getElementById('videoModal').addEventListener('click', function(e) {
+  if (e.target === this) closeVideoModal();
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('videoModal');
+    if (modal.style.display === 'flex') closeVideoModal();
+  }
+});
+
+// ======================== VIDEO PROTECTION ========================
+const videoPlayer = document.getElementById('lessonVideo');
+videoPlayer.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
+videoPlayer.setAttribute('disablePictureInPicture', '');
+videoPlayer.disablePictureInPicture = true;
+videoPlayer.addEventListener('enterpictureinpicture', (e) => {
+  e.preventDefault();
+  if (videoPlayer.exitPictureInPicture) videoPlayer.exitPictureInPicture();
+});
+
+// ======================== SECURITY ========================
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  if (e.keyCode === 123) { e.preventDefault(); return; }
+  if (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) { e.preventDefault(); return; }
+  if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return; }
+});
+</script>
+</body>
+</html>
