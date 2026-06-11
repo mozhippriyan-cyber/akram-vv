@@ -32,7 +32,6 @@ body {
   min-height: 100vh;
 }
 
-/* TOP HEADER BAR (same as original) */
 .top-bar {
   background: var(--navy);
   padding: 8px 24px;
@@ -96,7 +95,6 @@ body {
   color: var(--navy);
 }
 
-/* HERO (unchanged) */
 .hero {
   background: linear-gradient(140deg, #071560 0%, #1a3fa8 50%, #0d7bd4 100%);
   padding: 3.5rem 2rem 3rem;
@@ -104,7 +102,6 @@ body {
   position: relative;
   overflow: hidden;
 }
-.hero-glow-1, .hero-glow-2 { display: none; }
 .hero-inner { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; }
 .hero-eyebrow {
   display: inline-flex;
@@ -177,7 +174,6 @@ body {
   padding-top: 18px;
 }
 
-/* FEATURE BAR */
 .feat-bar {
   background: #050f45;
   overflow: hidden;
@@ -205,7 +201,6 @@ body {
 }
 .feat-dot { color: var(--gold); font-size: 16px; }
 
-/* CONTROLS */
 .controls-wrap {
   background: var(--white);
   border-bottom: 1px solid var(--border);
@@ -234,7 +229,6 @@ body {
   transition: border-color 0.15s;
 }
 .search-wrap:focus-within { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(13,123,212,0.1); }
-.search-icon { color: var(--muted); font-size: 14px; }
 .search-wrap input {
   border: none; background: transparent;
   padding: 9px 0; font-size: 13px;
@@ -264,7 +258,6 @@ body {
 }
 .s-tab.active { background: var(--navy); color: var(--white); box-shadow: 0 2px 8px rgba(7,21,96,0.25); }
 
-/* FILTERS */
 .filter-wrap {
   display: flex;
   gap: 6px;
@@ -288,7 +281,6 @@ body {
 }
 .filter-btn.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
 
-/* SECTION HEADER */
 .section-hdr {
   padding: 20px 20px 10px;
   display: flex;
@@ -322,7 +314,6 @@ body {
   border-radius: 20px;
 }
 
-/* TOPIC GRID */
 .topic-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -383,7 +374,7 @@ body {
   color: var(--muted);
 }
 
-/* VIDEO MODAL - CUSTOM HTML5 VIDEO (NO DOWNLOAD, NO LOGO, PROTECTED) */
+/* VIDEO MODAL */
 .modal {
   display: none;
   position: fixed;
@@ -403,6 +394,8 @@ body {
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0,0,0,0.6);
   animation: modalFadeIn 0.2s ease;
+  position: relative;
+  z-index: 1001;
 }
 .modal-header {
   display: flex;
@@ -419,16 +412,23 @@ body {
   margin: 0;
 }
 .close-modal {
-  background: none;
-  border: none;
-  font-size: 32px;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.4);
+  font-size: 26px;
   cursor: pointer;
   color: white;
   line-height: 1;
-  padding: 0 8px;
-  transition: opacity 0.15s;
+  padding: 2px 10px 4px;
+  border-radius: 8px;
+  transition: background 0.15s, border-color 0.15s;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  flex-shrink: 0;
 }
-.close-modal:hover { opacity: 0.7; }
+.close-modal:hover {
+  background: rgba(255,255,255,0.3);
+  border-color: rgba(255,255,255,0.8);
+}
 .modal-body {
   background: #000;
   display: flex;
@@ -450,7 +450,6 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
-/* LANGUAGES SECTION + FOOTER (unchanged) */
 .langs-section {
   background: linear-gradient(135deg, #071560 0%, #1a3fa8 100%);
   padding: 40px 20px;
@@ -597,7 +596,7 @@ footer strong { color: var(--gold); }
   Complete American English video course with 200 playable lessons
 </footer>
 
-<!-- VIDEO MODAL WITH CUSTOM PROTECTED VIDEO -->
+<!-- VIDEO MODAL -->
 <div id="videoModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -638,113 +637,90 @@ document.getElementById('signOutBtn').addEventListener('click', async () => {
   await signOut(auth);
   window.location.href = 'login.html';
 });
+</script>
 
-// ======================== ARCHIVE.ORG VIDEO URLs ========================
-// Grammar (s2) — all 50 grammar files
+<script>
+// ======================== VIDEO URLs ========================
 const grammarBase = "https://archive.org/download/036-verbs-education-and-research-engtam-mob/";
 const grammarFilenames = {
-  1: "001_Pronouns_ENGTAM_MOB.mp4", 2: "002_Objective_Pronouns_ENGTAM_MOB.mp4", 3: "003_Possessive_Pronouns_ENGTAM_MOB.mp4",
-  4: "004_Reflexive_Pronouns_ENGTAM_MOB.mp4", 5: "005_Relative_Pronouns_ENGTAM_MOB.mp4", 6: "006_Prepositions_ENGTAM_MOB.mp4",
-  7: "007_Conjuctions_ENGTAM_MOB.mp4", 8: "008_Expressing_Quantity_ENGTAM_MOB.mp4", 9: "009_Punctuations_ENGTAM_MOB.mp4",
-  10: "010_Nouns_Communication_ENGTAM_MOB.mp4", 11: "011_Nouns_Consciousness_ENGTAM_MOB.mp4", 12: "012_Nouns_Concrete_Nouns_ENGTAM_MOB.mp4",
-  13: "013_Nouns_Abstract_Nouns_1_ENGTAM_MOB.mp4", 14: "014_Nouns_Abstract_Nouns_2_ENGTAM_MOB.mp4", 15: "015_Adjectives_Describing_Objects_ENGTAM_MOB.mp4",
-  16: "016_Adjectives_About_People_ENGTAM_MOB.mp4", 17: "017_Adjectives_Describing_Art_ENGTAM_MOB.mp4", 18: "018_Adjectives_Descriptions_1_ENGTAM_MOB.mp4",
-  19: "019_Adjectives_Descriptions_2_ENGTAM_MOB.mp4", 20: "020_Adjectives_Descriptions_3_ENGTAM_MOB.mp4", 21: "021_Adjectives_Pairs_1_ENGTAM_MOB.mp4",
-  22: "022_Adjectives_Pairs_2_ENGTAM_MOB.mp4", 23: "023_Adverbs_Time_and_Frequency_ENGTAM_MOB.mp4", 24: "024_Adverbs_Place_ENGTAM_MOB.mp4",
-  25: "025_Adverbs_Manner_1_ENGTAM_MOB.mp4", 26: "026_Adverbs_Manner_2_ENGTAM_MOB.mp4", 27: "027_Adverbs_Manner_3_ENGTAM_MOB.mp4",
-  28: "028_Adverbs_Degree_ENGTAM_MOB.mp4", 29: "029_Adverbs_Interrogative_and_Linking_Words_ENGTAM_MOB.mp4", 30: "030_Verbs_Actions_1_ENGTAM_MOB.mp4",
-  31: "031_Verbs_Actions_2_ENGTAM_MOB.mp4", 32: "032_Verbs_Actions_3_ENGTAM_MOB.mp4", 33: "033_Verbs_Cooking_ENGTAM_MOB.mp4",
-  34: "934_Verbs_Management_ENGTAM_MOB.mp4", 35: "035_Verbs_Communications_ENGTAM_MOB.mp4", 36: "036_Verbs_Education_and_Research_ENGTAM_MOB.mp4",
-  37: "037_Verbs_Interpersonal_Skills_ENGTAM_MOB.mp4", 38: "038_Verbs_Efficiency_ENGTAM_MOB.mp4", 39: "039_Verbs_Skills_ENGTAM_MOB.mp4",
-  40: "040_Verbs_Stative_Verbs_ENGTAM_MOB.mp4", 41: "041_Verbs_Expressing_feelings_ENGTAM_MOB.mp4", 42: "042_Describing_Noun_Characteristice_1_ENGTAM_MOB.mp4",
-  43: "043_Describing_Noun_Characteristice_2_ENGTAM_MOB.mp4", 44: "044_Describing_Noun_Characteristice_3_ENGTAM_MOB.mp4", 45: "045_Describing_Noun_Physical_Characteristics_ENGTAM_MOB.mp4",
-  46: "046_Describing_Noun_Physical_States_ENGTAM_MOB.mp4", 47: "047_Describing_Noun_Emotional_States_ENGTAM_MOB.mp4", 48: "048_Describing_Noun_Feelings_ENGTAM_MOB.mp4",
-  49: "049_Describing_Noun_People_Opinions_ENGTAM_MOB.mp4", 50: "050_Describing_Noun_Values_and_Vices_ENGTAM_MOB.mp4"
+  1:"001_Pronouns_ENGTAM_MOB.mp4",2:"002_Objective_Pronouns_ENGTAM_MOB.mp4",3:"003_Possessive_Pronouns_ENGTAM_MOB.mp4",
+  4:"004_Reflexive_Pronouns_ENGTAM_MOB.mp4",5:"005_Relative_Pronouns_ENGTAM_MOB.mp4",6:"006_Prepositions_ENGTAM_MOB.mp4",
+  7:"007_Conjuctions_ENGTAM_MOB.mp4",8:"008_Expressing_Quantity_ENGTAM_MOB.mp4",9:"009_Punctuations_ENGTAM_MOB.mp4",
+  10:"010_Nouns_Communication_ENGTAM_MOB.mp4",11:"011_Nouns_Consciousness_ENGTAM_MOB.mp4",12:"012_Nouns_Concrete_Nouns_ENGTAM_MOB.mp4",
+  13:"013_Nouns_Abstract_Nouns_1_ENGTAM_MOB.mp4",14:"014_Nouns_Abstract_Nouns_2_ENGTAM_MOB.mp4",15:"015_Adjectives_Describing_Objects_ENGTAM_MOB.mp4",
+  16:"016_Adjectives_About_People_ENGTAM_MOB.mp4",17:"017_Adjectives_Describing_Art_ENGTAM_MOB.mp4",18:"018_Adjectives_Descriptions_1_ENGTAM_MOB.mp4",
+  19:"019_Adjectives_Descriptions_2_ENGTAM_MOB.mp4",20:"020_Adjectives_Descriptions_3_ENGTAM_MOB.mp4",21:"021_Adjectives_Pairs_1_ENGTAM_MOB.mp4",
+  22:"022_Adjectives_Pairs_2_ENGTAM_MOB.mp4",23:"023_Adverbs_Time_and_Frequency_ENGTAM_MOB.mp4",24:"024_Adverbs_Place_ENGTAM_MOB.mp4",
+  25:"025_Adverbs_Manner_1_ENGTAM_MOB.mp4",26:"026_Adverbs_Manner_2_ENGTAM_MOB.mp4",27:"027_Adverbs_Manner_3_ENGTAM_MOB.mp4",
+  28:"028_Adverbs_Degree_ENGTAM_MOB.mp4",29:"029_Adverbs_Interrogative_and_Linking_Words_ENGTAM_MOB.mp4",30:"030_Verbs_Actions_1_ENGTAM_MOB.mp4",
+  31:"031_Verbs_Actions_2_ENGTAM_MOB.mp4",32:"032_Verbs_Actions_3_ENGTAM_MOB.mp4",33:"033_Verbs_Cooking_ENGTAM_MOB.mp4",
+  34:"934_Verbs_Management_ENGTAM_MOB.mp4",35:"035_Verbs_Communications_ENGTAM_MOB.mp4",36:"036_Verbs_Education_and_Research_ENGTAM_MOB.mp4",
+  37:"037_Verbs_Interpersonal_Skills_ENGTAM_MOB.mp4",38:"038_Verbs_Efficiency_ENGTAM_MOB.mp4",39:"039_Verbs_Skills_ENGTAM_MOB.mp4",
+  40:"040_Verbs_Stative_Verbs_ENGTAM_MOB.mp4",41:"041_Verbs_Expressing_feelings_ENGTAM_MOB.mp4",42:"042_Describing_Noun_Characteristice_1_ENGTAM_MOB.mp4",
+  43:"043_Describing_Noun_Characteristice_2_ENGTAM_MOB.mp4",44:"044_Describing_Noun_Characteristice_3_ENGTAM_MOB.mp4",45:"045_Describing_Noun_Physical_Characteristics_ENGTAM_MOB.mp4",
+  46:"046_Describing_Noun_Physical_States_ENGTAM_MOB.mp4",47:"047_Describing_Noun_Emotional_States_ENGTAM_MOB.mp4",48:"048_Describing_Noun_Feelings_ENGTAM_MOB.mp4",
+  49:"049_Describing_Noun_People_Opinions_ENGTAM_MOB.mp4",50:"050_Describing_Noun_Values_and_Vices_ENGTAM_MOB.mp4"
 };
 const grammarUrlsArchive = {};
 for (let i = 1; i <= 50; i++) grammarUrlsArchive[i] = grammarBase + grammarFilenames[i];
-window.grammarUrlsArchive = grammarUrlsArchive;
 
-// Vocabulary (s1) — all 150 vocab files
 const vocabBase = "https://archive.org/download/061-jobs-2-engtam-mob/";
 const vocabFilenames = {
-  1: "001_Cardinal_Numerals_ENGTAM_MOB.mp4", 2: "002_Ordinal_Numerals_ENGTAM_MOB.mp4", 3: "003_Colors_ENGTAM_MOB.mp4",
-  4: "004_Calendar_ENGTAM_MOB.mp4", 5: "005_Time_ENGTAM_MOB.mp4", 6: "006_Sizes_and_Shapes_ENGTAM_MOB.mp4",
-  7: "007_Units_of_Measurement_ENGTAM_MOB.mp4", 8: "008_Fruits_ENGTAM_MOB.mp4", 9: "009_Vegetables_ENGTAM_MOB.mp4",
-  10: "010_Meat_ENGTAM_MOB.mp4", 11: "011_Fish_and_Seafood_ENGTAM_MOB.mp4", 12: "012_Dairy_Products_ENGTAM_MOB.mp4",
-  13: "013_Breads_ENGTAM_MOB.mp4", 14: "014_Grains_Nuts_and_Seeds_ENGTAM_MOB.mp4", 15: "015_Condiments_ENGTAM_MOB.mp4",
-  16: "016_Sweets_ENGTAM_MOB.mp4", 17: "017_Meals_ENGTAM_MOB.mp4", 18: "018_Dishes_ENGTAM_MOB.mp4",
-  19: "019_Describing_Food_ENGTAM_MOB.mp4", 20: "020_Non-Alcoholic_Drinks_ENGTAM_MOB.mp4", 21: "021_Domestic_Animals_ENGTAM_MOB.mp4",
-  22: "022_Domestic_Birds_ENGTAM_MOB.mp4", 23: "023_Wild_Animals_ENGTAM_MOB.mp4", 24: "024_Wild_Birds_ENGTAM_MOB.mp4",
-  25: "025_Fish_ENGTAM_MOB.mp4", 26: "026_Amphibians_and_Reptiles_ENGTAM_MOB.mp4", 27: "027_Aquatic_Animals_ENGTAM_MOB.mp4",
-  28: "028_Insects_and_Arachnids_ENGTAM_MOB.mp4", 29: "029_Baby_Animals_ENGTAM_MOB.mp4", 30: "030_Parts_Of_Animals_ENGTAM_MOB.mp4",
-  31: "@31_Animal_Groups_ENGTAM_MOB.mp4", 32: "032_Animal_Sounds_ENGTAM_MOB.mp4", 33: "033_Family_ENGTAM_MOB.mp4",
-  34: "034_Love_and_Friendship_ENGTAM_MOB.mp4", 35: "035_People_ENGTAM_MOB.mp4", 36: "036_Identify_ENGTAM_MOB.mp4",
-  37: "037_Age_and_Life_Events_ENGTAM_MOB.mp4", 38: "038_Head_and_Face_ENGTAM_MOB.mp4", 39: "039_Body_Parts_ENGTAM_MOB.mp4",
-  40: "040_Internal_Organs_ENGTAM_MOB.mp4", 41: "041_Skeleton_and_Muscles_ENGTAM_MOB.mp4", 42: "042_Health_Problems_ENGTAM_MOB.mp4",
-  43: "043_Symptoms_ENGTAM_MOB.mp4", 44: "044_Injuries_ENGTAM_MOB.mp4", 45: "045_Treatment_ENGTAM_MOB.mp4",
-  46: "046_Specialists_ENGTAM_MOB.mp4", 47: "047_Pharmacy_ENGTAM_MOB.mp4", 48: "048_Dentists_ENGTAM_MOB.mp4",
-  49: "049_Optometrists_ENGTAM_MOB.mp4", 50: "050_School_ENGTAM_MOB.mp4", 51: "051_University_ENGTAM_MOB.mp4",
-  52: "052_Mathematics_ENGTAM_MOB.mp4", 53: "053_Physics_ENGTAM_MOB.mp4", 54: "054_Astronomy_ENGTAM_MOB.mp4",
-  55: "055_Chemistry_ENGTAM_MOB.mp4", 56: "056_Biology_ENGTAM_MOB.mp4", 57: "057_Geography_ENGTAM_MOB.mp4",
-  58: "058_Lingistics_ENGTAM_MOB.mp4", 59: "059_Scientists_ENGTAM_MOB.mp4", 60: "060_Jobs_1_ENGTAM_MOB.mp4",
-  61: "061_Jobs_2_ENGTAM_MOB.mp4", 62: "062_Workplace_ENGTAM_MOB.mp4", 63: "063_Business_ENGTAM_MOB.mp4",
-  64: "064_Banks_ENGTAM_MOB.mp4", 65: "065_Winter_Sports_ENGTAM_MOB.mp4", 66: "066_Summer_Sports_ENGTAM_MOB.mp4",
-  67: "067_Gym_ENGTAM_MOB.mp4", 68: "068_Sports_Equipment_ENGTAM_MOB.mp4", 69: "069_About_Sports_ENGTAM_MOB.mp4",
-  70: "070_Sportsmen_ENGTAM_MOB.mp4", 71: "071_Clothes_ENGTAM_MOB.mp4", 72: "072_Footwear_ENGTAM_MOB.mp4",
-  73: "073_Accessories_ENGTAM_MOB.mp4", 74: "074_Beauty_Shop_ENGTAM_MOB.mp4", 75: "075_Tailor_ENGTAM_MOB.mp4",
-  76: "076_Types_of_Houses_ENGTAM_MOB.mp4", 77: "077_Rooms_ENGTAM_MOB.mp4", 78: "078_Furniture_ENGTAM_MOB.mp4",
-  79: "079_Home_Decor_ENGTAM_MOB.mp4", 80: "080_Parts_of_The_House_ENGTAM_MOB.mp4", 81: "081_Describing_A_House_ENGTAM_MOB.mp4",
-  82: "082_Real_Estate_Office_ENGTAM_MOB.mp4", 83: "083_Types_of_Stores_ENGTAM_MOB.mp4", 84: "084_Appliance_Store_ENGTAM_MOB.mp4",
-  85: "085_Kitchenware_ENGTAM_MOB.mp4", 86: "086_Household_Products_ENGTAM_MOB.mp4", 87: "087_Stationery_ENGTAM_MOB.mp4",
-  88: "088_Bookstore__ENGTAM_MOB.mp4", 89: "089_Kids_Store_ENGTAM_MOB.mp4", 90: "090_Cosmetics_ENGTAM_MOB.mp4",
-  91: "091_Bath_Products_ENGTAM_MOB.mp4", 92: "092_Hardware_Store_ENGTAM_MOB.mp4", 93: "093_In-Store_Shopping_ENGTAM_MOB.mp4",
-  94: "094_Online_Shopping_ENGTAM_MOB.mp4", 95: "095_Tv_and_Radio_ENGTAM_MOB.mp4", 96: "096_Computers_ENGTAM_MOB.mp4",
-  97: "097_Internet_ENGTAM_MOB.mp4", 98: "098_Phones_ENGTAM_MOB.mp4", 99: "099_Journalism_ENGTAM_MOB.mp4",
-  100: "100_Mail_ENGTAM_MOB.mp4", 101: "101TreesENGTAMMOB.mp4", 102: "102_Fruit_Trees_ENGTAM_MOB.mp4",
-  103: "103_Shrubs_ENGTAM_MOB.mp4", 104: "104_Flowers_ENGTAM_MOB.mp4", 105: "105_Other_Plants_ENGTAM_MOB.mp4",
-  106: "106_About_Plants_ENGTAM_MOB.mp4", 107: "107_Agriculture_ENGTAM_MOB.mp4", 108: "108_Hotel_ENGTAM_MOB.mp4",
-  109: "109_Restaurant_and_Bar_ENGTAM_MOB.mp4", 110: "110_Tourist_Attractions_ENGTAM_MOB.mp4", 111: "111_Buildings_ENGTAM_MOB.mp4",
-  112: "112_Streets_ENGTAM_MOB.mp4", 113: "113_Regions_ENGTAM_MOB.mp4", 114: "114_Literature_ENGTAM_MOB.mp4",
-  115: "115_Books_ENGTAM_MOB.mp4", 116: "116_Music_ENGTAM_MOB.mp4", 117: "117_Musical_Instruments_ENGTAM_MOB.mp4",
-  118: "118_Plastic_Arts_ENGTAM_MOB.mp4", 119: "119_Photography_ENGTAM_MOB.mp4", 120: "120_Mythsand_Legends_ENGTAM_MOB.mp4",
-  121: "121_Supernatural_ENGTAM_MOB.mp4", 122: "122_Cinema_ENGTAM_MOB.mp4", 123: "123_Theater_ENGTAM_MOB.mp4",
-  124: "124_Hobbies_ENGTAM_MOB.mp4", 125: "125_Traveling_ENGTAM_MOB.mp4", 126: "126_At_The_Beach_ENGTAM_MOB.mp4",
-  127: "127_Camping_ENGTAM_MOB.mp4", 128: "128_Fishing_ENGTAM_MOB.mp4", 129: "129_Games_ENGTAM_MOB.mp4",
-  130: "130_Playground_ENGTAM_MOB.mp4", 131: "131_Road_Transportation_ENGTAM_MOB.mp4", 132: "132_Rail_Transportation_ENGTAM_MOB.mp4",
-  133: "133_Air_Transportation_ENGTAM_MOB.mp4", 134: "134_Water_Transportation_ENGTAM_MOB.mp4", 135: "135_Roads_ENGTAM_MOB.mp4",
-  136: "136_Car_Parts_ENGTAM_MOB.mp4", 137: "137_Police_ENGTAM_MOB.mp4", 138: "138_Crimes_ENGTAM_MOB.mp4",
-  139: "139_Culprits_ENGTAM_MOB.mp4", 140: "140_Law_and_Justice_ENGTAM_MOB.mp4", 141: "141_Army_and_War_ENGTAM_MOB.mp4",
-  142: "142_Weapons_ENGTAM_MOB.mp4", 143: "143_Poverty_and_Charity_ENGTAM_MOB.mp4", 144: "144_Weather_ENGTAM_MOB.mp4",
-  145: "145_Natural_Phenomena_ENGTAM_MOB.mp4", 146: "146_Landscape_ENGTAM_MOB.mp4", 147: "147_Water_Bodies_ENGTAM_MOB.mp4",
-  148: "148_Pollution_ENGTAM_MOB.mp4", 149: "149_Rocks_Gemstones_ENGTAM_MOB.mp4", 150: "150_Minerals_and_Metals_ENGTAM_MOB.mp4"
+  1:"001_Cardinal_Numerals_ENGTAM_MOB.mp4",2:"002_Ordinal_Numerals_ENGTAM_MOB.mp4",3:"003_Colors_ENGTAM_MOB.mp4",
+  4:"004_Calendar_ENGTAM_MOB.mp4",5:"005_Time_ENGTAM_MOB.mp4",6:"006_Sizes_and_Shapes_ENGTAM_MOB.mp4",
+  7:"007_Units_of_Measurement_ENGTAM_MOB.mp4",8:"008_Fruits_ENGTAM_MOB.mp4",9:"009_Vegetables_ENGTAM_MOB.mp4",
+  10:"010_Meat_ENGTAM_MOB.mp4",11:"011_Fish_and_Seafood_ENGTAM_MOB.mp4",12:"012_Dairy_Products_ENGTAM_MOB.mp4",
+  13:"013_Breads_ENGTAM_MOB.mp4",14:"014_Grains_Nuts_and_Seeds_ENGTAM_MOB.mp4",15:"015_Condiments_ENGTAM_MOB.mp4",
+  16:"016_Sweets_ENGTAM_MOB.mp4",17:"017_Meals_ENGTAM_MOB.mp4",18:"018_Dishes_ENGTAM_MOB.mp4",
+  19:"019_Describing_Food_ENGTAM_MOB.mp4",20:"020_Non-Alcoholic_Drinks_ENGTAM_MOB.mp4",21:"021_Domestic_Animals_ENGTAM_MOB.mp4",
+  22:"022_Domestic_Birds_ENGTAM_MOB.mp4",23:"023_Wild_Animals_ENGTAM_MOB.mp4",24:"024_Wild_Birds_ENGTAM_MOB.mp4",
+  25:"025_Fish_ENGTAM_MOB.mp4",26:"026_Amphibians_and_Reptiles_ENGTAM_MOB.mp4",27:"027_Aquatic_Animals_ENGTAM_MOB.mp4",
+  28:"028_Insects_and_Arachnids_ENGTAM_MOB.mp4",29:"029_Baby_Animals_ENGTAM_MOB.mp4",30:"030_Parts_Of_Animals_ENGTAM_MOB.mp4",
+  31:"@31_Animal_Groups_ENGTAM_MOB.mp4",32:"032_Animal_Sounds_ENGTAM_MOB.mp4",33:"033_Family_ENGTAM_MOB.mp4",
+  34:"034_Love_and_Friendship_ENGTAM_MOB.mp4",35:"035_People_ENGTAM_MOB.mp4",36:"036_Identify_ENGTAM_MOB.mp4",
+  37:"037_Age_and_Life_Events_ENGTAM_MOB.mp4",38:"038_Head_and_Face_ENGTAM_MOB.mp4",39:"039_Body_Parts_ENGTAM_MOB.mp4",
+  40:"040_Internal_Organs_ENGTAM_MOB.mp4",41:"041_Skeleton_and_Muscles_ENGTAM_MOB.mp4",42:"042_Health_Problems_ENGTAM_MOB.mp4",
+  43:"043_Symptoms_ENGTAM_MOB.mp4",44:"044_Injuries_ENGTAM_MOB.mp4",45:"045_Treatment_ENGTAM_MOB.mp4",
+  46:"046_Specialists_ENGTAM_MOB.mp4",47:"047_Pharmacy_ENGTAM_MOB.mp4",48:"048_Dentists_ENGTAM_MOB.mp4",
+  49:"049_Optometrists_ENGTAM_MOB.mp4",50:"050_School_ENGTAM_MOB.mp4",51:"051_University_ENGTAM_MOB.mp4",
+  52:"052_Mathematics_ENGTAM_MOB.mp4",53:"053_Physics_ENGTAM_MOB.mp4",54:"054_Astronomy_ENGTAM_MOB.mp4",
+  55:"055_Chemistry_ENGTAM_MOB.mp4",56:"056_Biology_ENGTAM_MOB.mp4",57:"057_Geography_ENGTAM_MOB.mp4",
+  58:"058_Lingistics_ENGTAM_MOB.mp4",59:"059_Scientists_ENGTAM_MOB.mp4",60:"060_Jobs_1_ENGTAM_MOB.mp4",
+  61:"061_Jobs_2_ENGTAM_MOB.mp4",62:"062_Workplace_ENGTAM_MOB.mp4",63:"063_Business_ENGTAM_MOB.mp4",
+  64:"064_Banks_ENGTAM_MOB.mp4",65:"065_Winter_Sports_ENGTAM_MOB.mp4",66:"066_Summer_Sports_ENGTAM_MOB.mp4",
+  67:"067_Gym_ENGTAM_MOB.mp4",68:"068_Sports_Equipment_ENGTAM_MOB.mp4",69:"069_About_Sports_ENGTAM_MOB.mp4",
+  70:"070_Sportsmen_ENGTAM_MOB.mp4",71:"071_Clothes_ENGTAM_MOB.mp4",72:"072_Footwear_ENGTAM_MOB.mp4",
+  73:"073_Accessories_ENGTAM_MOB.mp4",74:"074_Beauty_Shop_ENGTAM_MOB.mp4",75:"075_Tailor_ENGTAM_MOB.mp4",
+  76:"076_Types_of_Houses_ENGTAM_MOB.mp4",77:"077_Rooms_ENGTAM_MOB.mp4",78:"078_Furniture_ENGTAM_MOB.mp4",
+  79:"079_Home_Decor_ENGTAM_MOB.mp4",80:"080_Parts_of_The_House_ENGTAM_MOB.mp4",81:"081_Describing_A_House_ENGTAM_MOB.mp4",
+  82:"082_Real_Estate_Office_ENGTAM_MOB.mp4",83:"083_Types_of_Stores_ENGTAM_MOB.mp4",84:"084_Appliance_Store_ENGTAM_MOB.mp4",
+  85:"085_Kitchenware_ENGTAM_MOB.mp4",86:"086_Household_Products_ENGTAM_MOB.mp4",87:"087_Stationery_ENGTAM_MOB.mp4",
+  88:"088_Bookstore__ENGTAM_MOB.mp4",89:"089_Kids_Store_ENGTAM_MOB.mp4",90:"090_Cosmetics_ENGTAM_MOB.mp4",
+  91:"091_Bath_Products_ENGTAM_MOB.mp4",92:"092_Hardware_Store_ENGTAM_MOB.mp4",93:"093_In-Store_Shopping_ENGTAM_MOB.mp4",
+  94:"094_Online_Shopping_ENGTAM_MOB.mp4",95:"095_Tv_and_Radio_ENGTAM_MOB.mp4",96:"096_Computers_ENGTAM_MOB.mp4",
+  97:"097_Internet_ENGTAM_MOB.mp4",98:"098_Phones_ENGTAM_MOB.mp4",99:"099_Journalism_ENGTAM_MOB.mp4",
+  100:"100_Mail_ENGTAM_MOB.mp4",101:"101TreesENGTAMMOB.mp4",102:"102_Fruit_Trees_ENGTAM_MOB.mp4",
+  103:"103_Shrubs_ENGTAM_MOB.mp4",104:"104_Flowers_ENGTAM_MOB.mp4",105:"105_Other_Plants_ENGTAM_MOB.mp4",
+  106:"106_About_Plants_ENGTAM_MOB.mp4",107:"107_Agriculture_ENGTAM_MOB.mp4",108:"108_Hotel_ENGTAM_MOB.mp4",
+  109:"109_Restaurant_and_Bar_ENGTAM_MOB.mp4",110:"110_Tourist_Attractions_ENGTAM_MOB.mp4",111:"111_Buildings_ENGTAM_MOB.mp4",
+  112:"112_Streets_ENGTAM_MOB.mp4",113:"113_Regions_ENGTAM_MOB.mp4",114:"114_Literature_ENGTAM_MOB.mp4",
+  115:"115_Books_ENGTAM_MOB.mp4",116:"116_Music_ENGTAM_MOB.mp4",117:"117_Musical_Instruments_ENGTAM_MOB.mp4",
+  118:"118_Plastic_Arts_ENGTAM_MOB.mp4",119:"119_Photography_ENGTAM_MOB.mp4",120:"120_Mythsand_Legends_ENGTAM_MOB.mp4",
+  121:"121_Supernatural_ENGTAM_MOB.mp4",122:"122_Cinema_ENGTAM_MOB.mp4",123:"123_Theater_ENGTAM_MOB.mp4",
+  124:"124_Hobbies_ENGTAM_MOB.mp4",125:"125_Traveling_ENGTAM_MOB.mp4",126:"126_At_The_Beach_ENGTAM_MOB.mp4",
+  127:"127_Camping_ENGTAM_MOB.mp4",128:"128_Fishing_ENGTAM_MOB.mp4",129:"129_Games_ENGTAM_MOB.mp4",
+  130:"130_Playground_ENGTAM_MOB.mp4",131:"131_Road_Transportation_ENGTAM_MOB.mp4",132:"132_Rail_Transportation_ENGTAM_MOB.mp4",
+  133:"133_Air_Transportation_ENGTAM_MOB.mp4",134:"134_Water_Transportation_ENGTAM_MOB.mp4",135:"135_Roads_ENGTAM_MOB.mp4",
+  136:"136_Car_Parts_ENGTAM_MOB.mp4",137:"137_Police_ENGTAM_MOB.mp4",138:"138_Crimes_ENGTAM_MOB.mp4",
+  139:"139_Culprits_ENGTAM_MOB.mp4",140:"140_Law_and_Justice_ENGTAM_MOB.mp4",141:"141_Army_and_War_ENGTAM_MOB.mp4",
+  142:"142_Weapons_ENGTAM_MOB.mp4",143:"143_Poverty_and_Charity_ENGTAM_MOB.mp4",144:"144_Weather_ENGTAM_MOB.mp4",
+  145:"145_Natural_Phenomena_ENGTAM_MOB.mp4",146:"146_Landscape_ENGTAM_MOB.mp4",147:"147_Water_Bodies_ENGTAM_MOB.mp4",
+  148:"148_Pollution_ENGTAM_MOB.mp4",149:"149_Rocks_Gemstones_ENGTAM_MOB.mp4",150:"150_Minerals_and_Metals_ENGTAM_MOB.mp4"
 };
 const vocabUrlsArchive = {};
 for (let i = 1; i <= 150; i++) vocabUrlsArchive[i] = vocabBase + vocabFilenames[i];
-window.vocabUrlsArchive = vocabUrlsArchive;
 
-// ----- TOPICS DATA (unchanged) -----
-const s1 = [
-  {n:1,title:'Cardinal Numerals',cat:'Numbers'},{n:2,title:'Ordinal Numerals',cat:'Numbers'},{n:3,title:'Colors',cat:'Colors'},
-  {n:4,title:'Calendar',cat:'Time & Measurement'},{n:5,title:'Time',cat:'Time & Measurement'},{n:6,title:'Sizes and Shapes',cat:'Time & Measurement'},
-  {n:7,title:'Units of Measurement',cat:'Time & Measurement'},{n:8,title:'Fruits',cat:'Food & Drinks'},{n:9,title:'Vegetables',cat:'Food & Drinks'},
-  {n:10,title:'Meat',cat:'Food & Drinks'},{n:11,title:'Fish and Seafood',cat:'Food & Drinks'},{n:12,title:'Dairy Products',cat:'Food & Drinks'},
-  {n:13,title:'Breads',cat:'Food & Drinks'},{n:14,title:'Grains, Nuts and Seeds',cat:'Food & Drinks'},{n:15,title:'Condiments',cat:'Food & Drinks'},
-  {n:16,title:'Sweets',cat:'Food & Drinks'},{n:17,title:'Meals',cat:'Food & Drinks'},{n:18,title:'Dishes',cat:'Food & Drinks'},
-  {n:19,title:'Describing Food',cat:'Food & Drinks'},{n:20,title:'Non-Alcoholic Drinks',cat:'Food & Drinks'},{n:21,title:'Domestic Animals',cat:'Animals'},
-  {n:22,title:'Domestic Birds',cat:'Animals'},{n:23,title:'Wild Animals',cat:'Animals'},{n:24,title:'Wild Birds',cat:'Animals'},
-  {n:25,title:'Fish',cat:'Animals'},{n:26,title:'Amphibians and Reptiles',cat:'Animals'},{n:27,title:'Aquatic Animals',cat:'Animals'},
-  {n:28,title:'Insects and Arachnids',cat:'Animals'},{n:29,title:'Baby Animals',cat:'Animals'},{n:30,title:'Parts of Animals',cat:'Animals'},
-  {n:31,title:'Animal Groups',cat:'Animals'},{n:32,title:'Animal Sounds',cat:'Animals'},{n:33,title:'Family',cat:'People & Society'},
-  {n:34,title:'Love and Friendship',cat:'People & Society'},{n:35,title:'People',cat:'People & Society'},{n:36,title:'Identity',cat:'People & Society'},
-  // ... rest truncated for brevity but fully functional in final code (full original array)
-];
-// (Full arrays remain same as original but we embed the full data - to save space in final answer I will keep them exactly as original)
-// In the final delivered code, we will include the complete s1 and s2 data (150+50). For brevity here I show a placeholder.
-// I will generate final HTML with full original arrays to preserve all 150 vocab and 50 grammar topics.
-</script>
-<script>
-// FULL DATA RETAINED FROM ORIGINAL - ensuring all 200 lessons exist
+// ======================== TOPICS DATA ========================
 const s1_full = [
   {n:1,title:'Cardinal Numerals',cat:'Numbers'},{n:2,title:'Ordinal Numerals',cat:'Numbers'},{n:3,title:'Colors',cat:'Colors'},
   {n:4,title:'Calendar',cat:'Time & Measurement'},{n:5,title:'Time',cat:'Time & Measurement'},{n:6,title:'Sizes and Shapes',cat:'Time & Measurement'},
@@ -797,31 +773,44 @@ const s1_full = [
   {n:146,title:'Landscape',cat:'Environment'},{n:147,title:'Water Bodies',cat:'Environment'},{n:148,title:'Pollution',cat:'Environment'},
   {n:149,title:'Rocks and Gemstones',cat:'Environment'},{n:150,title:'Minerals and Metals',cat:'Environment'}
 ];
+
 const s2_full = [
   {n:1,title:'Pronouns',cat:'Pronouns'},{n:2,title:'Objective Pronouns',cat:'Pronouns'},{n:3,title:'Possessive Pronouns',cat:'Pronouns'},
   {n:4,title:'Reflexive Pronouns',cat:'Pronouns'},{n:5,title:'Relative Pronouns',cat:'Pronouns'},{n:6,title:'Prepositions',cat:'Grammar Essentials'},
   {n:7,title:'Conjunctions',cat:'Grammar Essentials'},{n:8,title:'Expressing Quantity',cat:'Grammar Essentials'},{n:9,title:'Punctuations',cat:'Grammar Essentials'},
   {n:10,title:'Nouns: Communication',cat:'Nouns'},{n:11,title:'Nouns: Consciousness',cat:'Nouns'},{n:12,title:'Nouns: Concrete Nouns',cat:'Nouns'},
-  {n:13,title:'Nouns: Abstract Nouns Part 1',cat:'Nouns'},{n:14,title:'Nouns: Abstract Nouns Part 2',cat:'Nouns'},{n:15,title:'Adjectives: Describing Objects',cat:'Adjectives'},
-  {n:16,title:'Adjectives: About People',cat:'Adjectives'},{n:17,title:'Adjectives: Describing Art',cat:'Adjectives'},{n:18,title:'Adjectives: Descriptions Part 1',cat:'Adjectives'},
-  {n:19,title:'Adjectives: Descriptions Part 2',cat:'Adjectives'},{n:20,title:'Adjectives: Descriptions Part 3',cat:'Adjectives'},{n:21,title:'Adjectives: Pairs Part 1',cat:'Adjectives'},
-  {n:22,title:'Adjectives: Pairs Part 2',cat:'Adjectives'},{n:23,title:'Adverbs: Time and Frequency',cat:'Adverbs'},{n:24,title:'Adverbs: Place',cat:'Adverbs'},
-  {n:25,title:'Adverbs: Manner Part 1',cat:'Adverbs'},{n:26,title:'Adverbs: Manner Part 2',cat:'Adverbs'},{n:27,title:'Adverbs: Manner Part 3',cat:'Adverbs'},
-  {n:28,title:'Adverbs: Degree',cat:'Adverbs'},{n:29,title:'Adverbs: Interrogative and Linking Words',cat:'Adverbs'},{n:30,title:'Verbs: Actions Part 1',cat:'Verbs'},
-  {n:31,title:'Verbs: Actions Part 2',cat:'Verbs'},{n:32,title:'Verbs: Actions Part 3',cat:'Verbs'},{n:33,title:'Verbs: Cooking',cat:'Verbs'},
-  {n:34,title:'Verbs: Management',cat:'Verbs'},{n:35,title:'Verbs: Communications',cat:'Verbs'},{n:36,title:'Verbs: Education and Research',cat:'Verbs'},
-  {n:37,title:'Verbs: Interpersonal Skills',cat:'Verbs'},{n:38,title:'Verbs: Efficiency',cat:'Verbs'},{n:39,title:'Verbs: Skills',cat:'Verbs'},
-  {n:40,title:'Verbs: Stative Verbs',cat:'Verbs'},{n:41,title:'Verbs: Expressing Feelings',cat:'Verbs'},{n:42,title:'Describing Noun Characteristics Part 1',cat:'Describing Nouns'},
+  {n:13,title:'Nouns: Abstract Nouns Part 1',cat:'Nouns'},{n:14,title:'Nouns: Abstract Nouns Part 2',cat:'Nouns'},
+  {n:15,title:'Adjectives: Describing Objects',cat:'Adjectives'},{n:16,title:'Adjectives: About People',cat:'Adjectives'},
+  {n:17,title:'Adjectives: Describing Art',cat:'Adjectives'},{n:18,title:'Adjectives: Descriptions Part 1',cat:'Adjectives'},
+  {n:19,title:'Adjectives: Descriptions Part 2',cat:'Adjectives'},{n:20,title:'Adjectives: Descriptions Part 3',cat:'Adjectives'},
+  {n:21,title:'Adjectives: Pairs Part 1',cat:'Adjectives'},{n:22,title:'Adjectives: Pairs Part 2',cat:'Adjectives'},
+  {n:23,title:'Adverbs: Time and Frequency',cat:'Adverbs'},{n:24,title:'Adverbs: Place',cat:'Adverbs'},
+  {n:25,title:'Adverbs: Manner Part 1',cat:'Adverbs'},{n:26,title:'Adverbs: Manner Part 2',cat:'Adverbs'},
+  {n:27,title:'Adverbs: Manner Part 3',cat:'Adverbs'},{n:28,title:'Adverbs: Degree',cat:'Adverbs'},
+  {n:29,title:'Adverbs: Interrogative and Linking Words',cat:'Adverbs'},{n:30,title:'Verbs: Actions Part 1',cat:'Verbs'},
+  {n:31,title:'Verbs: Actions Part 2',cat:'Verbs'},{n:32,title:'Verbs: Actions Part 3',cat:'Verbs'},
+  {n:33,title:'Verbs: Cooking',cat:'Verbs'},{n:34,title:'Verbs: Management',cat:'Verbs'},
+  {n:35,title:'Verbs: Communications',cat:'Verbs'},{n:36,title:'Verbs: Education and Research',cat:'Verbs'},
+  {n:37,title:'Verbs: Interpersonal Skills',cat:'Verbs'},{n:38,title:'Verbs: Efficiency',cat:'Verbs'},
+  {n:39,title:'Verbs: Skills',cat:'Verbs'},{n:40,title:'Verbs: Stative Verbs',cat:'Verbs'},
+  {n:41,title:'Verbs: Expressing Feelings',cat:'Verbs'},{n:42,title:'Describing Noun Characteristics Part 1',cat:'Describing Nouns'},
   {n:43,title:'Describing Noun Characteristics Part 2',cat:'Describing Nouns'},{n:44,title:'Describing Noun Characteristics Part 3',cat:'Describing Nouns'},
   {n:45,title:'Describing Noun: Physical Characteristics',cat:'Describing Nouns'},{n:46,title:'Describing Noun: Physical States',cat:'Describing Nouns'},
   {n:47,title:'Describing Noun: Emotional States',cat:'Describing Nouns'},{n:48,title:'Describing Noun: Feelings',cat:'Describing Nouns'},
   {n:49,title:'Describing Noun: People Opinions',cat:'Describing Nouns'},{n:50,title:'Describing Noun: Values and Vices',cat:'Describing Nouns'}
 ];
-const allTopics = [...s1_full.map(t => ({...t, series:'s1', label:'Vocabulary'})), ...s2_full.map(t => ({...t, series:'s2', label:'Grammar'}))];
+
+const allTopics = [
+  ...s1_full.map(t => ({...t, series:'s1', label:'Vocabulary'})),
+  ...s2_full.map(t => ({...t, series:'s2', label:'Grammar'}))
+];
+
+const catColorPalette = ['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#ef4444','#14b8a6','#a855f7','#06b6d4','#84cc16','#64748b','#dc2626'];
 const catColors = {};
-[...new Set(allTopics.map(t => t.cat))].forEach(c => catColors[c] = ['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#ef4444','#14b8a6','#a855f7','#06b6d4','#84cc16','#64748b','#dc2626'][Math.floor(Math.random()*12)]);
+[...new Set(allTopics.map(t => t.cat))].forEach((c, i) => catColors[c] = catColorPalette[i % catColorPalette.length]);
 
 let activeSeries = 'all', activeCat = 'All';
+
 function getFiltered() {
   let items = activeSeries === 'all' ? allTopics : allTopics.filter(t => t.series === activeSeries);
   if (activeCat !== 'All') items = items.filter(t => t.cat === activeCat);
@@ -829,75 +818,139 @@ function getFiltered() {
   if (search) items = items.filter(t => t.title.toLowerCase().includes(search) || t.cat.toLowerCase().includes(search) || t.n.toString().includes(search));
   return items;
 }
+
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
+}
+
 function renderGrid() {
   const items = getFiltered();
   const grid = document.getElementById('topicGrid');
-  if (!items.length) { grid.innerHTML = `<div class="no-results"><div>🔍</div><p>No lessons found</p></div>`; document.getElementById('countBadge').innerHTML = '0 lessons'; return; }
+  if (!items.length) {
+    grid.innerHTML = `<div class="no-results"><div style="font-size:2rem">🔍</div><p>No lessons found</p></div>`;
+    document.getElementById('countBadge').innerHTML = '0 lessons';
+    return;
+  }
   grid.innerHTML = items.map(v => {
     const color = catColors[v.cat] || '#3b82f6';
     const badgeCls = v.series === 's1' ? 'badge-s1' : 'badge-s2';
-    const videoUrl = v.series === 's1' ? window.vocabUrlsArchive[v.n] : window.grammarUrlsArchive[v.n];
-    return `<div class="topic-card" data-title="${escapeHtml(v.title)}" data-video="${videoUrl}" data-num="${v.n}" data-series="${v.series}">
+    const videoUrl = v.series === 's1' ? vocabUrlsArchive[v.n] : grammarUrlsArchive[v.n];
+    return `<div class="topic-card" data-title="${escapeHtml(v.title)}" data-video="${videoUrl}">
       <div class="card-color-bar" style="background:${color}"></div>
       <div class="card-inner">
-        <div class="card-top"><span class="card-num">#${String(v.n).padStart(3,'0')}</span><span class="series-badge ${badgeCls}">${v.label}</span></div>
+        <div class="card-top">
+          <span class="card-num">#${String(v.n).padStart(3,'0')}</span>
+          <span class="series-badge ${badgeCls}">${v.label}</span>
+        </div>
         <div class="card-title">${escapeHtml(v.title)}</div>
-        <div class="card-cat"><span class="cat-dot" style="background:${color}"></span>${v.cat}</div>
+        <div class="card-cat"><span class="cat-dot" style="background:${color}"></span>${escapeHtml(v.cat)}</div>
       </div>
     </div>`;
   }).join('');
-  document.getElementById('countBadge').innerHTML = items.length + ' lesson' + (items.length!==1?'s':'');
-  document.querySelectorAll('.topic-card').forEach(card => card.addEventListener('click', () => {
-    const videoSrc = card.dataset.video;
-    const title = card.dataset.title;
-    if (!videoSrc) { alert('Video URL missing'); return; }
-    const videoEl = document.getElementById('lessonVideo');
-    const sourceEl = document.getElementById('videoSource');
-    sourceEl.src = videoSrc;
-    videoEl.load();
-    document.getElementById('modalTitle').innerText = title;
-    document.getElementById('videoModal').style.display = 'flex';
-    videoEl.play().catch(e => console.log('autoplay prevented', e));
-  }));
+  document.getElementById('countBadge').innerHTML = items.length + ' lesson' + (items.length !== 1 ? 's' : '');
+
+  document.querySelectorAll('.topic-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const videoSrc = card.dataset.video;
+      const title = card.dataset.title;
+      if (!videoSrc) { alert('Video URL missing'); return; }
+      const videoEl = document.getElementById('lessonVideo');
+      const sourceEl = document.getElementById('videoSource');
+      sourceEl.src = videoSrc;
+      videoEl.load();
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('videoModal').style.display = 'flex';
+      videoEl.play().catch(e => console.log('Autoplay prevented:', e));
+    });
+  });
 }
-function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+
 function buildFilters() {
   const wrap = document.getElementById('filterWrap');
-  let cats = [...new Set(allTopics.filter(t => activeSeries==='all' || t.series===activeSeries).map(t => t.cat))].sort();
-  wrap.innerHTML = `<button class="filter-btn ${activeCat==='All'?'active':''}" data-cat="All">All</button>` + cats.map(c => `<button class="filter-btn ${activeCat===c?'active':''}" data-cat="${c}">${c}</button>`).join('');
-  document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', () => { activeCat = btn.dataset.cat; renderGrid(); buildFilters(); }));
+  const cats = [...new Set(allTopics.filter(t => activeSeries === 'all' || t.series === activeSeries).map(t => t.cat))].sort();
+  wrap.innerHTML =
+    `<button class="filter-btn ${activeCat === 'All' ? 'active' : ''}" data-cat="All">All</button>` +
+    cats.map(c => `<button class="filter-btn ${activeCat === c ? 'active' : ''}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join('');
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => { activeCat = btn.dataset.cat; renderGrid(); buildFilters(); });
+  });
 }
-document.querySelectorAll('.s-tab').forEach(btn => btn.addEventListener('click', () => {
-  activeSeries = btn.dataset.series;
-  activeCat = 'All';
-  document.querySelectorAll('.s-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderGrid(); buildFilters();
-}));
+
+document.querySelectorAll('.s-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeSeries = btn.dataset.series;
+    activeCat = 'All';
+    document.querySelectorAll('.s-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGrid();
+    buildFilters();
+  });
+});
+
 document.getElementById('searchInput').addEventListener('input', () => renderGrid());
-const langs = ['01 US American English','02 UK American English','03 Spanish','04 German','05 Hindi','06 Arabic','07 French','08 Korean','09 Chinese','10 Tamil','11 Russian','12 Portuguese','13 Japanese','14 Italian','15 Hebrew','16 Dutch'];
-document.getElementById('langsGrid').innerHTML = langs.map(l => `<div class="lang-card"><span class="lang-num">${l.slice(0,2)}</span><span class="lang-name">${l.slice(3)}</span></div>`).join('');
-renderGrid(); buildFilters();
 
-// Modal close & stop video
-const modal = document.getElementById('videoModal');
-const closeBtn = document.getElementById('closeModalBtn');
+// Languages grid
+const langs = [
+  '01 US American English','02 UK British English','03 Spanish','04 German',
+  '05 Hindi','06 Arabic','07 French','08 Korean',
+  '09 Chinese','10 Tamil','11 Russian','12 Portuguese',
+  '13 Japanese','14 Italian','15 Hebrew','16 Dutch'
+];
+document.getElementById('langsGrid').innerHTML = langs.map(l =>
+  `<div class="lang-card"><span class="lang-num">${l.slice(0,2)}</span><span class="lang-name">${l.slice(3)}</span></div>`
+).join('');
+
+// Init
+renderGrid();
+buildFilters();
+
+// ======================== MODAL CLOSE — FIXED ========================
+function closeVideoModal() {
+  const modal = document.getElementById('videoModal');
+  const videoEl = document.getElementById('lessonVideo');
+  const sourceEl = document.getElementById('videoSource');
+  modal.style.display = 'none';
+  videoEl.pause();
+  videoEl.currentTime = 0;
+  sourceEl.src = '';
+  videoEl.load(); // fully resets the media element — stops buffering
+}
+
+// Close button
+document.getElementById('closeModalBtn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  closeVideoModal();
+});
+
+// Click outside modal content (on dark backdrop)
+document.getElementById('videoModal').addEventListener('click', function(e) {
+  if (e.target === this) closeVideoModal();
+});
+
+// Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('videoModal');
+    if (modal.style.display === 'flex') closeVideoModal();
+  }
+});
+
+// ======================== VIDEO PROTECTION ========================
 const videoPlayer = document.getElementById('lessonVideo');
-
-// Enforce protection attributes via JS (belt-and-suspenders)
 videoPlayer.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
 videoPlayer.setAttribute('disablePictureInPicture', '');
 videoPlayer.disablePictureInPicture = true;
-videoPlayer.addEventListener('enterpictureinpicture', (e) => { e.preventDefault(); videoPlayer.exitPictureInPicture && videoPlayer.exitPictureInPicture(); });
-closeBtn.onclick = () => { modal.style.display = 'none'; videoPlayer.pause(); videoPlayer.src = ''; document.getElementById('videoSource').src = ''; };
-window.onclick = (e) => { if (e.target === modal) { modal.style.display = 'none'; videoPlayer.pause(); videoPlayer.src = ''; document.getElementById('videoSource').src = ''; } };
+videoPlayer.addEventListener('enterpictureinpicture', (e) => {
+  e.preventDefault();
+  if (videoPlayer.exitPictureInPicture) videoPlayer.exitPictureInPicture();
+});
 
-// ---------- Security: Disable right-click and dev shortcuts ----------
-document.addEventListener('contextmenu', (e) => e.preventDefault());
-document.addEventListener('keydown', (e) => {
-  if (e.keyCode === 123) { e.preventDefault(); }
-  if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) { e.preventDefault(); }
-  if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); }
+// ======================== SECURITY ========================
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  if (e.keyCode === 123) { e.preventDefault(); return; }
+  if (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) { e.preventDefault(); return; }
+  if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return; }
 });
 </script>
 </body>
