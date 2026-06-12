@@ -374,7 +374,7 @@ body {
   color: var(--muted);
 }
 
-/* VIDEO MODAL */
+/* VIDEO MODAL with watermark container */
 .modal {
   display: none;
   position: fixed;
@@ -434,10 +434,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 .video-container {
   width: 100%;
   background: #000;
+  position: relative;
 }
 .video-container video {
   width: 100%;
@@ -445,6 +447,63 @@ body {
   background: #000;
   outline: none;
 }
+/* FLOATING WATERMARK (inside modal) */
+.video-watermark {
+  position: absolute;
+  z-index: 9999;
+  background: rgba(10, 20, 40, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: 60px;
+  padding: 8px 18px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.2) inset;
+  pointer-events: none;
+  transition: left 2.2s cubic-bezier(0.25,0.8,0.45,1), top 2.2s cubic-bezier(0.25,0.8,0.45,1);
+  animation: floatSoft 3.8s infinite ease-in-out;
+}
+@keyframes floatSoft {
+  0% { transform: translateY(0px) translateX(0px); }
+  45% { transform: translateY(-6px) translateX(2px); }
+  70% { transform: translateY(3px) translateX(-2px); }
+  100% { transform: translateY(0px) translateX(0px); }
+}
+/* Warning overlay for screenshot/devtools */
+.protection-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 10002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  font-family: monospace;
+  text-align: center;
+  gap: 1rem;
+  font-size: 1.2rem;
+  padding: 1rem;
+}
+.protection-overlay button {
+  background: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
 @keyframes modalFadeIn {
   from { opacity: 0; transform: scale(0.96); }
   to { opacity: 1; transform: scale(1); }
@@ -506,12 +565,13 @@ footer strong { color: var(--gold); }
   .hero { padding: 2rem 1rem; }
   .langs-grid { grid-template-columns: repeat(2, 1fr); }
   .modal-content { width: 95%; }
+  .video-watermark { font-size: 0.7rem; padding: 4px 12px; white-space: nowrap; }
 }
 </style>
 </head>
 <body>
 
-<!-- TOP HEADER -->
+<!-- TOP BAR (unchanged) -->
 <div class="top-bar">
   <div class="top-bar-brand">
     <div class="brand-name">
@@ -528,7 +588,7 @@ footer strong { color: var(--gold); }
   </div>
 </div>
 
-<!-- HERO SECTION -->
+<!-- HERO SECTION (unchanged) -->
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-eyebrow">🇺🇸 American English · Complete Video Course</div>
@@ -552,7 +612,7 @@ footer strong { color: var(--gold); }
   </div>
 </div>
 
-<!-- FEATURE TICKER -->
+<!-- FEATURE TICKER (unchanged) -->
 <div class="feat-bar">
   <div class="feat-ticker">
     <span class="feat-item"><span class="feat-dot">✦</span> 200 American English Video Lessons</span>
@@ -563,7 +623,7 @@ footer strong { color: var(--gold); }
   </div>
 </div>
 
-<!-- CONTROLS -->
+<!-- CONTROLS (unchanged) -->
 <div class="controls-wrap">
   <div class="controls-row">
     <div class="search-wrap"><span>🔍</span><input type="text" id="searchInput" placeholder="Search topics, categories..."></div>
@@ -596,16 +656,16 @@ footer strong { color: var(--gold); }
   Complete American English video course with 200 playable lessons
 </footer>
 
-<!-- VIDEO MODAL -->
+<!-- VIDEO MODAL (watermark will be injected via JS) -->
 <div id="videoModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
       <h3 id="modalTitle">Loading video...</h3>
       <button class="close-modal" id="closeModalBtn">&times;</button>
     </div>
-    <div class="modal-body">
-      <div class="video-container">
-        <video id="lessonVideo" controls controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture oncontextmenu="return false;" preload="metadata" playsinline>
+    <div class="modal-body" id="modalBody">
+      <div class="video-container" id="videoContainer">
+        <video id="lessonVideo" preload="auto" controls controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture oncontextmenu="return false;" playsinline webkit-playsinline>
           <source id="videoSource" src="" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -629,8 +689,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+// Wait for user and then inject watermark + protections
+let currentUser = null;
 onAuthStateChanged(auth, user => {
   if (!user) { window.location.href = 'login.html'; }
+  else {
+    currentUser = user;
+    // Update watermark text if already exists
+    updateWatermarkText();
+  }
 });
 
 document.getElementById('signOutBtn').addEventListener('click', async () => {
@@ -640,7 +707,7 @@ document.getElementById('signOutBtn').addEventListener('click', async () => {
 </script>
 
 <script>
-// ======================== VIDEO URLs ========================
+// ======================== VIDEO URLS (unchanged) ========================
 const grammarBase = "https://archive.org/download/036-verbs-education-and-research-engtam-mob/";
 const grammarFilenames = {
   1:"001_Pronouns_ENGTAM_MOB.mp4",2:"002_Objective_Pronouns_ENGTAM_MOB.mp4",3:"003_Possessive_Pronouns_ENGTAM_MOB.mp4",
@@ -720,7 +787,7 @@ const vocabFilenames = {
 const vocabUrlsArchive = {};
 for (let i = 1; i <= 150; i++) vocabUrlsArchive[i] = vocabBase + vocabFilenames[i];
 
-// ======================== TOPICS DATA ========================
+// ======================== TOPICS DATA (unchanged) ========================
 const s1_full = [
   {n:1,title:'Cardinal Numerals',cat:'Numbers'},{n:2,title:'Ordinal Numerals',cat:'Numbers'},{n:3,title:'Colors',cat:'Colors'},
   {n:4,title:'Calendar',cat:'Time & Measurement'},{n:5,title:'Time',cat:'Time & Measurement'},{n:6,title:'Sizes and Shapes',cat:'Time & Measurement'},
@@ -900,57 +967,271 @@ document.getElementById('langsGrid').innerHTML = langs.map(l =>
   `<div class="lang-card"><span class="lang-num">${l.slice(0,2)}</span><span class="lang-name">${l.slice(3)}</span></div>`
 ).join('');
 
-// Init
-renderGrid();
-buildFilters();
+// ======================== FLOATING WATERMARK (from Firebase user) ========================
+let watermarkInterval = null;
+let watermarkElement = null;
 
-// ======================== MODAL CLOSE — FIXED ========================
+function updateWatermarkText() {
+  if (!watermarkElement) return;
+  // Access currentUser from the module script's global? We'll expose it via a global variable from the module.
+  // We'll set a global variable 'globalCurrentUser' from the module.
+  if (window.globalCurrentUser) {
+    const user = window.globalCurrentUser;
+    const name = user.displayName || (user.email ? user.email.split('@')[0] : 'Akram User');
+    const phone = user.phoneNumber || 'Not Provided';
+    watermarkElement.textContent = `🧿 ${name} (${phone})`;
+  } else {
+    watermarkElement.textContent = `🧿 Akram User (Secure Session)`;
+  }
+}
+
+function createFloatingWatermark() {
+  const container = document.getElementById('videoContainer');
+  if (!container) return;
+  // remove old if exists
+  if (watermarkElement) watermarkElement.remove();
+  const wm = document.createElement('div');
+  wm.className = 'video-watermark';
+  container.style.position = 'relative';
+  container.appendChild(wm);
+  watermarkElement = wm;
+  updateWatermarkText();
+
+  // random movement function
+  function moveWatermark() {
+    if (!container || !watermarkElement) return;
+    const containerRect = container.getBoundingClientRect();
+    const wmRect = watermarkElement.getBoundingClientRect();
+    if (containerRect.width === 0) return;
+    let maxLeft = containerRect.width - wmRect.width - 10;
+    let maxTop = containerRect.height - wmRect.height - 10;
+    if (maxLeft < 0) maxLeft = 0;
+    if (maxTop < 0) maxTop = 0;
+    const left = Math.random() * maxLeft;
+    const top = Math.random() * maxTop;
+    watermarkElement.style.left = `${left}px`;
+    watermarkElement.style.top = `${top}px`;
+  }
+  if (watermarkInterval) clearInterval(watermarkInterval);
+  moveWatermark();
+  watermarkInterval = setInterval(moveWatermark, 4000);
+  window.addEventListener('resize', () => moveWatermark());
+}
+
+// ======================== VIDEO PROTECTION FUNCTIONS ========================
+let warningActive = false;
+let warningTimeout = null;
+let devtoolsOpen = false;
+let devtoolsDetectionInterval = null;
+
+function showWarningAndPause(reason, videoElement) {
+  if (warningActive) return;
+  const vid = videoElement || document.getElementById('lessonVideo');
+  if (!vid) return;
+  if (!vid.paused) vid.pause();
+  warningActive = true;
+  const container = document.getElementById('videoContainer');
+  if (!container) return;
+  const existing = container.querySelector('.protection-overlay');
+  if (existing) existing.remove();
+  const overlay = document.createElement('div');
+  overlay.className = 'protection-overlay';
+  overlay.innerHTML = `
+    <span>⚠️ ${reason}</span>
+    <span>Video paused to protect content.</span>
+    <button id="resumeProtectionBtn">Resume playback</button>
+  `;
+  container.style.position = 'relative';
+  container.appendChild(overlay);
+  const resumeBtn = document.getElementById('resumeProtectionBtn');
+  if (resumeBtn) {
+    resumeBtn.addEventListener('click', () => {
+      vid.play().catch(e => console.log("Play blocked:", e));
+      overlay.remove();
+      warningActive = false;
+      if (warningTimeout) clearTimeout(warningTimeout);
+    });
+  }
+  warningTimeout = setTimeout(() => {
+    if (overlay && overlay.parentNode) overlay.remove();
+    warningActive = false;
+  }, 5000);
+}
+
+function isScreenshotShortcut(e) {
+  if (e.key === 'PrintScreen') return true;
+  if (e.altKey && e.key === 'PrintScreen') return true;
+  if (e.metaKey && e.shiftKey && e.key === 'S') return true;
+  if (e.ctrlKey && e.shiftKey && e.key === 'S') return true;
+  if (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4' || e.key === '5')) return true;
+  if (e.shiftKey && e.key === 'PrintScreen') return true;
+  return false;
+}
+
+function setupGlobalProtections() {
+  // Screenshot shortcuts
+  document.addEventListener('keydown', (e) => {
+    if (isScreenshotShortcut(e)) {
+      e.preventDefault();
+      showWarningAndPause('📸 Screenshot attempt detected!', document.getElementById('lessonVideo'));
+    }
+  });
+  // PrintScreen keyup
+  window.addEventListener('keyup', (e) => {
+    if (e.key === 'PrintScreen') {
+      navigator.clipboard?.writeText('').catch(()=>{});
+      showWarningAndPause('📸 PrintScreen key pressed!', document.getElementById('lessonVideo'));
+    }
+  });
+  // DevTools detection
+  function detectDevTools() {
+    const threshold = 200;
+    const widthDiff = window.outerWidth - window.innerWidth;
+    const heightDiff = window.outerHeight - window.innerHeight;
+    if (widthDiff > threshold || heightDiff > threshold) {
+      if (!devtoolsOpen) {
+        devtoolsOpen = true;
+        showWarningAndPause('🛠️ Developer tools detected! Video paused for security.', document.getElementById('lessonVideo'));
+      }
+    } else {
+      devtoolsOpen = false;
+    }
+  }
+  setInterval(detectDevTools, 1000);
+  // Debugger detection
+  devtoolsDetectionInterval = setInterval(() => {
+    const before = new Date().getTime();
+    debugger;
+    const after = new Date().getTime();
+    if (after - before > 100) {
+      if (!devtoolsOpen) {
+        devtoolsOpen = true;
+        showWarningAndPause('🛠️ Debugger detected! Video paused.', document.getElementById('lessonVideo'));
+      }
+    }
+  }, 2000);
+  // Tab visibility
+  document.addEventListener('visibilitychange', () => {
+    const vid = document.getElementById('lessonVideo');
+    if (document.hidden && vid && !vid.paused) vid.pause();
+  });
+  // Block right-click on video
+  const vid = document.getElementById('lessonVideo');
+  if (vid) {
+    vid.addEventListener('contextmenu', (e) => e.preventDefault());
+    vid.addEventListener('dragstart', (e) => e.preventDefault());
+  }
+  // Block keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    if (e.keyCode === 123 ||
+        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
+        (e.ctrlKey && e.keyCode === 85) ||
+        (e.ctrlKey && e.keyCode === 83)) {
+      e.preventDefault();
+      showWarningAndPause('⛔ Shortcut blocked!', document.getElementById('lessonVideo'));
+    }
+  });
+  // Disable picture-in-picture fully
+  if (vid) {
+    vid.disablePictureInPicture = true;
+    vid.addEventListener('enterpictureinpicture', (e) => {
+      e.preventDefault();
+      if (vid.exitPictureInPicture) vid.exitPictureInPicture();
+    });
+  }
+}
+
+// ======================== MODAL CLOSE CLEANUP ========================
 function closeVideoModal() {
   const modal = document.getElementById('videoModal');
   const videoEl = document.getElementById('lessonVideo');
-  const sourceEl = document.getElementById('videoSource');
   modal.style.display = 'none';
   videoEl.pause();
   videoEl.currentTime = 0;
-  sourceEl.src = '';
-  videoEl.load(); // fully resets the media element — stops buffering
+  // clear watermark movement interval? Keep it but modal closed, watermark hidden. No problem.
+  // also remove any protection overlay
+  const overlay = document.querySelector('#videoContainer .protection-overlay');
+  if (overlay) overlay.remove();
+  warningActive = false;
+  if (warningTimeout) clearTimeout(warningTimeout);
 }
 
-// Close button
-document.getElementById('closeModalBtn').addEventListener('click', function(e) {
-  e.stopPropagation();
-  closeVideoModal();
+// ======================== INITIALIZE ========================
+// Expose currentUser from module to window
+const authModuleScript = document.querySelector('script[type="module"]');
+if (authModuleScript) {
+  // We'll wait for Firebase auth and then set window.globalCurrentUser
+  // Already defined in module, we can listen to auth state there and update.
+  // To simplify, we'll add a listener inside module to set window.globalCurrentUser
+  // Since we can't modify module script here, we'll add a new module script?
+  // Better: we inject a small script that reads auth state and sets global.
+  const waitForAuth = setInterval(() => {
+    if (window.authReady) {
+      clearInterval(waitForAuth);
+      if (window.globalCurrentUser) {
+        updateWatermarkText();
+      }
+    }
+  }, 100);
+}
+// Also ensure when modal opens we create watermark if not exists
+document.getElementById('videoModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('videoModal')) closeVideoModal();
 });
-
-// Click outside modal content (on dark backdrop)
-document.getElementById('videoModal').addEventListener('click', function(e) {
-  if (e.target === this) closeVideoModal();
-});
-
-// Escape key
-document.addEventListener('keydown', function(e) {
+document.getElementById('closeModalBtn').addEventListener('click', closeVideoModal);
+document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     const modal = document.getElementById('videoModal');
     if (modal.style.display === 'flex') closeVideoModal();
   }
 });
 
-// ======================== VIDEO PROTECTION ========================
-const videoPlayer = document.getElementById('lessonVideo');
-videoPlayer.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
-videoPlayer.setAttribute('disablePictureInPicture', '');
-videoPlayer.disablePictureInPicture = true;
-videoPlayer.addEventListener('enterpictureinpicture', (e) => {
-  e.preventDefault();
-  if (videoPlayer.exitPictureInPicture) videoPlayer.exitPictureInPicture();
+// When video loads, ensure watermark exists and protections are active
+const videoModal = document.getElementById('videoModal');
+const observer = new MutationObserver(() => {
+  if (videoModal.style.display === 'flex') {
+    if (!watermarkElement) createFloatingWatermark();
+    else updateWatermarkText();
+    const vid = document.getElementById('lessonVideo');
+    if (vid) {
+      vid.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
+      vid.setAttribute('disablePictureInPicture', '');
+      vid.disablePictureInPicture = true;
+    }
+  }
 });
+observer.observe(videoModal, { attributes: true, attributeFilter: ['style'] });
+setupGlobalProtections();
+renderGrid();
+buildFilters();
 
-// ======================== SECURITY ========================
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', e => {
-  if (e.keyCode === 123) { e.preventDefault(); return; }
-  if (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) { e.preventDefault(); return; }
-  if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return; }
+// Additionally, set up a listener for video load to ensure no buffering delays
+const videoElem = document.getElementById('lessonVideo');
+videoElem.preload = 'auto';
+videoElem.addEventListener('loadstart', () => {
+  // optional: show loading spinner? Not needed.
+});
+</script>
+
+<script type="module">
+// This module synchronises Firebase user to global variable
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyBUzO90MhDWaRn_3kkWB1aJOYai7aeKE-8",
+  authDomain: "vocabulary-academy.firebaseapp.com",
+  projectId: "vocabulary-academy",
+  storageBucket: "vocabulary-academy.firebasestorage.app",
+  messagingSenderId: "507242998830",
+  appId: "1:507242998830:web:53820d4213de0ea54943bf"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+onAuthStateChanged(auth, (user) => {
+  window.globalCurrentUser = user;
+  window.authReady = true;
+  // Update watermark if visible
+  if (typeof updateWatermarkText === 'function') updateWatermarkText();
 });
 </script>
 </body>
