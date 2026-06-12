@@ -374,7 +374,7 @@ body {
   color: var(--muted);
 }
 
-/* VIDEO MODAL with watermark container */
+/* VIDEO MODAL with secure watermark */
 .modal {
   display: none;
   position: fixed;
@@ -447,39 +447,40 @@ body {
   background: #000;
   outline: none;
 }
-/* FLOATING WATERMARK (inside modal) */
+/* FLOATING WATERMARK - name & mobile number (NEVER shows "Not Provided") */
 .video-watermark {
   position: absolute;
   z-index: 9999;
-  background: rgba(10, 20, 40, 0.75);
-  backdrop-filter: blur(12px);
+  background: rgba(0, 15, 30, 0.82);
+  backdrop-filter: blur(14px);
   border-radius: 60px;
-  padding: 8px 18px;
-  font-family: monospace;
-  font-size: 0.9rem;
+  padding: 8px 20px;
+  font-family: 'Inter', monospace;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: white;
+  color: #FFE6B3;
   text-shadow: 0 2px 5px rgba(0,0,0,0.5);
   white-space: nowrap;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.2) inset;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,215,0,0.35) inset;
   pointer-events: none;
-  transition: left 2.2s cubic-bezier(0.25,0.8,0.45,1), top 2.2s cubic-bezier(0.25,0.8,0.45,1);
+  transition: left 2.1s cubic-bezier(0.2,0.85,0.4,1), top 2.1s cubic-bezier(0.2,0.85,0.4,1);
   animation: floatSoft 3.8s infinite ease-in-out;
+  letter-spacing: 0.3px;
 }
 @keyframes floatSoft {
   0% { transform: translateY(0px) translateX(0px); }
-  45% { transform: translateY(-6px) translateX(2px); }
-  70% { transform: translateY(3px) translateX(-2px); }
+  45% { transform: translateY(-5px) translateX(2px); }
+  70% { transform: translateY(3px) translateX(-1px); }
   100% { transform: translateY(0px) translateX(0px); }
 }
-/* Warning overlay for screenshot/devtools */
+/* Protection overlay for screenshots/devtools */
 .protection-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.88);
   backdrop-filter: blur(8px);
   z-index: 10002;
   display: flex;
@@ -565,13 +566,13 @@ footer strong { color: var(--gold); }
   .hero { padding: 2rem 1rem; }
   .langs-grid { grid-template-columns: repeat(2, 1fr); }
   .modal-content { width: 95%; }
-  .video-watermark { font-size: 0.7rem; padding: 4px 12px; white-space: nowrap; }
+  .video-watermark { font-size: 0.65rem; padding: 5px 12px; white-space: nowrap; }
 }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR (unchanged) -->
+<!-- TOP BAR -->
 <div class="top-bar">
   <div class="top-bar-brand">
     <div class="brand-name">
@@ -588,7 +589,7 @@ footer strong { color: var(--gold); }
   </div>
 </div>
 
-<!-- HERO SECTION (unchanged) -->
+<!-- HERO SECTION -->
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-eyebrow">🇺🇸 American English · Complete Video Course</div>
@@ -612,7 +613,6 @@ footer strong { color: var(--gold); }
   </div>
 </div>
 
-<!-- FEATURE TICKER (unchanged) -->
 <div class="feat-bar">
   <div class="feat-ticker">
     <span class="feat-item"><span class="feat-dot">✦</span> 200 American English Video Lessons</span>
@@ -623,7 +623,6 @@ footer strong { color: var(--gold); }
   </div>
 </div>
 
-<!-- CONTROLS (unchanged) -->
 <div class="controls-wrap">
   <div class="controls-row">
     <div class="search-wrap"><span>🔍</span><input type="text" id="searchInput" placeholder="Search topics, categories..."></div>
@@ -636,16 +635,13 @@ footer strong { color: var(--gold); }
   <div class="filter-wrap" id="filterWrap"></div>
 </div>
 
-<!-- SECTION HEADER -->
 <div class="section-hdr">
   <div class="section-title"><div class="section-icon">🎬</div> American English Video Lessons</div>
   <span class="count-badge" id="countBadge">200 lessons</span>
 </div>
 
-<!-- TOPIC GRID -->
 <div class="topic-grid" id="topicGrid"></div>
 
-<!-- LANGUAGES GRID -->
 <div class="langs-section">
   <p class="langs-section-title">Available in 16 Languages</p>
   <div class="langs-grid" id="langsGrid"></div>
@@ -656,7 +652,7 @@ footer strong { color: var(--gold); }
   Complete American English video course with 200 playable lessons
 </footer>
 
-<!-- VIDEO MODAL (watermark will be injected via JS) -->
+<!-- VIDEO MODAL -->
 <div id="videoModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -689,14 +685,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Wait for user and then inject watermark + protections
-let currentUser = null;
 onAuthStateChanged(auth, user => {
   if (!user) { window.location.href = 'login.html'; }
   else {
-    currentUser = user;
-    // Update watermark text if already exists
-    updateWatermarkText();
+    window.globalCurrentUser = user;
+    window.authReady = true;
+    if (window.updateWatermarkTextFn) window.updateWatermarkTextFn();
   }
 });
 
@@ -707,7 +701,11 @@ document.getElementById('signOutBtn').addEventListener('click', async () => {
 </script>
 
 <script>
-// ======================== VIDEO URLS (unchanged) ========================
+// ======================== CONFIGURABLE DEFAULT CONTACT (NEVER shows "Not Provided") ========================
+const DEFAULT_CONTACT_PHONE = "+91 98400 12345";   // Institute official number - change as needed
+// -------------------------------------------------------------------------
+
+// ======================== VIDEO URLS ========================
 const grammarBase = "https://archive.org/download/036-verbs-education-and-research-engtam-mob/";
 const grammarFilenames = {
   1:"001_Pronouns_ENGTAM_MOB.mp4",2:"002_Objective_Pronouns_ENGTAM_MOB.mp4",3:"003_Possessive_Pronouns_ENGTAM_MOB.mp4",
@@ -787,7 +785,7 @@ const vocabFilenames = {
 const vocabUrlsArchive = {};
 for (let i = 1; i <= 150; i++) vocabUrlsArchive[i] = vocabBase + vocabFilenames[i];
 
-// ======================== TOPICS DATA (unchanged) ========================
+// ======================== TOPICS DATA ========================
 const s1_full = [
   {n:1,title:'Cardinal Numerals',cat:'Numbers'},{n:2,title:'Ordinal Numerals',cat:'Numbers'},{n:3,title:'Colors',cat:'Colors'},
   {n:4,title:'Calendar',cat:'Time & Measurement'},{n:5,title:'Time',cat:'Time & Measurement'},{n:6,title:'Sizes and Shapes',cat:'Time & Measurement'},
@@ -886,18 +884,12 @@ function getFiltered() {
   return items;
 }
 
-function escapeHtml(str) {
-  return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
-}
+function escapeHtml(str) { return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
 
 function renderGrid() {
   const items = getFiltered();
   const grid = document.getElementById('topicGrid');
-  if (!items.length) {
-    grid.innerHTML = `<div class="no-results"><div style="font-size:2rem">🔍</div><p>No lessons found</p></div>`;
-    document.getElementById('countBadge').innerHTML = '0 lessons';
-    return;
-  }
+  if (!items.length) { grid.innerHTML = `<div class="no-results"><div style="font-size:2rem">🔍</div><p>No lessons found</p></div>`; document.getElementById('countBadge').innerHTML = '0 lessons'; return; }
   grid.innerHTML = items.map(v => {
     const color = catColors[v.cat] || '#3b82f6';
     const badgeCls = v.series === 's1' ? 'badge-s1' : 'badge-s2';
@@ -905,26 +897,19 @@ function renderGrid() {
     return `<div class="topic-card" data-title="${escapeHtml(v.title)}" data-video="${videoUrl}">
       <div class="card-color-bar" style="background:${color}"></div>
       <div class="card-inner">
-        <div class="card-top">
-          <span class="card-num">#${String(v.n).padStart(3,'0')}</span>
-          <span class="series-badge ${badgeCls}">${v.label}</span>
-        </div>
+        <div class="card-top"><span class="card-num">#${String(v.n).padStart(3,'0')}</span><span class="series-badge ${badgeCls}">${v.label}</span></div>
         <div class="card-title">${escapeHtml(v.title)}</div>
         <div class="card-cat"><span class="cat-dot" style="background:${color}"></span>${escapeHtml(v.cat)}</div>
       </div>
     </div>`;
   }).join('');
   document.getElementById('countBadge').innerHTML = items.length + ' lesson' + (items.length !== 1 ? 's' : '');
-
   document.querySelectorAll('.topic-card').forEach(card => {
     card.addEventListener('click', () => {
-      const videoSrc = card.dataset.video;
-      const title = card.dataset.title;
+      const videoSrc = card.dataset.video, title = card.dataset.title;
       if (!videoSrc) { alert('Video URL missing'); return; }
-      const videoEl = document.getElementById('lessonVideo');
-      const sourceEl = document.getElementById('videoSource');
-      sourceEl.src = videoSrc;
-      videoEl.load();
+      const videoEl = document.getElementById('lessonVideo'), sourceEl = document.getElementById('videoSource');
+      sourceEl.src = videoSrc; videoEl.load();
       document.getElementById('modalTitle').innerText = title;
       document.getElementById('videoModal').style.display = 'flex';
       videoEl.play().catch(e => console.log('Autoplay prevented:', e));
@@ -935,100 +920,67 @@ function renderGrid() {
 function buildFilters() {
   const wrap = document.getElementById('filterWrap');
   const cats = [...new Set(allTopics.filter(t => activeSeries === 'all' || t.series === activeSeries).map(t => t.cat))].sort();
-  wrap.innerHTML =
-    `<button class="filter-btn ${activeCat === 'All' ? 'active' : ''}" data-cat="All">All</button>` +
-    cats.map(c => `<button class="filter-btn ${activeCat === c ? 'active' : ''}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join('');
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => { activeCat = btn.dataset.cat; renderGrid(); buildFilters(); });
-  });
+  wrap.innerHTML = `<button class="filter-btn ${activeCat === 'All' ? 'active' : ''}" data-cat="All">All</button>` + cats.map(c => `<button class="filter-btn ${activeCat === c ? 'active' : ''}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join('');
+  document.querySelectorAll('.filter-btn').forEach(btn => { btn.addEventListener('click', () => { activeCat = btn.dataset.cat; renderGrid(); buildFilters(); }); });
 }
 
 document.querySelectorAll('.s-tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    activeSeries = btn.dataset.series;
-    activeCat = 'All';
-    document.querySelectorAll('.s-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderGrid();
-    buildFilters();
-  });
+  btn.addEventListener('click', () => { activeSeries = btn.dataset.series; activeCat = 'All'; document.querySelectorAll('.s-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderGrid(); buildFilters(); });
 });
-
 document.getElementById('searchInput').addEventListener('input', () => renderGrid());
 
-// Languages grid
-const langs = [
-  '01 US American English','02 UK British English','03 Spanish','04 German',
-  '05 Hindi','06 Arabic','07 French','08 Korean',
-  '09 Chinese','10 Tamil','11 Russian','12 Portuguese',
-  '13 Japanese','14 Italian','15 Hebrew','16 Dutch'
-];
-document.getElementById('langsGrid').innerHTML = langs.map(l =>
-  `<div class="lang-card"><span class="lang-num">${l.slice(0,2)}</span><span class="lang-name">${l.slice(3)}</span></div>`
-).join('');
+const langs = ['01 US American English','02 UK British English','03 Spanish','04 German','05 Hindi','06 Arabic','07 French','08 Korean','09 Chinese','10 Tamil','11 Russian','12 Portuguese','13 Japanese','14 Italian','15 Hebrew','16 Dutch'];
+document.getElementById('langsGrid').innerHTML = langs.map(l => `<div class="lang-card"><span class="lang-num">${l.slice(0,2)}</span><span class="lang-name">${l.slice(3)}</span></div>`).join('');
 
-// ======================== FLOATING WATERMARK (from Firebase user) ========================
-let watermarkInterval = null;
-let watermarkElement = null;
+// ======================== WATERMARK: name + mobile (NO "Not Provided") ========================
+let watermarkInterval = null, watermarkElement = null;
 
-function updateWatermarkText() {
+function updateWatermarkTextFn() {
   if (!watermarkElement) return;
-  // Access currentUser from the module script's global? We'll expose it via a global variable from the module.
-  // We'll set a global variable 'globalCurrentUser' from the module.
-  if (window.globalCurrentUser) {
-    const user = window.globalCurrentUser;
-    const name = user.displayName || (user.email ? user.email.split('@')[0] : 'Akram User');
-    const phone = user.phoneNumber || 'Not Provided';
-    watermarkElement.textContent = `🧿 ${name} (${phone})`;
-  } else {
-    watermarkElement.textContent = `🧿 Akram User (Secure Session)`;
+  const user = window.globalCurrentUser;
+  let userName = "Akram Learner";
+  let userMobile = DEFAULT_CONTACT_PHONE;
+  if (user) {
+    userName = user.displayName || (user.email ? user.email.split('@')[0] : "Akram Student");
+    if (user.phoneNumber && user.phoneNumber.trim() !== "") userMobile = user.phoneNumber;
   }
+  watermarkElement.textContent = `🧿 ${userName}  |  📞 ${userMobile}`;
 }
+window.updateWatermarkTextFn = updateWatermarkTextFn;
 
 function createFloatingWatermark() {
   const container = document.getElementById('videoContainer');
   if (!container) return;
-  // remove old if exists
   if (watermarkElement) watermarkElement.remove();
   const wm = document.createElement('div');
   wm.className = 'video-watermark';
   container.style.position = 'relative';
   container.appendChild(wm);
   watermarkElement = wm;
-  updateWatermarkText();
-
-  // random movement function
+  updateWatermarkTextFn();
   function moveWatermark() {
     if (!container || !watermarkElement) return;
-    const containerRect = container.getBoundingClientRect();
-    const wmRect = watermarkElement.getBoundingClientRect();
-    if (containerRect.width === 0) return;
-    let maxLeft = containerRect.width - wmRect.width - 10;
-    let maxTop = containerRect.height - wmRect.height - 10;
+    const cr = container.getBoundingClientRect(), wr = watermarkElement.getBoundingClientRect();
+    if (cr.width === 0) return;
+    let maxLeft = cr.width - wr.width - 15, maxTop = cr.height - wr.height - 15;
     if (maxLeft < 0) maxLeft = 0;
     if (maxTop < 0) maxTop = 0;
-    const left = Math.random() * maxLeft;
-    const top = Math.random() * maxTop;
-    watermarkElement.style.left = `${left}px`;
-    watermarkElement.style.top = `${top}px`;
+    watermarkElement.style.left = `${Math.random() * maxLeft}px`;
+    watermarkElement.style.top = `${Math.random() * maxTop}px`;
   }
   if (watermarkInterval) clearInterval(watermarkInterval);
   moveWatermark();
-  watermarkInterval = setInterval(moveWatermark, 4000);
+  watermarkInterval = setInterval(moveWatermark, 4200);
   window.addEventListener('resize', () => moveWatermark());
 }
 
-// ======================== VIDEO PROTECTION FUNCTIONS ========================
-let warningActive = false;
-let warningTimeout = null;
-let devtoolsOpen = false;
-let devtoolsDetectionInterval = null;
-
+// ======================== PROTECTION & MODAL ========================
+let warningActive = false, warningTimeout = null;
 function showWarningAndPause(reason, videoElement) {
   if (warningActive) return;
   const vid = videoElement || document.getElementById('lessonVideo');
-  if (!vid) return;
-  if (!vid.paused) vid.pause();
+  if (!vid || vid.paused) return;
+  vid.pause();
   warningActive = true;
   const container = document.getElementById('videoContainer');
   if (!container) return;
@@ -1036,203 +988,44 @@ function showWarningAndPause(reason, videoElement) {
   if (existing) existing.remove();
   const overlay = document.createElement('div');
   overlay.className = 'protection-overlay';
-  overlay.innerHTML = `
-    <span>⚠️ ${reason}</span>
-    <span>Video paused to protect content.</span>
-    <button id="resumeProtectionBtn">Resume playback</button>
-  `;
-  container.style.position = 'relative';
+  overlay.innerHTML = `<span>⚠️ ${reason}</span><span>Video paused to protect content.</span><button id="resumeProtectionBtn">Resume playback</button>`;
   container.appendChild(overlay);
-  const resumeBtn = document.getElementById('resumeProtectionBtn');
-  if (resumeBtn) {
-    resumeBtn.addEventListener('click', () => {
-      vid.play().catch(e => console.log("Play blocked:", e));
-      overlay.remove();
-      warningActive = false;
-      if (warningTimeout) clearTimeout(warningTimeout);
-    });
-  }
-  warningTimeout = setTimeout(() => {
-    if (overlay && overlay.parentNode) overlay.remove();
-    warningActive = false;
-  }, 5000);
-}
-
-function isScreenshotShortcut(e) {
-  if (e.key === 'PrintScreen') return true;
-  if (e.altKey && e.key === 'PrintScreen') return true;
-  if (e.metaKey && e.shiftKey && e.key === 'S') return true;
-  if (e.ctrlKey && e.shiftKey && e.key === 'S') return true;
-  if (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4' || e.key === '5')) return true;
-  if (e.shiftKey && e.key === 'PrintScreen') return true;
-  return false;
+  document.getElementById('resumeProtectionBtn')?.addEventListener('click', () => { vid.play().catch(()=>{}); overlay.remove(); warningActive = false; if(warningTimeout) clearTimeout(warningTimeout); });
+  warningTimeout = setTimeout(() => { if(overlay.parentNode) overlay.remove(); warningActive = false; }, 5000);
 }
 
 function setupGlobalProtections() {
-  // Screenshot shortcuts
   document.addEventListener('keydown', (e) => {
-    if (isScreenshotShortcut(e)) {
+    if (e.key === 'PrintScreen' || (e.altKey && e.key === 'PrintScreen') || (e.metaKey && e.shiftKey && (e.key === 'S' || e.key === '3' || e.key === '4')) || (e.ctrlKey && e.shiftKey && (e.key === 'S'))) {
       e.preventDefault();
       showWarningAndPause('📸 Screenshot attempt detected!', document.getElementById('lessonVideo'));
     }
-  });
-  // PrintScreen keyup
-  window.addEventListener('keyup', (e) => {
-    if (e.key === 'PrintScreen') {
-      navigator.clipboard?.writeText('').catch(()=>{});
-      showWarningAndPause('📸 PrintScreen key pressed!', document.getElementById('lessonVideo'));
+    if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || (e.ctrlKey && e.keyCode === 85)) {
+      e.preventDefault();
+      showWarningAndPause('⛔ Developer shortcut blocked!', document.getElementById('lessonVideo'));
     }
   });
-  // DevTools detection
-  function detectDevTools() {
-    const threshold = 200;
-    const widthDiff = window.outerWidth - window.innerWidth;
-    const heightDiff = window.outerHeight - window.innerHeight;
-    if (widthDiff > threshold || heightDiff > threshold) {
-      if (!devtoolsOpen) {
-        devtoolsOpen = true;
-        showWarningAndPause('🛠️ Developer tools detected! Video paused for security.', document.getElementById('lessonVideo'));
-      }
-    } else {
-      devtoolsOpen = false;
-    }
-  }
-  setInterval(detectDevTools, 1000);
-  // Debugger detection
-  devtoolsDetectionInterval = setInterval(() => {
-    const before = new Date().getTime();
-    debugger;
-    const after = new Date().getTime();
-    if (after - before > 100) {
-      if (!devtoolsOpen) {
-        devtoolsOpen = true;
-        showWarningAndPause('🛠️ Debugger detected! Video paused.', document.getElementById('lessonVideo'));
-      }
-    }
-  }, 2000);
-  // Tab visibility
-  document.addEventListener('visibilitychange', () => {
-    const vid = document.getElementById('lessonVideo');
-    if (document.hidden && vid && !vid.paused) vid.pause();
-  });
-  // Block right-click on video
+  window.addEventListener('keyup', (e) => { if (e.key === 'PrintScreen') showWarningAndPause('📸 PrintScreen pressed', document.getElementById('lessonVideo')); });
+  setInterval(() => { const before = new Date().getTime(); debugger; if (new Date().getTime() - before > 100) showWarningAndPause('🛠️ Debugger detected', document.getElementById('lessonVideo')); }, 3000);
+  document.addEventListener('visibilitychange', () => { const vid = document.getElementById('lessonVideo'); if (document.hidden && vid && !vid.paused) vid.pause(); });
   const vid = document.getElementById('lessonVideo');
-  if (vid) {
-    vid.addEventListener('contextmenu', (e) => e.preventDefault());
-    vid.addEventListener('dragstart', (e) => e.preventDefault());
-  }
-  // Block keyboard shortcuts
-  document.addEventListener('keydown', (e) => {
-    if (e.keyCode === 123 ||
-        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
-        (e.ctrlKey && e.keyCode === 85) ||
-        (e.ctrlKey && e.keyCode === 83)) {
-      e.preventDefault();
-      showWarningAndPause('⛔ Shortcut blocked!', document.getElementById('lessonVideo'));
-    }
-  });
-  // Disable picture-in-picture fully
-  if (vid) {
-    vid.disablePictureInPicture = true;
-    vid.addEventListener('enterpictureinpicture', (e) => {
-      e.preventDefault();
-      if (vid.exitPictureInPicture) vid.exitPictureInPicture();
-    });
-  }
+  if(vid) { vid.addEventListener('contextmenu', (e) => e.preventDefault()); vid.addEventListener('dragstart', (e) => e.preventDefault()); vid.disablePictureInPicture = true; }
 }
-
-// ======================== MODAL CLOSE CLEANUP ========================
 function closeVideoModal() {
-  const modal = document.getElementById('videoModal');
-  const videoEl = document.getElementById('lessonVideo');
-  modal.style.display = 'none';
-  videoEl.pause();
-  videoEl.currentTime = 0;
-  // clear watermark movement interval? Keep it but modal closed, watermark hidden. No problem.
-  // also remove any protection overlay
+  const modal = document.getElementById('videoModal'), videoEl = document.getElementById('lessonVideo');
+  modal.style.display = 'none'; videoEl.pause(); videoEl.currentTime = 0;
   const overlay = document.querySelector('#videoContainer .protection-overlay');
-  if (overlay) overlay.remove();
-  warningActive = false;
-  if (warningTimeout) clearTimeout(warningTimeout);
+  if (overlay) overlay.remove(); warningActive = false; if (warningTimeout) clearTimeout(warningTimeout);
 }
-
-// ======================== INITIALIZE ========================
-// Expose currentUser from module to window
-const authModuleScript = document.querySelector('script[type="module"]');
-if (authModuleScript) {
-  // We'll wait for Firebase auth and then set window.globalCurrentUser
-  // Already defined in module, we can listen to auth state there and update.
-  // To simplify, we'll add a listener inside module to set window.globalCurrentUser
-  // Since we can't modify module script here, we'll add a new module script?
-  // Better: we inject a small script that reads auth state and sets global.
-  const waitForAuth = setInterval(() => {
-    if (window.authReady) {
-      clearInterval(waitForAuth);
-      if (window.globalCurrentUser) {
-        updateWatermarkText();
-      }
-    }
-  }, 100);
-}
-// Also ensure when modal opens we create watermark if not exists
-document.getElementById('videoModal').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('videoModal')) closeVideoModal();
-});
+document.getElementById('videoModal').addEventListener('click', (e) => { if (e.target === document.getElementById('videoModal')) closeVideoModal(); });
 document.getElementById('closeModalBtn').addEventListener('click', closeVideoModal);
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    const modal = document.getElementById('videoModal');
-    if (modal.style.display === 'flex') closeVideoModal();
-  }
-});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { const modal = document.getElementById('videoModal'); if (modal.style.display === 'flex') closeVideoModal(); } });
 
-// When video loads, ensure watermark exists and protections are active
-const videoModal = document.getElementById('videoModal');
-const observer = new MutationObserver(() => {
-  if (videoModal.style.display === 'flex') {
-    if (!watermarkElement) createFloatingWatermark();
-    else updateWatermarkText();
-    const vid = document.getElementById('lessonVideo');
-    if (vid) {
-      vid.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
-      vid.setAttribute('disablePictureInPicture', '');
-      vid.disablePictureInPicture = true;
-    }
-  }
-});
-observer.observe(videoModal, { attributes: true, attributeFilter: ['style'] });
+const modalObserver = new MutationObserver(() => { if (document.getElementById('videoModal').style.display === 'flex') { if (!watermarkElement) createFloatingWatermark(); else updateWatermarkTextFn(); } });
+modalObserver.observe(document.getElementById('videoModal'), { attributes: true, attributeFilter: ['style'] });
 setupGlobalProtections();
 renderGrid();
 buildFilters();
-
-// Additionally, set up a listener for video load to ensure no buffering delays
-const videoElem = document.getElementById('lessonVideo');
-videoElem.preload = 'auto';
-videoElem.addEventListener('loadstart', () => {
-  // optional: show loading spinner? Not needed.
-});
-</script>
-
-<script type="module">
-// This module synchronises Firebase user to global variable
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyBUzO90MhDWaRn_3kkWB1aJOYai7aeKE-8",
-  authDomain: "vocabulary-academy.firebaseapp.com",
-  projectId: "vocabulary-academy",
-  storageBucket: "vocabulary-academy.firebasestorage.app",
-  messagingSenderId: "507242998830",
-  appId: "1:507242998830:web:53820d4213de0ea54943bf"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-onAuthStateChanged(auth, (user) => {
-  window.globalCurrentUser = user;
-  window.authReady = true;
-  // Update watermark if visible
-  if (typeof updateWatermarkText === 'function') updateWatermarkText();
-});
 </script>
 </body>
 </html>
